@@ -89,6 +89,13 @@ let CACHED_COLORS = {};
 let staticBuffer = null;
 let staticBufferDirty = true;
 
+// GIF Recording
+let gifRecorder = null;
+let isRecording = false;
+let recordingYear = START_YEAR;
+let recordingFrameCount = 0;
+const FRAMES_PER_YEAR = 3; // Capture 3 frames per year for smoother animation
+
 const NASA_FIRMS_MAP_KEY = ''; // Get your key at https://firms.modaps.eosdis.nasa.gov/api/area/
 
 async function fetchStateBoundaries() {
@@ -659,6 +666,11 @@ function draw() {
   drawAshParticles(currentYear);
   drawTypography(currentYear);
   drawDataSourceBadge();
+
+  // Capture frame if recording
+  if (isRecording) {
+    captureGifFrame();
+  }
 }
 
 function getMapBounds() {
@@ -1174,4 +1186,111 @@ function refreshData() {
   stateBoundariesLoaded = false;
   staticBufferDirty = true;
   fetchLiveData();
+}
+
+function toggleRecording() {
+  if (isRecording) {
+    stopRecording();
+  } else {
+    startRecording();
+  }
+}
+
+function startRecording() {
+  if (isLoadingData) {
+    alert('Please wait for data to finish loading before recording.');
+    return;
+  }
+
+  // Stop any playing animation
+  if (isPlaying) {
+    togglePlay();
+  }
+
+  // Initialize GIF encoder
+  gifRecorder = new GIF({
+    workers: 2,
+    quality: 10,
+    width: CANVAS_WIDTH,
+    height: CANVAS_HEIGHT,
+    workerScript: 'https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js'
+  });
+
+  gifRecorder.on('finished', function(blob) {
+    // Download the GIF
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `amazon-deforestation-${START_YEAR}-${CURRENT_YEAR}.gif`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    // Reset state
+    isRecording = false;
+    updateRecordButton(false);
+    hideLoadingOverlay();
+  });
+
+  gifRecorder.on('progress', function(p) {
+    updateDataStatus(`Rendering GIF: ${Math.round(p * 100)}%`);
+  });
+
+  // Start recording
+  isRecording = true;
+  recordingYear = START_YEAR;
+  recordingFrameCount = 0;
+  currentYear = START_YEAR;
+  updateSlider(currentYear);
+  updateRecordButton(true);
+  showLoadingOverlay('Recording GIF...');
+}
+
+function stopRecording() {
+  if (!gifRecorder) return;
+
+  updateDataStatus('Rendering GIF...');
+  gifRecorder.render();
+}
+
+function updateRecordButton(recording) {
+  const btn = document.getElementById('record-btn');
+  if (!btn) return;
+
+  if (recording) {
+    btn.classList.add('recording');
+    btn.innerHTML = '<span id="record-icon">⬤</span> Stop';
+  } else {
+    btn.classList.remove('recording');
+    btn.innerHTML = '<span id="record-icon">⬤</span> Record GIF';
+  }
+}
+
+function captureGifFrame() {
+  if (!isRecording || !gifRecorder) return;
+
+  // Add current frame to GIF
+  const canvas = document.querySelector('#canvas-container canvas');
+  if (canvas) {
+    gifRecorder.addFrame(canvas, { delay: 200, copy: true });
+  }
+
+  recordingFrameCount++;
+
+  // After capturing FRAMES_PER_YEAR frames, advance to next year
+  if (recordingFrameCount >= FRAMES_PER_YEAR) {
+    recordingFrameCount = 0;
+    recordingYear++;
+
+    if (recordingYear > CURRENT_YEAR) {
+      // Done recording all years
+      stopRecording();
+    } else {
+      currentYear = recordingYear;
+      updateSlider(currentYear);
+      const progress = ((recordingYear - START_YEAR) / (CURRENT_YEAR - START_YEAR) * 100).toFixed(0);
+      updateDataStatus(`Recording: ${recordingYear} (${progress}%)`);
+    }
+  }
 }

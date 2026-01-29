@@ -136,6 +136,36 @@ button:disabled {
   cursor: not-allowed;
 }
 
+#record-btn {
+  background: transparent;
+  border-color: #888;
+}
+
+#record-btn:hover:not(:disabled) {
+  background: rgba(255, 68, 68, 0.1);
+  border-color: #FF4444;
+}
+
+#record-btn.recording {
+  background: #FF4444;
+  border-color: #FF4444;
+  animation: pulse-recording 1s ease-in-out infinite;
+}
+
+#record-icon {
+  color: #FF4444;
+  font-size: 0.7rem;
+}
+
+#record-btn.recording #record-icon {
+  color: #F4F4F0;
+}
+
+@keyframes pulse-recording {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
 .canvas-area {
   grid-area: canvas;
   display: flex;
