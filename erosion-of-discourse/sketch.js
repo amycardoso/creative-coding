@@ -8,7 +8,16 @@
  *
  * The rigidity of the background is eroded by the softness of affection,
  * proving that reality is not binary — it is gray.
+ *
+ * Controls: Press Shift+S to start/stop GIF recording
  */
+
+P5Capture.setDefaultOptions({
+  format: 'gif',
+  framerate: 30,
+  quality: 0.8,
+  width: 600,
+});
 
 const NUM_AGENTS = 7;
 const GRID_SIZE = 40;
