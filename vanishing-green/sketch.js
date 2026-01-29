@@ -551,6 +551,7 @@ function showLoadingOverlay(message) {
 }
 
 function setup() {
+  pixelDensity(1);
   const canvas = createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
   canvas.parent('canvas-container');
   textFont('Inter, sans-serif');
