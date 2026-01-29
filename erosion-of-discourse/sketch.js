@@ -14,6 +14,7 @@ const NUM_AGENTS = 12;
 const GRID_SIZE = 40;
 const CANVAS_SIZE = 600;
 const TRAIL_HISTORY_LENGTH = 60;
+const TRAIL_FADE_RATE = 2; // Alpha value for slow fade (higher = faster fade)
 
 let agents = [];
 let trailLayer;
@@ -33,6 +34,10 @@ function setup() {
 
 function draw() {
   drawGrid();
+
+  // Slowly fade the trail layer to prevent complete fog
+  // This creates an equilibrium where discourse reasserts itself
+  fadeTrailLayer();
 
   for (const agent of agents) {
     agent.update();
@@ -61,6 +66,18 @@ function drawGrid() {
   }
 }
 
+function fadeTrailLayer() {
+  // Use erase mode to slowly reduce alpha of existing trails
+  trailLayer.loadPixels();
+  for (let i = 3; i < trailLayer.pixels.length; i += 4) {
+    // Reduce alpha channel
+    if (trailLayer.pixels[i] > 0) {
+      trailLayer.pixels[i] = max(0, trailLayer.pixels[i] - TRAIL_FADE_RATE);
+    }
+  }
+  trailLayer.updatePixels();
+}
+
 // Agent personalities define movement characteristics
 const PERSONALITIES = [
   { name: 'contemplative', speedMult: 0.5, noiseInc: 0.002, trailDensity: 25 },
@@ -83,7 +100,6 @@ class Agent {
   constructor(x, y, index) {
     this.pos = createVector(x, y);
     this.vel = createVector(0, 0);
-    this.prevPos = createVector(x, y);
 
     // Unique noise offsets
     this.noiseOffsetX = random(1000);
@@ -115,8 +131,6 @@ class Agent {
   }
 
   update() {
-    this.prevPos.set(this.pos);
-
     // Perlin noise-based movement
     const angle = noise(this.noiseOffsetX, this.noiseOffsetY) * TWO_PI * 2;
     const speed = this.baseSpeed * map(noise(this.noiseOffsetX * 0.5), 0, 1, 0.5, 1.5);
