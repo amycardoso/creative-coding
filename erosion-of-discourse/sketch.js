@@ -10,11 +10,11 @@
  * proving that reality is not binary — it is gray.
  */
 
-const NUM_AGENTS = 12;
+const NUM_AGENTS = 7;
 const GRID_SIZE = 40;
 const CANVAS_SIZE = 600;
 const TRAIL_HISTORY_LENGTH = 60;
-const TRAIL_FADE_RATE = 2;
+const TRAIL_FADE_RATE = 1;
 
 let agents = [];
 let trailLayer;
@@ -44,7 +44,6 @@ function draw() {
   image(trailLayer, 0, 0);
 
   for (const agent of agents) {
-    agent.displayTrailHistory();
     agent.display();
   }
 }
@@ -74,19 +73,10 @@ function fadeTrailLayer() {
 }
 
 const PERSONALITIES = [
-  { name: 'contemplative', speedMult: 0.5, noiseInc: 0.002, trailDensity: 25 },
-  { name: 'restless', speedMult: 1.8, noiseInc: 0.008, trailDensity: 12 },
-  { name: 'wanderer', speedMult: 1.0, noiseInc: 0.004, trailDensity: 18 },
-  { name: 'drifter', speedMult: 0.7, noiseInc: 0.003, trailDensity: 22 },
-];
-
-const COLOR_TINTS = [
-  { r: 140, g: 120, b: 110 }, // warm sepia
-  { r: 110, g: 120, b: 140 }, // cool blue
-  { r: 130, g: 125, b: 115 }, // neutral warm
-  { r: 115, g: 125, b: 130 }, // neutral cool
-  { r: 145, g: 130, b: 120 }, // warm amber
-  { r: 120, g: 130, b: 145 }, // cool slate
+  { name: 'contemplative', speedMult: 0.5, noiseInc: 0.002, trailDensity: 75 },
+  { name: 'restless', speedMult: 1.8, noiseInc: 0.008, trailDensity: 36 },
+  { name: 'wanderer', speedMult: 1.0, noiseInc: 0.004, trailDensity: 54 },
+  { name: 'drifter', speedMult: 0.7, noiseInc: 0.003, trailDensity: 66 },
 ];
 
 class Agent {
@@ -96,6 +86,7 @@ class Agent {
 
     this.noiseOffsetX = random(1000);
     this.noiseOffsetY = random(1000);
+    this.turbulenceOffset = random(1000);
 
     this.personality = PERSONALITIES[index % PERSONALITIES.length];
     this.baseSpeed = random(0.8, 1.4) * this.personality.speedMult;
@@ -103,7 +94,6 @@ class Agent {
     this.baseTrailDensity = this.personality.trailDensity;
 
     this.size = random(10, 18);
-    this.colorTint = COLOR_TINTS[index % COLOR_TINTS.length];
 
     this.history = [];
     this.lingerCounter = 0;
@@ -127,6 +117,7 @@ class Agent {
 
     this.noiseOffsetX += this.noiseIncrement;
     this.noiseOffsetY += this.noiseIncrement * 1.1;
+    this.turbulenceOffset += 0.01;
 
     const currentCell = this.getCurrentGridCell();
     if (currentCell.col === this.lastGridCell.col &&
@@ -172,77 +163,78 @@ class Agent {
     const moveAngle = this.vel.heading();
 
     for (let i = 0; i < particleCount; i++) {
-      const alongDir = randomGaussian(0, this.size * 0.8);
-      const perpDir = randomGaussian(0, this.size * 0.5);
+      const turbulenceX = noise(this.turbulenceOffset + i * 0.1, this.pos.y * 0.01) * 2 - 1;
+      const turbulenceY = noise(this.pos.x * 0.01, this.turbulenceOffset + i * 0.1) * 2 - 1;
 
-      const offsetX = cos(moveAngle) * alongDir - sin(moveAngle) * perpDir;
-      const offsetY = sin(moveAngle) * alongDir + cos(moveAngle) * perpDir;
+      const alongDir = randomGaussian(0, this.size * 1.2);
+      const perpDir = randomGaussian(0, this.size * 0.8);
 
-      const tintStrength = random(0.3, 0.7);
-      const baseGray = random(90, 170);
-      const r = lerp(baseGray, this.colorTint.r, tintStrength);
-      const g = lerp(baseGray, this.colorTint.g, tintStrength);
-      const b = lerp(baseGray, this.colorTint.b, tintStrength);
+      const offsetX = cos(moveAngle) * alongDir - sin(moveAngle) * perpDir + turbulenceX * 8;
+      const offsetY = sin(moveAngle) * alongDir + cos(moveAngle) * perpDir + turbulenceY * 8;
 
-      const alpha = random(15, 35) * lingerFactor;
+      const gray = random(80, 180);
+      const alpha = random(20, 60) * lingerFactor;
 
-      buffer.fill(r, g, b, alpha);
+      buffer.fill(gray, gray, gray, alpha);
 
-      const particleW = random(1.5, 4);
-      const particleH = random(1, 2.5);
+      const particleW = random(2, 6);
+      const particleH = random(1.5, 4);
 
       buffer.push();
       buffer.translate(this.pos.x + offsetX, this.pos.y + offsetY);
-      buffer.rotate(moveAngle);
+      buffer.rotate(moveAngle + random(-0.3, 0.3));
       buffer.ellipse(0, 0, particleW, particleH);
       buffer.pop();
     }
-  }
 
-  displayTrailHistory() {
-    noFill();
+    // Occasional larger smoke wisps
+    if (random() < 0.3) {
+      const wispX = this.pos.x + randomGaussian(0, this.size * 1.5);
+      const wispY = this.pos.y + randomGaussian(0, this.size * 1.5);
+      const wispGray = random(100, 160);
+      const wispAlpha = random(10, 30);
+      const wispSize = random(6, 12);
 
-    for (let i = 1; i < this.history.length; i++) {
-      const prev = this.history[i - 1];
-      const curr = this.history[i];
-
-      if (dist(prev.x, prev.y, curr.x, curr.y) > 50) continue;
-
-      const alpha = map(i, 0, this.history.length, 0, 120);
-      const weight = map(i, 0, this.history.length, 0.5, 2.5);
-
-      stroke(this.colorTint.r, this.colorTint.g, this.colorTint.b, alpha);
-      strokeWeight(weight);
-      line(prev.x, prev.y, curr.x, curr.y);
+      buffer.fill(wispGray, wispGray, wispGray, wispAlpha);
+      buffer.ellipse(wispX, wispY, wispSize, wispSize * 0.7);
     }
   }
 
   display() {
+    fill(0);
     noStroke();
 
-    // Glow
-    for (let i = 4; i > 0; i--) {
-      const glowSize = this.size + i * 6;
-      const glowAlpha = map(i, 4, 0, 10, 40);
-      fill(this.colorTint.r, this.colorTint.g, this.colorTint.b, glowAlpha);
-      ellipse(this.pos.x, this.pos.y, glowSize, glowSize);
-    }
+    // Head
+    ellipse(this.pos.x, this.pos.y - 8, 5, 5);
 
     // Body
-    fill(this.colorTint.r, this.colorTint.g, this.colorTint.b, 200);
-    ellipse(this.pos.x, this.pos.y, this.size, this.size);
+    rectMode(CENTER);
+    rect(this.pos.x, this.pos.y - 2, 4, 10, 1);
 
-    // Core
-    fill(255, 220);
-    ellipse(this.pos.x, this.pos.y, this.size * 0.35, this.size * 0.35);
+    // Legs with walking animation
+    const legOffset = sin(frameCount * 0.15 + this.noiseOffsetX) * 3;
 
-    // Highlight
-    fill(255, 255);
-    ellipse(
-      this.pos.x - this.size * 0.15,
-      this.pos.y - this.size * 0.15,
-      this.size * 0.15,
-      this.size * 0.15
-    );
+    stroke(0);
+    strokeWeight(2);
+
+    // Left leg
+    line(this.pos.x - 1, this.pos.y + 3, this.pos.x - 3 + legOffset, this.pos.y + 10);
+
+    // Right leg
+    line(this.pos.x + 1, this.pos.y + 3, this.pos.x + 3 - legOffset, this.pos.y + 10);
+
+    // Arms with subtle swing
+    const armOffset = sin(frameCount * 0.15 + this.noiseOffsetX + PI) * 2;
+
+    strokeWeight(1.5);
+
+    // Left arm
+    line(this.pos.x - 2, this.pos.y - 4, this.pos.x - 4 + armOffset, this.pos.y + 1);
+
+    // Right arm
+    line(this.pos.x + 2, this.pos.y - 4, this.pos.x + 4 - armOffset, this.pos.y + 1);
+
+    noStroke();
+    rectMode(CORNER);
   }
 }
