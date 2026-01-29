@@ -1209,7 +1209,7 @@ function startRecording() {
     quality: 10,
     width: CANVAS_WIDTH,
     height: CANVAS_HEIGHT,
-    workerScript: 'https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js'
+    workerScript: 'gif.worker.js'
   });
 
   gifRecorder.on('finished', function(blob) {
