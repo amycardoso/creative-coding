@@ -89,14 +89,13 @@ let CACHED_COLORS = {};
 let staticBuffer = null;
 let staticBufferDirty = true;
 
-// GIF Recording
 let gifRecorder = null;
 let isRecording = false;
 let recordingYear = START_YEAR;
 let recordingFrameCount = 0;
-const FRAMES_PER_YEAR = 3; // Capture 3 frames per year for smoother animation
+const FRAMES_PER_YEAR = 3;
 
-const NASA_FIRMS_MAP_KEY = ''; // Get your key at https://firms.modaps.eosdis.nasa.gov/api/area/
+const NASA_FIRMS_MAP_KEY = '';
 
 async function fetchStateBoundaries() {
   updateDataStatus('Fetching state boundaries...');
@@ -667,7 +666,6 @@ function draw() {
   drawTypography(currentYear);
   drawDataSourceBadge();
 
-  // Capture frame if recording
   if (isRecording) {
     captureGifFrame();
   }
@@ -1202,12 +1200,10 @@ function startRecording() {
     return;
   }
 
-  // Stop any playing animation
   if (isPlaying) {
     togglePlay();
   }
 
-  // Initialize GIF encoder
   gifRecorder = new GIF({
     workers: 2,
     quality: 10,
@@ -1217,7 +1213,6 @@ function startRecording() {
   });
 
   gifRecorder.on('finished', function(blob) {
-    // Download the GIF
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -1227,7 +1222,6 @@ function startRecording() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    // Reset state
     isRecording = false;
     updateRecordButton(false);
     hideLoadingOverlay();
@@ -1237,7 +1231,6 @@ function startRecording() {
     updateDataStatus(`Rendering GIF: ${Math.round(p * 100)}%`);
   });
 
-  // Start recording
   isRecording = true;
   recordingYear = START_YEAR;
   recordingFrameCount = 0;
@@ -1270,7 +1263,6 @@ function updateRecordButton(recording) {
 function captureGifFrame() {
   if (!isRecording || !gifRecorder) return;
 
-  // Add current frame to GIF
   const canvas = document.querySelector('#canvas-container canvas');
   if (canvas) {
     gifRecorder.addFrame(canvas, { delay: 200, copy: true });
@@ -1278,13 +1270,11 @@ function captureGifFrame() {
 
   recordingFrameCount++;
 
-  // After capturing FRAMES_PER_YEAR frames, advance to next year
   if (recordingFrameCount >= FRAMES_PER_YEAR) {
     recordingFrameCount = 0;
     recordingYear++;
 
     if (recordingYear > CURRENT_YEAR) {
-      // Done recording all years
       stopRecording();
     } else {
       currentYear = recordingYear;
