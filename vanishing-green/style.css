@@ -177,8 +177,8 @@ button:disabled {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
   line-height: 0;
   position: relative;
-  min-width: 800px;
-  min-height: 900px;
+  width: 800px;
+  height: 900px;
   background: #1A1A1A;
 }
 
