@@ -26,6 +26,15 @@
       "media": "vanishing-green/amazon-deforestation-1988-2026.gif",
       "tags": ["data-visualization", "environment"],
       "tech": ["p5.js", "gif.js", "INPE API", "NASA FIRMS"]
+    },
+    {
+      "slug": "aurora-boreal",
+      "title": "Aurora Boreal",
+      "description": "Generative northern lights: curtains of light ripple across a starlit sky above a silhouetted mountain ridge.",
+      "date": "2026-02-08",
+      "media": "aurora-boreal/aurora-boreal.png",
+      "tags": ["generative", "p5.js", "landscape"],
+      "tech": ["p5.js"]
     }
   ]
 }
