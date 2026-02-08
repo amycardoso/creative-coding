@@ -32,7 +32,7 @@
       "title": "Aurora Boreal",
       "description": "Generative northern lights: curtains of light ripple across a starlit sky above a silhouetted mountain ridge.",
       "date": "2026-02-08",
-      "media": "aurora-boreal/aurora-boreal.png",
+      "media": "aurora-boreal/aurora-boreal.gif",
       "tags": ["generative", "p5.js", "landscape"],
       "tech": ["p5.js"]
     }
