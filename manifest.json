@@ -35,6 +35,15 @@
       "media": "aurora-boreal/aurora-boreal.gif",
       "tags": ["generative", "p5.js", "landscape"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "opus",
+      "title": "Opus — Audio Explanation of Life",
+      "description": "A geometric mandala that breathes with Eric Prydz's Opus. One unified visualization continuously scales from silence to full psychedelic intensity, driven by a smooth energy curve matched to the song and real-time FFT analysis.",
+      "date": "2026-02-08",
+      "media": "opus/opus.gif",
+      "tags": ["audio-reactive", "p5.js", "generative", "psychedelic"],
+      "tech": ["p5.js", "p5.sound", "Web Audio API"]
     }
   ]
 }
