@@ -10,15 +10,6 @@
       "tech": ["p5.js", "p5.capture"]
     },
     {
-      "slug": "urban-sunset",
-      "title": "Urban Sunset",
-      "description": "Shader-driven sky with layered clouds over a procedural cityscape silhouette.",
-      "date": "2026-02-08",
-      "media": "urban-sunset/urban-sunset.png",
-      "tags": ["shader", "p5.js", "generative"],
-      "tech": ["p5.js", "GLSL"]
-    },
-    {
       "slug": "vanishing-green",
       "title": "Vanishing Green",
       "description": "38 years of Amazon deforestation visualized with real satellite data from INPE and NASA FIRMS.",
@@ -26,6 +17,15 @@
       "media": "vanishing-green/amazon-deforestation-1988-2026.gif",
       "tags": ["data-visualization", "environment"],
       "tech": ["p5.js", "gif.js", "INPE API", "NASA FIRMS"]
+    },
+    {
+      "slug": "urban-sunset",
+      "title": "Urban Sunset",
+      "description": "Shader-driven sky with layered clouds over a procedural cityscape silhouette.",
+      "date": "2026-01-29",
+      "media": "urban-sunset/urban-sunset.png",
+      "tags": ["shader", "p5.js", "generative"],
+      "tech": ["p5.js", "GLSL"]
     },
     {
       "slug": "aurora-boreal",
