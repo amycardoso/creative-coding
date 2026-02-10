@@ -44,6 +44,15 @@
       "media": "opus/opus.gif",
       "tags": ["audio-reactive", "p5.js", "generative", "psychedelic"],
       "tech": ["p5.js", "p5.sound", "Web Audio API"]
+    },
+    {
+      "slug": "time-dilation",
+      "title": "Time Dilation",
+      "description": "Concentric time rings visualizing relativistic time dilation near a black hole. Inner rings crawl, outer rings spin freely.",
+      "date": "2026-02-09",
+      "media": "time-dilation/time-dilation.gif",
+      "tags": ["generative", "p5.js", "physics"],
+      "tech": ["p5.js"]
     }
   ]
 }
