@@ -53,6 +53,15 @@
       "media": "time-dilation/time-dilation.gif",
       "tags": ["generative", "p5.js", "physics"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "endurance",
+      "title": "Endurance — Relativistic Clock",
+      "description": "Three clock hands sweep at different gravitational time rates — Earth, orbit, and Miller's planet — making relativistic time dilation tangible through real system time.",
+      "date": "2026-02-09",
+      "media": "endurance/endurance.gif",
+      "tags": ["generative", "p5.js", "physics", "interstellar"],
+      "tech": ["p5.js"]
     }
   ]
 }
