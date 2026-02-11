@@ -68,7 +68,7 @@
       "title": "Eye of God",
       "description": "The Helix Nebula reimagined in GLSL — domain-warped noise sculpts gas clouds around an asymmetric ring, from crimson outer halo through amber ring to a blue stellar core, floating in a dense starfield.",
       "date": "2026-02-10",
-      "media": "eye-of-god/eye-of-god.png",
+      "media": "eye-of-god/eye-of-god.gif",
       "tags": ["shader", "p5.js", "generative", "space"],
       "tech": ["p5.js", "GLSL"]
     }
