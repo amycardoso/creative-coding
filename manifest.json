@@ -77,7 +77,7 @@
       "title": "Open Ocean",
       "description": "A calm, vast seascape rendered in GLSL — layered FBM noise creates rolling ocean swells with perspective foreshortening beneath an overcast sky with soft cumulus clouds, blended at a hazy horizon.",
       "date": "2026-02-10",
-      "media": "open-ocean/open-ocean.png",
+      "media": "open-ocean/open-ocean.gif",
       "tags": ["shader", "p5.js", "generative", "landscape"],
       "tech": ["p5.js", "GLSL"]
     }
