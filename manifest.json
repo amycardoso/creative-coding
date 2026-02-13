@@ -107,6 +107,15 @@
       "media": "sketches/solar-system/solar-system.gif",
       "tags": ["generative", "p5.js", "space", "animation"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "overthinking",
+      "title": "Overthinking",
+      "description": "Autonomous thought-lines wander and tangle inside a brain silhouette — the inescapable loop of a racing mind at 3 a.m.",
+      "date": "2026-02-13",
+      "media": "sketches/overthinking/overthinking.gif",
+      "tags": ["generative", "p5.js", "abstract", "agents"],
+      "tech": ["p5.js"]
     }
   ]
 }
