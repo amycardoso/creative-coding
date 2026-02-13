@@ -89,6 +89,15 @@
       "media": "oil-marble/oil-marble.gif",
       "tags": ["shader", "p5.js", "generative", "abstract"],
       "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "drifting-clouds",
+      "title": "Drifting Clouds",
+      "description": "Fluffy cumulus clouds drift across a deep blue sky — four parallax-layered cloud passes with volumetric lighting, rendered in GLSL.",
+      "date": "2026-02-13",
+      "media": "drifting-clouds/drifting-clouds.gif",
+      "tags": ["shader", "p5.js", "generative", "landscape"],
+      "tech": ["p5.js", "GLSL"]
     }
   ]
 }
