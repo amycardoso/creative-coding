@@ -80,6 +80,15 @@
       "media": "open-ocean/open-ocean.gif",
       "tags": ["shader", "p5.js", "generative", "landscape"],
       "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "oil-marble",
+      "title": "Oil Marble",
+      "description": "Swirling oil pour painting rendered in GLSL — double domain-warped FBM noise creates dense, organic marble swirls with a glossy wet-paint appearance in deep blues, salmon pinks, whites, and teal.",
+      "date": "2026-02-12",
+      "media": "oil-marble/oil-marble.gif",
+      "tags": ["shader", "p5.js", "generative", "abstract"],
+      "tech": ["p5.js", "GLSL"]
     }
   ]
 }
