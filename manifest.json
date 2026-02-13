@@ -98,6 +98,15 @@
       "media": "drifting-clouds/drifting-clouds.gif",
       "tags": ["shader", "p5.js", "generative", "landscape"],
       "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "solar-system",
+      "title": "Solar System",
+      "description": "Animated orrery with log-scaled AU distances and Kepler-accurate orbital speeds — eight planets orbit a glowing sun over a twinkling starfield.",
+      "date": "2026-02-13",
+      "media": "solar-system/solar-system.gif",
+      "tags": ["generative", "p5.js", "space", "animation"],
+      "tech": ["p5.js"]
     }
   ]
 }
