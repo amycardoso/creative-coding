@@ -1,11 +1,11 @@
 {
-  "artworks": [
+  "sketches": [
     {
       "slug": "erosion-of-discourse",
       "title": "Erosion of Discourse",
       "description": "Autonomous agents erode a rigid black-and-white grid into shades of gray — the world is not black and white. Attitudes are gray.",
       "date": "2026-01-28",
-      "media": "erosion-of-discourse/20260128-224959.gif",
+      "media": "sketches/erosion-of-discourse/20260128-224959.gif",
       "tags": ["generative", "p5.js", "agents"],
       "tech": ["p5.js", "p5.capture"]
     },
@@ -14,7 +14,7 @@
       "title": "Vanishing Green",
       "description": "38 years of Amazon deforestation visualized with real satellite data from INPE and NASA FIRMS.",
       "date": "2026-01-28",
-      "media": "vanishing-green/amazon-deforestation-1988-2026.gif",
+      "media": "sketches/vanishing-green/amazon-deforestation-1988-2026.gif",
       "tags": ["data-visualization", "environment"],
       "tech": ["p5.js", "gif.js", "INPE API", "NASA FIRMS"]
     },
@@ -23,7 +23,7 @@
       "title": "Urban Sunset",
       "description": "Shader-driven sky with layered clouds over a procedural cityscape silhouette.",
       "date": "2026-01-29",
-      "media": "urban-sunset/urban-sunset.png",
+      "media": "sketches/urban-sunset/urban-sunset.png",
       "tags": ["shader", "p5.js", "generative"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -32,7 +32,7 @@
       "title": "Aurora Boreal",
       "description": "Generative northern lights: curtains of light ripple across a starlit sky above a silhouetted mountain ridge.",
       "date": "2026-02-08",
-      "media": "aurora-boreal/aurora-boreal.gif",
+      "media": "sketches/aurora-boreal/aurora-boreal.gif",
       "tags": ["generative", "p5.js", "landscape"],
       "tech": ["p5.js"]
     },
@@ -41,7 +41,7 @@
       "title": "Opus — Audio Explanation of Life",
       "description": "A geometric mandala that breathes with Eric Prydz's Opus. One unified visualization continuously scales from silence to full psychedelic intensity, driven by a smooth energy curve matched to the song and real-time FFT analysis.",
       "date": "2026-02-08",
-      "media": "opus/opus.gif",
+      "media": "sketches/opus/opus.gif",
       "tags": ["audio-reactive", "p5.js", "generative", "psychedelic"],
       "tech": ["p5.js", "p5.sound", "Web Audio API"]
     },
@@ -50,7 +50,7 @@
       "title": "Time Dilation",
       "description": "Concentric time rings visualizing relativistic time dilation near a black hole. Inner rings crawl, outer rings spin freely.",
       "date": "2026-02-09",
-      "media": "time-dilation/time-dilation.gif",
+      "media": "sketches/time-dilation/time-dilation.gif",
       "tags": ["generative", "p5.js", "physics"],
       "tech": ["p5.js"]
     },
@@ -59,7 +59,7 @@
       "title": "Endurance — Relativistic Clock",
       "description": "Three clock hands sweep at different gravitational time rates — Earth, orbit, and Miller's planet — making relativistic time dilation tangible through real system time.",
       "date": "2026-02-09",
-      "media": "endurance/endurance.gif",
+      "media": "sketches/endurance/endurance.gif",
       "tags": ["generative", "p5.js", "physics", "interstellar"],
       "tech": ["p5.js"]
     },
@@ -68,7 +68,7 @@
       "title": "Eye of God",
       "description": "The Helix Nebula reimagined in GLSL — domain-warped noise sculpts gas clouds around an asymmetric ring, from crimson outer halo through amber ring to a blue stellar core, floating in a dense starfield.",
       "date": "2026-02-10",
-      "media": "eye-of-god/eye-of-god.gif",
+      "media": "sketches/eye-of-god/eye-of-god.gif",
       "tags": ["shader", "p5.js", "generative", "space"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -77,7 +77,7 @@
       "title": "Open Ocean",
       "description": "A calm, vast seascape rendered in GLSL — layered FBM noise creates rolling ocean swells with perspective foreshortening beneath an overcast sky with soft cumulus clouds, blended at a hazy horizon.",
       "date": "2026-02-10",
-      "media": "open-ocean/open-ocean.gif",
+      "media": "sketches/open-ocean/open-ocean.gif",
       "tags": ["shader", "p5.js", "generative", "landscape"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -86,7 +86,7 @@
       "title": "Oil Marble",
       "description": "Swirling oil pour painting rendered in GLSL — double domain-warped FBM noise creates dense, organic marble swirls with a glossy wet-paint appearance in deep blues, salmon pinks, whites, and teal.",
       "date": "2026-02-12",
-      "media": "oil-marble/oil-marble.gif",
+      "media": "sketches/oil-marble/oil-marble.gif",
       "tags": ["shader", "p5.js", "generative", "abstract"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -95,7 +95,7 @@
       "title": "Drifting Clouds",
       "description": "Fluffy cumulus clouds drift across a deep blue sky — four parallax-layered cloud passes with volumetric lighting, rendered in GLSL.",
       "date": "2026-02-13",
-      "media": "drifting-clouds/drifting-clouds.gif",
+      "media": "sketches/drifting-clouds/drifting-clouds.gif",
       "tags": ["shader", "p5.js", "generative", "landscape"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -104,7 +104,7 @@
       "title": "Solar System",
       "description": "Animated orrery with log-scaled AU distances and Kepler-accurate orbital speeds — eight planets orbit a glowing sun over a twinkling starfield.",
       "date": "2026-02-13",
-      "media": "solar-system/solar-system.gif",
+      "media": "sketches/solar-system/solar-system.gif",
       "tags": ["generative", "p5.js", "space", "animation"],
       "tech": ["p5.js"]
     }
