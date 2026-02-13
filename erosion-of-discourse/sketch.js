@@ -1,13 +1,11 @@
 /**
  * Erosion of Discourse
  *
- * A generative visualization about human incoherence.
- * The background imposes a rigid binary contrast between black and white,
- * representing political discourse. Autonomous agents wander freely,
- * leaving trails of texture and nuance.
+ * The world is not black and white. Attitudes are gray.
  *
- * The rigidity of the background is eroded by the softness of affection,
- * proving that reality is not binary — it is gray.
+ * A rigid checkerboard — the binary fiction of political discourse.
+ * Autonomous agents wander freely, leaving trails of gray.
+ * Over time, certainty dissolves into nuance.
  *
  * Controls: Press Shift+S to start/stop GIF recording
  */

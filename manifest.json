@@ -3,7 +3,7 @@
     {
       "slug": "erosion-of-discourse",
       "title": "Erosion of Discourse",
-      "description": "Autonomous agents wander a rigid grid, leaving trails of gray — proving that reality is not binary.",
+      "description": "Autonomous agents erode a rigid black-and-white grid into shades of gray — the world is not black and white. Attitudes are gray.",
       "date": "2026-01-28",
       "media": "erosion-of-discourse/20260128-224959.gif",
       "tags": ["generative", "p5.js", "agents"],
