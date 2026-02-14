@@ -125,6 +125,15 @@
       "media": "sketches/the-xx/the-xx.gif",
       "tags": ["shader", "p5.js", "generative", "abstract"],
       "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "solar-eclipse",
+      "title": "Solar Eclipse",
+      "description": "A stylized solar eclipse in GLSL — a crescent sun with turbulent chromospheric surface, noise-modulated corona, and a pulsing prominence erupting from the limb, as the moon slowly transits across the sun's face over a twinkling starfield.",
+      "date": "2026-02-14",
+      "media": "sketches/solar-eclipse/solar-eclipse.png",
+      "tags": ["shader", "p5.js", "generative", "space"],
+      "tech": ["p5.js", "GLSL"]
     }
   ]
 }
