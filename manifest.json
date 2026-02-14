@@ -6,7 +6,7 @@
       "description": "Autonomous agents erode a rigid black-and-white grid into shades of gray — the world is not black and white. Attitudes are gray.",
       "date": "2026-01-28",
       "media": "sketches/erosion-of-discourse/20260128-224959.gif",
-      "tags": ["generative", "p5.js", "agents"],
+      "tags": ["generative", "agents", "abstract"],
       "tech": ["p5.js", "p5.capture"]
     },
     {
@@ -15,7 +15,7 @@
       "description": "38 years of Amazon deforestation visualized with real satellite data from INPE and NASA FIRMS.",
       "date": "2026-01-28",
       "media": "sketches/vanishing-green/amazon-deforestation-1988-2026.gif",
-      "tags": ["data-visualization", "environment"],
+      "tags": ["data-visualization"],
       "tech": ["p5.js", "gif.js", "INPE API", "NASA FIRMS"]
     },
     {
@@ -24,7 +24,7 @@
       "description": "Shader-driven sky with layered clouds over a procedural cityscape silhouette.",
       "date": "2026-01-29",
       "media": "sketches/urban-sunset/urban-sunset.png",
-      "tags": ["shader", "p5.js", "generative"],
+      "tags": ["generative", "shader", "landscape"],
       "tech": ["p5.js", "GLSL"]
     },
     {
@@ -33,7 +33,7 @@
       "description": "Generative northern lights: curtains of light ripple across a starlit sky above a silhouetted mountain ridge.",
       "date": "2026-02-08",
       "media": "sketches/aurora-boreal/aurora-boreal.gif",
-      "tags": ["generative", "p5.js", "landscape"],
+      "tags": ["generative", "landscape"],
       "tech": ["p5.js"]
     },
     {
@@ -42,7 +42,7 @@
       "description": "A geometric mandala that breathes with Eric Prydz's Opus. One unified visualization continuously scales from silence to full psychedelic intensity, driven by a smooth energy curve matched to the song and real-time FFT analysis.",
       "date": "2026-02-08",
       "media": "sketches/opus/opus.gif",
-      "tags": ["audio-reactive", "p5.js", "generative", "psychedelic"],
+      "tags": ["generative", "audio-reactive", "abstract"],
       "tech": ["p5.js", "p5.sound", "Web Audio API"]
     },
     {
@@ -51,7 +51,7 @@
       "description": "Concentric time rings visualizing relativistic time dilation near a black hole. Inner rings crawl, outer rings spin freely.",
       "date": "2026-02-09",
       "media": "sketches/time-dilation/time-dilation.gif",
-      "tags": ["generative", "p5.js", "physics"],
+      "tags": ["generative", "simulation", "space"],
       "tech": ["p5.js"]
     },
     {
@@ -60,7 +60,7 @@
       "description": "Three clock hands sweep at different gravitational time rates — Earth, orbit, and Miller's planet — making relativistic time dilation tangible through real system time.",
       "date": "2026-02-09",
       "media": "sketches/endurance/endurance.gif",
-      "tags": ["generative", "p5.js", "physics", "interstellar"],
+      "tags": ["generative", "simulation", "space"],
       "tech": ["p5.js"]
     },
     {
@@ -69,7 +69,7 @@
       "description": "The Helix Nebula reimagined in GLSL — domain-warped noise sculpts gas clouds around an asymmetric ring, from crimson outer halo through amber ring to a blue stellar core, floating in a dense starfield.",
       "date": "2026-02-10",
       "media": "sketches/eye-of-god/eye-of-god.gif",
-      "tags": ["shader", "p5.js", "generative", "space"],
+      "tags": ["generative", "shader", "space"],
       "tech": ["p5.js", "GLSL"]
     },
     {
@@ -78,7 +78,7 @@
       "description": "A calm, vast seascape rendered in GLSL — layered FBM noise creates rolling ocean swells with perspective foreshortening beneath an overcast sky with soft cumulus clouds, blended at a hazy horizon.",
       "date": "2026-02-10",
       "media": "sketches/open-ocean/open-ocean.gif",
-      "tags": ["shader", "p5.js", "generative", "landscape"],
+      "tags": ["generative", "shader", "landscape"],
       "tech": ["p5.js", "GLSL"]
     },
     {
@@ -87,7 +87,7 @@
       "description": "Swirling oil pour painting rendered in GLSL — double domain-warped FBM noise creates dense, organic marble swirls with a glossy wet-paint appearance in deep blues, salmon pinks, whites, and teal.",
       "date": "2026-02-12",
       "media": "sketches/oil-marble/oil-marble.gif",
-      "tags": ["shader", "p5.js", "generative", "abstract"],
+      "tags": ["generative", "shader", "abstract"],
       "tech": ["p5.js", "GLSL"]
     },
     {
@@ -96,7 +96,7 @@
       "description": "Fluffy cumulus clouds drift across a deep blue sky — four parallax-layered cloud passes with volumetric lighting, rendered in GLSL.",
       "date": "2026-02-13",
       "media": "sketches/drifting-clouds/drifting-clouds.gif",
-      "tags": ["shader", "p5.js", "generative", "landscape"],
+      "tags": ["generative", "shader", "landscape"],
       "tech": ["p5.js", "GLSL"]
     },
     {
@@ -105,7 +105,7 @@
       "description": "Animated orrery with log-scaled AU distances and Kepler-accurate orbital speeds — eight planets orbit a glowing sun over a twinkling starfield.",
       "date": "2026-02-13",
       "media": "sketches/solar-system/solar-system.gif",
-      "tags": ["generative", "p5.js", "space", "animation"],
+      "tags": ["generative", "simulation", "space"],
       "tech": ["p5.js"]
     },
     {
@@ -114,7 +114,7 @@
       "description": "Autonomous thought-lines wander and tangle inside a brain silhouette — the inescapable loop of a racing mind at 3 a.m.",
       "date": "2026-02-13",
       "media": "sketches/overthinking/overthinking.gif",
-      "tags": ["generative", "p5.js", "abstract", "agents"],
+      "tags": ["generative", "agents", "abstract"],
       "tech": ["p5.js"]
     },
     {
@@ -123,7 +123,7 @@
       "description": "Inspired by The xx's iconic album art — a bold white X over an animated fluid background rendered in GLSL. Triple domain-warped FBM creates organic swirls in a Purple Sunset palette of indigo, crimson, orange, and gold.",
       "date": "2026-02-14",
       "media": "sketches/the-xx/the-xx.gif",
-      "tags": ["shader", "p5.js", "generative", "abstract"],
+      "tags": ["generative", "shader", "abstract"],
       "tech": ["p5.js", "GLSL"]
     }
   ]
