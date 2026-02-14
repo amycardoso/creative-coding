@@ -116,6 +116,15 @@
       "media": "sketches/overthinking/overthinking.gif",
       "tags": ["generative", "p5.js", "abstract", "agents"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "the-xx",
+      "title": "The XX",
+      "description": "Inspired by The xx's iconic album art — a bold white X over an animated fluid background rendered in GLSL. Triple domain-warped FBM creates organic swirls in a Purple Sunset palette of indigo, crimson, orange, and gold.",
+      "date": "2026-02-14",
+      "media": "sketches/the-xx/the-xx.gif",
+      "tags": ["shader", "p5.js", "generative", "abstract"],
+      "tech": ["p5.js", "GLSL"]
     }
   ]
 }
