@@ -125,6 +125,15 @@
       "media": "sketches/the-xx/the-xx.gif",
       "tags": ["generative", "shader", "abstract"],
       "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "digital-david",
+      "title": "Digital David",
+      "description": "Michelangelo's David emerges from cascading Matrix code — a rotating 3D bust sculpted through character-density ASCII art, where heavy symbols carve highlights and faint dots trace shadows under dramatic Rembrandt lighting.",
+      "date": "2026-02-14",
+      "media": "sketches/digital-david/digital-david.gif",
+      "tags": ["generative", "typography", "3d"],
+      "tech": ["p5.js", "WEBGL"]
     }
   ]
 }
