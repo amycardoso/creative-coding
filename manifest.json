@@ -134,6 +134,15 @@
       "media": "sketches/digital-david/digital-david.gif",
       "tags": ["generative", "typography", "3d"],
       "tech": ["p5.js", "WEBGL"]
+    },
+    {
+      "slug": "deep-starfield",
+      "title": "Deep Starfield",
+      "description": "Thousands of stars twinkle against a dark navy void — dense clusters and faint nebula glow evoke the feeling of drifting through deep space.",
+      "date": "2026-02-16",
+      "media": "sketches/deep-starfield/deep-starfield.gif",
+      "tags": ["generative", "space"],
+      "tech": ["p5.js"]
     }
   ]
 }
