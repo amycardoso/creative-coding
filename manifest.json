@@ -143,6 +143,15 @@
       "media": "sketches/deep-starfield/deep-starfield.gif",
       "tags": ["generative", "space"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "cosmic-touch",
+      "title": "Cosmic Touch",
+      "description": "Michelangelo's Creation of Adam reimagined in deep space — hands dissolve into an animated nebula with twinkling stars, edge-dissolution particles, and divine energy sparking between the fingertips.",
+      "date": "2026-02-17",
+      "media": "sketches/cosmic-touch/cosmic-touch.gif",
+      "tags": ["generative", "space", "abstract"],
+      "tech": ["p5.js"]
     }
   ]
 }
