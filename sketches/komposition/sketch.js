@@ -11,8 +11,8 @@
  * - Press S to save PNG
  */
 
-const W = 800;
-const H = 800;
+const W = 600;
+const H = 600;
 
 // Curated palettes — every color pops against dark background
 const PALETTES = [
