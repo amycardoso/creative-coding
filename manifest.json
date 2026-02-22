@@ -152,6 +152,15 @@
       "media": "sketches/cosmic-touch/cosmic-touch.gif",
       "tags": ["generative", "space", "abstract"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "komposition",
+      "title": "Komposition",
+      "description": "Generative geometric abstraction — bold overlapping shapes, vivid colors, and dynamic composition. Each click births a new arrangement, inspired by Kandinsky and modern geometric art.",
+      "date": "2026-02-21",
+      "media": "sketches/komposition/komposition.png",
+      "tags": ["generative", "abstract"],
+      "tech": ["p5.js"]
     }
   ]
 }
