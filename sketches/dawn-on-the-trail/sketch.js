@@ -139,6 +139,48 @@ function drawTree(t, lightAmount) {
   }
 
   rect(t.x - t.w / 2, t.baseY - t.h, t.w, t.h);
+
+  // Only draw detail on lit trees in near/mid bands
+  if (lightAmount > 0.15 && t.hasCuts && t.z > 0.4) {
+    drawScars(t, lightAmount);
+    if (t.hasCup) {
+      drawCup(t, lightAmount);
+    }
+  }
+}
+
+function drawScars(t, lightAmount) {
+  const scarAlpha = lightAmount * 200;
+  stroke(SCAR_COLOR[0], SCAR_COLOR[1], SCAR_COLOR[2], scarAlpha);
+  strokeWeight(max(1, t.w * 0.06));
+
+  const scarLen = t.w * 0.7;
+  const spacing = t.w * 0.18;
+  const startY = t.baseY - t.h * 0.55;
+  const angle = radians(30) * t.cutSide;
+
+  for (let i = 0; i < t.scarCount; i++) {
+    const sy = startY + i * spacing;
+    const sx = t.x - scarLen / 2 * t.cutSide;
+    line(sx, sy, sx + cos(angle) * scarLen, sy + sin(angle) * scarLen);
+  }
+}
+
+function drawCup(t, lightAmount) {
+  const cupAlpha = lightAmount * 180;
+  const cupY = t.baseY - t.h * 0.35;
+  const cupX = t.x + t.w * 0.4 * t.cutSide;
+  const cupSize = t.w * 0.35;
+
+  noStroke();
+  fill(SCAR_COLOR[0], SCAR_COLOR[1], SCAR_COLOR[2], cupAlpha);
+  arc(cupX, cupY, cupSize, cupSize, 0, PI);
+
+  // Occasional latex drop
+  if (random() < 0.01) {
+    fill(LATEX_COLOR[0], LATEX_COLOR[1], LATEX_COLOR[2], cupAlpha);
+    ellipse(cupX, cupY - cupSize * 0.5 - random(2, 8), 2, 2);
+  }
 }
 
 function drawLightGlow() {
