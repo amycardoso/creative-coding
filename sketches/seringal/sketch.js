@@ -82,6 +82,16 @@ function drawRiver() {
     }
     endShape();
   }
+
+  // Subtle shadow on east bank for depth
+  stroke(10, 20, 10, 40);
+  strokeWeight(3);
+  noFill();
+  beginShape();
+  for (let i = 0; i < end; i++) {
+    curveVertex(riverPath[i].x + 4, riverPath[i].y);
+  }
+  endShape();
 }
 
 // --- Homesteads ---
@@ -318,6 +328,35 @@ function drawCanopy() {
   }
 }
 
+function drawRiverBank() {
+  // Draw lighter green circles along river edges for vegetation meeting water
+  if (phase < PHASE_CANOPY) return;
+
+  for (let i = 0; i < riverPath.length; i += 8) {
+    const p = riverPath[i];
+    // Draw a few circles on each side of the river
+    for (let side = -1; side <= 1; side += 2) {
+      const offset = RIVER_WIDTH * 0.5 + random(5, 15);
+      const bx = p.x + side * offset;
+      const by = p.y + random(-3, 3);
+      const br = random(4, 8);
+
+      // Check we don't overlap existing canopy too much
+      let tooClose = false;
+      for (const c of canopyCircles) {
+        if (dist(bx, by, c.x, c.y) < br + c.r - 2) { tooClose = true; break; }
+      }
+      if (tooClose) continue;
+
+      // Slightly lighter/yellower green
+      stroke(20, 40, 15, 100);
+      strokeWeight(0.6);
+      fill(random(60, 90), random(140, 180), random(50, 80));
+      ellipse(bx, by, br * 2, br * 2);
+    }
+  }
+}
+
 function setup() {
   const canvas = createCanvas(W, H);
   canvas.parent('canvas-container');
@@ -343,11 +382,12 @@ function generateSeringal() {
 
 function draw() {
   background(GROUND_COLOR);
-  drawCanopy();      // trees behind everything
-  drawRiver();       // river on top of trees
-  drawTrails();      // trails on top
-  drawHomesteads();  // houses on top
-  updateCanopy();    // add more circles if in canopy phase
+  drawCanopy();
+  drawRiverBank();    // lighter vegetation along river edges
+  drawRiver();
+  drawTrails();
+  drawHomesteads();
+  updateCanopy();
 }
 
 function mousePressed() {
