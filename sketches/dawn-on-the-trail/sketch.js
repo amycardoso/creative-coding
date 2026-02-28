@@ -40,6 +40,10 @@ const LAMP_REACH = H * 0.95;
 const LAMP_SWAY_SPEED = 0.008;
 const LAMP_SWAY_AMOUNT = 0.05; // radians (~3 degrees)
 
+// --- Dawn progression ---
+// Over ~5 minutes (9000 frames at 30fps), background shifts subtly
+const DAWN_DURATION = 9000;
+
 let trees = [];
 
 // --- Fireflies ---
@@ -89,6 +93,14 @@ function initTrees() {
   trees.sort((a, b) => a.z - b.z);
 }
 
+function getDawnBackground() {
+  const progress = min(frameCount / DAWN_DURATION, 1);
+  const r = lerp(BG_COLOR[0], 18, progress);
+  const g = lerp(BG_COLOR[1], 25, progress);
+  const b = lerp(BG_COLOR[2], 42, progress);
+  return [r, g, b];
+}
+
 function setup() {
   const canvas = createCanvas(W, H);
   canvas.parent('canvas-container');
@@ -99,7 +111,7 @@ function setup() {
 }
 
 function draw() {
-  background(...BG_COLOR);
+  background(...getDawnBackground());
 
   // Ground
   noStroke();
@@ -123,6 +135,8 @@ function draw() {
   updateFireflies();
 
   drawLightGlow();
+
+  drawVignette();
 }
 
 function getLampAngle() {
@@ -255,6 +269,19 @@ function drawLightGlow() {
     const cx = W / 2 + cos(lampDir) * r * 0.3;
     const cy = LAMP_ORIGIN_Y + sin(lampDir) * r * 0.3;
     ellipse(cx, cy, r * 0.8, r * 1.2);
+  }
+}
+
+function drawVignette() {
+  // Darken edges for focus on center light
+  noStroke();
+  const steps = 20;
+  for (let i = steps; i > 0; i--) {
+    const alpha = map(i, 0, steps, 0, 40);
+    fill(0, 0, 0, alpha);
+    const margin = map(i, 0, steps, 0, W * 0.35);
+    rect(0, 0, margin, H); // left
+    rect(W - margin, 0, margin, H); // right
   }
 }
 
