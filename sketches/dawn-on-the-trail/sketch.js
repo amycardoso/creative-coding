@@ -33,6 +33,13 @@ const BANDS = [
 
 const SCROLL_SPEED = 0.6;
 
+// --- Headlamp ---
+const LAMP_ORIGIN_Y = H * 0.92;
+const LAMP_CONE_ANGLE = PI / 3; // 60 degrees
+const LAMP_REACH = H * 0.95;
+const LAMP_SWAY_SPEED = 0.008;
+const LAMP_SWAY_AMOUNT = 0.05; // radians (~3 degrees)
+
 let trees = [];
 
 function createTree(band, x) {
@@ -75,30 +82,76 @@ function setup() {
 function draw() {
   background(...BG_COLOR);
 
-  // Draw ground
+  // Ground
   noStroke();
   fill(...GROUND_COLOR);
   rect(0, H * 0.88, W, H * 0.12);
 
-  // Update and draw trees
   for (const t of trees) {
     t.x -= SCROLL_SPEED * t.z;
 
-    // Recycle tree when it exits left
     if (t.x < -60) {
       const recycled = createTree(t.band, W + random(20, 120));
       Object.assign(t, recycled);
     }
 
-    drawTreeSilhouette(t);
+    const lightAmount = isInLightCone(t.x, t.baseY - t.h / 2);
+    drawTree(t, lightAmount);
   }
+
+  drawLightGlow();
 }
 
-function drawTreeSilhouette(t) {
+function getLampAngle() {
+  return -HALF_PI + sin(frameCount * LAMP_SWAY_SPEED) * LAMP_SWAY_AMOUNT;
+}
+
+function isInLightCone(px, py) {
+  const dx = px - W / 2;
+  const dy = py - LAMP_ORIGIN_Y;
+  const dist = sqrt(dx * dx + dy * dy);
+  if (dist > LAMP_REACH || dist < 1) return 0;
+
+  const angle = atan2(dy, dx);
+  const lampDir = getLampAngle();
+  let angleDiff = abs(angle - lampDir);
+  if (angleDiff > PI) angleDiff = TWO_PI - angleDiff;
+
+  if (angleDiff > LAMP_CONE_ANGLE / 2) return 0;
+
+  const angleFalloff = map(angleDiff, 0, LAMP_CONE_ANGLE / 2, 1, 0);
+  const distFalloff = map(dist, 0, LAMP_REACH, 1, 0);
+  return angleFalloff * distFalloff;
+}
+
+function drawTree(t, lightAmount) {
   noStroke();
-  const alpha = map(t.z, 0.1, 1.0, 80, 220);
-  fill(TRUNK_DARK[0], TRUNK_DARK[1], TRUNK_DARK[2], alpha);
+  const darkAlpha = map(t.z, 0.1, 1.0, 80, 220);
+
+  if (lightAmount > 0.05) {
+    // Lit trunk
+    const r = lerp(TRUNK_DARK[0], TRUNK_LIT[0], lightAmount);
+    const g = lerp(TRUNK_DARK[1], TRUNK_LIT[1], lightAmount);
+    const b = lerp(TRUNK_DARK[2], TRUNK_LIT[2], lightAmount);
+    fill(r, g, b, darkAlpha);
+  } else {
+    fill(TRUNK_DARK[0], TRUNK_DARK[1], TRUNK_DARK[2], darkAlpha);
+  }
+
   rect(t.x - t.w / 2, t.baseY - t.h, t.w, t.h);
+}
+
+function drawLightGlow() {
+  // Soft radial glow at lamp origin
+  noStroke();
+  const lampDir = getLampAngle();
+  for (let r = LAMP_REACH; r > 10; r -= 8) {
+    const alpha = map(r, 10, LAMP_REACH, 12, 1);
+    fill(LAMP_COLOR[0], LAMP_COLOR[1], LAMP_COLOR[2], alpha);
+    const cx = W / 2 + cos(lampDir) * r * 0.3;
+    const cy = LAMP_ORIGIN_Y + sin(lampDir) * r * 0.3;
+    ellipse(cx, cy, r * 0.8, r * 1.2);
+  }
 }
 
 function keyPressed() {
