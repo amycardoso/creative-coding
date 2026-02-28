@@ -35,7 +35,7 @@ const SCROLL_SPEED = 0.6;
 
 // --- Headlamp ---
 const LAMP_ORIGIN_Y = H * 0.92;
-const LAMP_CONE_ANGLE = PI / 3; // 60 degrees
+const LAMP_CONE_ANGLE = Math.PI / 3; // 60 degrees
 const LAMP_REACH = H * 0.95;
 const LAMP_SWAY_SPEED = 0.008;
 const LAMP_SWAY_AMOUNT = 0.05; // radians (~3 degrees)
