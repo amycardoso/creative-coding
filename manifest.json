@@ -161,6 +161,15 @@
       "media": "sketches/komposition/komposition.png",
       "tags": ["generative", "abstract"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "terra-brasileira",
+      "title": "Terra Brasileira",
+      "description": "Procedural landscapes inspired by Tarsila do Amaral — bold outlines, flat tropical color, and surreal proportions. Each click generates a unique composition.",
+      "date": "2026-02-28",
+      "media": "sketches/terra-brasileira/terra-brasileira.png",
+      "tags": ["generative", "abstract", "landscape"],
+      "tech": ["p5.js"]
     }
   ]
 }
