@@ -125,6 +125,106 @@ function drawHomesteads() {
   }
 }
 
+// --- Trails ---
+const TRAIL_SPEED = 35; // steps drawn per frame
+
+function generateTrails() {
+  trails = [];
+  const noiseSeedVal = random(1000);
+
+  for (const h of homesteads) {
+    const trailCount = floor(random(2, 4)); // 2-3 trails per homestead
+    for (let t = 0; t < trailCount; t++) {
+      const path = generateOneTrail(h.x, h.y, noiseSeedVal + t * 100);
+      trails.push({ path, drawIndex: 0, homestead: h });
+    }
+  }
+}
+
+function generateOneTrail(homeX, homeY, seed) {
+  const points = [{ x: homeX, y: homeY }];
+  const totalSteps = floor(random(180, 320));
+  const stepSize = 5;
+  let angle = random(TWO_PI);
+
+  for (let i = 1; i <= totalSteps; i++) {
+    const prev = points[i - 1];
+
+    // Noise-based turning
+    const n = noise(prev.x * 0.008 + seed, prev.y * 0.008) - 0.5;
+    angle += n * 0.8;
+
+    // Homing force: after 60% of steps, pull back toward home
+    const homingStart = totalSteps * 0.6;
+    if (i > homingStart) {
+      const homingStrength = map(i, homingStart, totalSteps, 0, 0.15);
+      const toHomeAngle = atan2(homeY - prev.y, homeX - prev.x);
+      let diff = toHomeAngle - angle;
+      while (diff > PI) diff -= TWO_PI;
+      while (diff < -PI) diff += TWO_PI;
+      angle += diff * homingStrength;
+    }
+
+    // Soft boundary repulsion
+    const nx = prev.x + cos(angle) * stepSize;
+    const ny = prev.y + sin(angle) * stepSize;
+    if (nx < 30) angle += 0.3;
+    if (nx > W - 80) angle -= 0.3; // avoid river area
+    if (ny < 30) angle += 0.3;
+    if (ny > H - 30) angle -= 0.3;
+
+    points.push({
+      x: constrain(prev.x + cos(angle) * stepSize, 20, W - 70),
+      y: constrain(prev.y + sin(angle) * stepSize, 20, H - 20),
+    });
+  }
+
+  // Close the loop — smooth return to home
+  const last = points[points.length - 1];
+  const returnSteps = 20;
+  for (let i = 1; i <= returnSteps; i++) {
+    const t = i / returnSteps;
+    const smooth = t * t * (3 - 2 * t); // smoothstep
+    points.push({
+      x: lerp(last.x, homeX, smooth),
+      y: lerp(last.y, homeY, smooth),
+    });
+  }
+
+  return points;
+}
+
+function drawTrails() {
+  if (phase === PHASE_TRAILS) {
+    let allDone = true;
+    for (const trail of trails) {
+      trail.drawIndex = min(trail.drawIndex + TRAIL_SPEED, trail.path.length);
+      if (trail.drawIndex < trail.path.length) allDone = false;
+    }
+    if (allDone) {
+      phase = PHASE_CANOPY;
+      phaseFrame = 0;
+    }
+  }
+
+  if (phase < PHASE_TRAILS) return;
+
+  stroke(TRAIL_COLOR);
+  strokeWeight(2.5);
+  noFill();
+  strokeCap(ROUND);
+  strokeJoin(ROUND);
+
+  for (const trail of trails) {
+    const end = phase >= PHASE_CANOPY ? trail.path.length : trail.drawIndex;
+    beginShape();
+    for (let i = 0; i < end; i++) {
+      curveVertex(trail.path[i].x, trail.path[i].y);
+    }
+    endShape();
+  }
+}
+
 function setup() {
   const canvas = createCanvas(W, H);
   canvas.parent('canvas-container');
@@ -144,12 +244,14 @@ function generateSeringal() {
   generateRiver();
   riverDrawIndex = 0;
   generateHomesteads();
+  generateTrails();
 }
 
 function draw() {
   background(GROUND_COLOR);
   drawRiver();
   drawHomesteads();
+  drawTrails();
 }
 
 function mousePressed() {
