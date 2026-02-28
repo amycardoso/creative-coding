@@ -42,6 +42,24 @@ const LAMP_SWAY_AMOUNT = 0.05; // radians (~3 degrees)
 
 let trees = [];
 
+// --- Fireflies ---
+const FIREFLY_COUNT = 20;
+let fireflies = [];
+
+function initFireflies() {
+  fireflies = [];
+  for (let i = 0; i < FIREFLY_COUNT; i++) {
+    fireflies.push({
+      x: random(W),
+      y: random(H * 0.2, H * 0.8),
+      vx: random(-0.2, 0.2),
+      vy: random(-0.15, 0.15),
+      phase: random(TWO_PI),
+      size: random(1.5, 3),
+    });
+  }
+}
+
 function createTree(band, x) {
   const z = random(band.minZ, band.maxZ);
   const trunkW = map(z, 0.1, 1.0, 3, 28);
@@ -77,6 +95,7 @@ function setup() {
   pixelDensity(2);
   frameRate(30);
   initTrees();
+  initFireflies();
 }
 
 function draw() {
@@ -86,6 +105,8 @@ function draw() {
   noStroke();
   fill(...GROUND_COLOR);
   rect(0, H * 0.88, W, H * 0.12);
+
+  drawTrailPath();
 
   for (const t of trees) {
     t.x -= SCROLL_SPEED * t.z;
@@ -98,6 +119,8 @@ function draw() {
     const lightAmount = isInLightCone(t.x, t.baseY - t.h / 2);
     drawTree(t, lightAmount);
   }
+
+  updateFireflies();
 
   drawLightGlow();
 }
@@ -181,6 +204,45 @@ function drawCup(t, lightAmount) {
     fill(LATEX_COLOR[0], LATEX_COLOR[1], LATEX_COLOR[2], cupAlpha);
     ellipse(cupX, cupY - cupSize * 0.5 - random(2, 8), 2, 2);
   }
+}
+
+function updateFireflies() {
+  for (const f of fireflies) {
+    f.x += f.vx;
+    f.y += f.vy;
+    f.phase += 0.03;
+
+    // Wrap around
+    if (f.x < -10) f.x = W + 10;
+    if (f.x > W + 10) f.x = -10;
+    if (f.y < H * 0.1) f.vy = abs(f.vy);
+    if (f.y > H * 0.85) f.vy = -abs(f.vy);
+
+    const brightness = map(sin(f.phase), -1, 1, 0, 1);
+    const alpha = brightness * 120;
+    noStroke();
+    fill(180, 210, 130, alpha);
+    ellipse(f.x, f.y, f.size * brightness, f.size * brightness);
+  }
+}
+
+function drawTrailPath() {
+  // Subtle lighter strip at ground level suggesting the worn trail
+  noStroke();
+  fill(GROUND_COLOR[0] + 8, GROUND_COLOR[1] + 6, GROUND_COLOR[2] + 4, 60);
+
+  beginShape();
+  const trailY = H * 0.89;
+  const trailWidth = 60;
+  for (let x = 0; x <= W; x += 20) {
+    const wobble = sin(x * 0.01 + frameCount * 0.005) * 8;
+    vertex(x, trailY + wobble - trailWidth / 2);
+  }
+  for (let x = W; x >= 0; x -= 20) {
+    const wobble = sin(x * 0.01 + frameCount * 0.005) * 8;
+    vertex(x, trailY + wobble + trailWidth / 2);
+  }
+  endShape(CLOSE);
 }
 
 function drawLightGlow() {
