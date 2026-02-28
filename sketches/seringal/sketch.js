@@ -225,6 +225,99 @@ function drawTrails() {
   }
 }
 
+// --- Canopy ---
+const CANOPY_CIRCLES_PER_FRAME = 80;
+const MAX_CANOPY_CIRCLES = 3000;
+let canopyAttemptsFailed = 0;
+const MAX_FAILED_ATTEMPTS = 500;
+
+function isOnRiver(x, y) {
+  for (const p of riverPath) {
+    if (dist(x, y, p.x, p.y) < RIVER_WIDTH * 0.6) return true;
+  }
+  return false;
+}
+
+function isOnTrail(x, y) {
+  for (const trail of trails) {
+    for (let i = 0; i < trail.path.length; i += 3) {
+      if (dist(x, y, trail.path[i].x, trail.path[i].y) < 8) return true;
+    }
+  }
+  return false;
+}
+
+function isOnHomestead(x, y) {
+  for (const h of homesteads) {
+    if (dist(x, y, h.x, h.y) < 25) return true;
+  }
+  return false;
+}
+
+function overlapsCircle(x, y, r) {
+  for (const c of canopyCircles) {
+    const d = dist(x, y, c.x, c.y);
+    if (d < r + c.r + 1) return true;
+  }
+  return false;
+}
+
+function tryPlaceCircle() {
+  const x = random(10, W - 10);
+  const y = random(10, H - 10);
+
+  if (isOnRiver(x, y)) return null;
+  if (isOnTrail(x, y)) return null;
+  if (isOnHomestead(x, y)) return null;
+
+  for (let r = random(8, 16); r >= 3; r -= 2) {
+    if (!overlapsCircle(x, y, r)) {
+      const col = color(random(GREENS));
+      const brightness = random(0.85, 1.15);
+      return {
+        x, y, r,
+        cr: red(col) * brightness,
+        cg: green(col) * brightness,
+        cb: blue(col) * brightness,
+      };
+    }
+  }
+  return null;
+}
+
+function updateCanopy() {
+  if (phase !== PHASE_CANOPY) return;
+
+  for (let i = 0; i < CANOPY_CIRCLES_PER_FRAME; i++) {
+    if (canopyCircles.length >= MAX_CANOPY_CIRCLES) {
+      phase = PHASE_DONE;
+      return;
+    }
+    const c = tryPlaceCircle();
+    if (c) {
+      canopyCircles.push(c);
+      canopyAttemptsFailed = 0;
+    } else {
+      canopyAttemptsFailed++;
+      if (canopyAttemptsFailed > MAX_FAILED_ATTEMPTS) {
+        phase = PHASE_DONE;
+        return;
+      }
+    }
+  }
+}
+
+function drawCanopy() {
+  if (phase < PHASE_CANOPY && canopyCircles.length === 0) return;
+
+  for (const c of canopyCircles) {
+    stroke(20, 40, 15, 120);
+    strokeWeight(0.8);
+    fill(c.cr, c.cg, c.cb);
+    ellipse(c.x, c.y, c.r * 2, c.r * 2);
+  }
+}
+
 function setup() {
   const canvas = createCanvas(W, H);
   canvas.parent('canvas-container');
@@ -240,6 +333,7 @@ function generateSeringal() {
   homesteads = [];
   trails = [];
   canopyCircles = [];
+  canopyAttemptsFailed = 0;
   noiseSeed(random(10000));
   generateRiver();
   riverDrawIndex = 0;
@@ -249,9 +343,11 @@ function generateSeringal() {
 
 function draw() {
   background(GROUND_COLOR);
-  drawRiver();
-  drawHomesteads();
-  drawTrails();
+  drawCanopy();      // trees behind everything
+  drawRiver();       // river on top of trees
+  drawTrails();      // trails on top
+  drawHomesteads();  // houses on top
+  updateCanopy();    // add more circles if in canopy phase
 }
 
 function mousePressed() {
