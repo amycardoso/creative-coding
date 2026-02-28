@@ -84,6 +84,47 @@ function drawRiver() {
   }
 }
 
+// --- Homesteads ---
+const HOMESTEAD_FADE_FRAMES = 15;
+
+function generateHomesteads() {
+  homesteads = [];
+  const count = floor(random(2, 4)); // 2-3 homesteads
+  for (let i = 0; i < count; i++) {
+    const riverIdx = floor(random(riverPath.length * 0.2, riverPath.length * 0.8));
+    const riverPt = riverPath[riverIdx];
+    const inlandDist = random(100, 200);
+    homesteads.push({
+      x: riverPt.x - inlandDist,
+      y: riverPt.y + random(-30, 30),
+      opacity: 0,
+    });
+  }
+}
+
+function drawHomesteads() {
+  if (phase === PHASE_HOMESTEADS) {
+    phaseFrame++;
+    for (const h of homesteads) {
+      h.opacity = min(h.opacity + (255 / HOMESTEAD_FADE_FRAMES), 255);
+    }
+    if (phaseFrame >= HOMESTEAD_FADE_FRAMES) {
+      phase = PHASE_TRAILS;
+      phaseFrame = 0;
+    }
+  }
+
+  if (phase < PHASE_HOMESTEADS) return;
+
+  for (const h of homesteads) {
+    noStroke();
+    const c = color(HOUSE_COLOR);
+    fill(red(c), green(c), blue(c), h.opacity);
+    rect(h.x - 6, h.y - 5, 12, 10);
+    ellipse(h.x + 15, h.y + 8, 6, 6);
+  }
+}
+
 function setup() {
   const canvas = createCanvas(W, H);
   canvas.parent('canvas-container');
@@ -102,11 +143,13 @@ function generateSeringal() {
   noiseSeed(random(10000));
   generateRiver();
   riverDrawIndex = 0;
+  generateHomesteads();
 }
 
 function draw() {
   background(GROUND_COLOR);
   drawRiver();
+  drawHomesteads();
 }
 
 function mousePressed() {
