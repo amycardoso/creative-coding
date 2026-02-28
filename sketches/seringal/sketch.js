@@ -39,6 +39,7 @@ let riverPath = [];
 let homesteads = [];
 let trails = [];
 let canopyCircles = [];
+let riverBankCircles = [];
 
 let riverDrawIndex = 0;
 const RIVER_WIDTH = 38;
@@ -328,32 +329,31 @@ function drawCanopy() {
   }
 }
 
-function drawRiverBank() {
-  // Draw lighter green circles along river edges for vegetation meeting water
-  if (phase < PHASE_CANOPY) return;
-
+function generateRiverBank() {
+  riverBankCircles = [];
   for (let i = 0; i < riverPath.length; i += 8) {
     const p = riverPath[i];
-    // Draw a few circles on each side of the river
     for (let side = -1; side <= 1; side += 2) {
       const offset = RIVER_WIDTH * 0.5 + random(5, 15);
       const bx = p.x + side * offset;
       const by = p.y + random(-3, 3);
       const br = random(4, 8);
-
-      // Check we don't overlap existing canopy too much
-      let tooClose = false;
-      for (const c of canopyCircles) {
-        if (dist(bx, by, c.x, c.y) < br + c.r - 2) { tooClose = true; break; }
-      }
-      if (tooClose) continue;
-
-      // Slightly lighter/yellower green
-      stroke(20, 40, 15, 100);
-      strokeWeight(0.6);
-      fill(random(60, 90), random(140, 180), random(50, 80));
-      ellipse(bx, by, br * 2, br * 2);
+      riverBankCircles.push({
+        x: bx, y: by, r: br,
+        cr: random(60, 90), cg: random(140, 180), cb: random(50, 80),
+      });
     }
+  }
+}
+
+function drawRiverBank() {
+  if (phase < PHASE_CANOPY) return;
+
+  for (const b of riverBankCircles) {
+    stroke(20, 40, 15, 100);
+    strokeWeight(0.6);
+    fill(b.cr, b.cg, b.cb);
+    ellipse(b.x, b.y, b.r * 2, b.r * 2);
   }
 }
 
@@ -372,12 +372,14 @@ function generateSeringal() {
   homesteads = [];
   trails = [];
   canopyCircles = [];
+  riverBankCircles = [];
   canopyAttemptsFailed = 0;
   noiseSeed(random(10000));
   generateRiver();
   riverDrawIndex = 0;
   generateHomesteads();
   generateTrails();
+  generateRiverBank();
 }
 
 function draw() {
