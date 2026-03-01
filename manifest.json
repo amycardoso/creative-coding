@@ -170,6 +170,15 @@
       "media": "sketches/terra-brasileira/terra-brasileira.png",
       "tags": ["generative", "abstract", "landscape"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "kene",
+      "title": "Kene",
+      "description": "Generative sacred geometry inspired by Huni Kuin kene patterns, rendered in vibrant MAHKU colors. The pattern weaves itself line by line like a loom building sacred fabric. Part of the Acre Series.",
+      "date": "2026-03-01",
+      "media": "sketches/kene/kene.png",
+      "tags": ["generative", "abstract", "narrative"],
+      "tech": ["p5.js"]
     }
   ]
 }

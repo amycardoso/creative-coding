@@ -48,7 +48,7 @@ let bands = [];
 // --- Band generation ---
 function generateBands() {
   bands = [];
-  const margin = 15;
+  const margin = 20;
   const numBands = floor(random(5, 8)); // 5-7 bands
   const availableH = H - margin * 2;
 
@@ -324,6 +324,20 @@ function generatePattern() {
     drawBandMotif(patternBuffer, band);
     mirrorBand(patternBuffer, band.y, band.h);
   }
+
+  // Separator lines between bands
+  patternBuffer.stroke('#f5e6ca'); // cream white from palette
+  patternBuffer.strokeWeight(1.5);
+  for (let i = 0; i < bands.length - 1; i++) {
+    const sepY = bands[i].y + bands[i].h;
+    patternBuffer.line(0, sepY, W, sepY);
+  }
+
+  // Thin border around the whole pattern
+  patternBuffer.noFill();
+  patternBuffer.stroke('#f5e6ca');
+  patternBuffer.strokeWeight(2);
+  patternBuffer.rect(1, 1, W - 2, H - 2);
 }
 
 function draw() {
