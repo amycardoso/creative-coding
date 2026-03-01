@@ -170,15 +170,6 @@
       "media": "sketches/terra-brasileira/terra-brasileira.png",
       "tags": ["generative", "abstract", "landscape"],
       "tech": ["p5.js"]
-    },
-    {
-      "slug": "seringal",
-      "title": "Seringal",
-      "description": "An aerial map of an Amazonian rubber estate draws itself — a golden river, homesteads, winding estrada trails, and dense forest canopy. Each click births a new seringal. Part of the Acre Series.",
-      "date": "2026-02-28",
-      "media": "sketches/seringal/seringal.png",
-      "tags": ["generative", "landscape", "narrative"],
-      "tech": ["p5.js"]
     }
   ]
 }
