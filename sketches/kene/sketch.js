@@ -191,6 +191,97 @@ function drawDiamondBand(g, by, bh, colors) {
   }
 }
 
+function drawSteppedBand(g, by, bh, colors) {
+  const halfW = W / 2;
+  const numLines = floor(random(2, 4));
+  const stepW = bh * 0.5;
+  const stepH = bh / 6;
+
+  g.noFill();
+  g.strokeWeight(3);
+  g.strokeCap(SQUARE);
+
+  for (let li = 0; li < numLines; li++) {
+    g.stroke(colors[li % colors.length]);
+    const baseY = by + bh * (li + 1) / (numLines + 1);
+
+    g.beginShape();
+    let cy = baseY;
+    let goingDown = true;
+    for (let x = 0; x <= halfW + stepW; x += stepW) {
+      g.vertex(x, cy);
+      g.vertex(x + stepW * 0.5, cy);
+      cy += goingDown ? stepH : -stepH;
+      g.vertex(x + stepW * 0.5, cy);
+      if (cy > baseY + bh * 0.3 || cy < baseY - bh * 0.3) {
+        goingDown = !goingDown;
+      }
+    }
+    g.endShape();
+  }
+}
+
+function drawCrossHatchBand(g, by, bh, colors) {
+  const halfW = W / 2;
+  const spacing = bh / floor(random(3, 6));
+
+  g.strokeWeight(2.5);
+  g.strokeCap(ROUND);
+
+  // Clip to band area
+  g.drawingContext.save();
+  g.drawingContext.beginPath();
+  g.drawingContext.rect(0, by, halfW, bh);
+  g.drawingContext.clip();
+
+  // Diagonal lines going down-right
+  g.stroke(colors[0]);
+  for (let offset = -bh; offset < halfW + bh; offset += spacing) {
+    g.line(offset, by, offset + bh, by + bh);
+  }
+
+  // Diagonal lines going up-right
+  g.stroke(colors.length > 1 ? colors[1] : colors[0]);
+  for (let offset = -bh; offset < halfW + bh; offset += spacing) {
+    g.line(offset, by + bh, offset + bh, by);
+  }
+
+  g.drawingContext.restore();
+}
+
+function drawNestedRectBand(g, by, bh, colors) {
+  const halfW = W / 2;
+  const tileW = bh * 1.1;
+  const numRects = floor(random(3, 6));
+
+  g.noFill();
+  g.strokeWeight(2.5);
+  g.strokeJoin(MITER);
+
+  // Clip to band area
+  g.drawingContext.save();
+  g.drawingContext.beginPath();
+  g.drawingContext.rect(0, by, halfW, bh);
+  g.drawingContext.clip();
+
+  for (let tx = 0; tx < halfW + tileW; tx += tileW) {
+    const cx = tx + tileW / 2;
+    const cy = by + bh / 2;
+    for (let ri = 0; ri < numRects; ri++) {
+      g.stroke(colors[ri % colors.length]);
+      const margin = ri * (min(tileW, bh) / (numRects * 2 + 1));
+      g.rect(
+        cx - tileW / 2 + margin,
+        cy - bh / 2 + margin,
+        tileW - margin * 2,
+        bh - margin * 2
+      );
+    }
+  }
+
+  g.drawingContext.restore();
+}
+
 function drawBandMotif(g, band) {
   switch (band.motif) {
     case 'zigzag':
@@ -199,9 +290,14 @@ function drawBandMotif(g, band) {
     case 'diamond':
       drawDiamondBand(g, band.y, band.h, band.colors);
       break;
-    // More motifs added in later tasks
-    default:
-      drawZigzagBand(g, band.y, band.h, band.colors);
+    case 'stepped':
+      drawSteppedBand(g, band.y, band.h, band.colors);
+      break;
+    case 'crosshatch':
+      drawCrossHatchBand(g, band.y, band.h, band.colors);
+      break;
+    case 'nestedRect':
+      drawNestedRectBand(g, band.y, band.h, band.colors);
       break;
   }
 }
