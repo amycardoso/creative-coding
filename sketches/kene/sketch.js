@@ -238,44 +238,77 @@ function drawSteppedBand(g, by, bh, colors) {
   const halfW = W / 2;
   clipBand(g, by, bh);
 
-  // Fill background
+  // Fill background with first color
   g.noStroke();
   g.fill(colors[0]);
   g.rect(0, by, halfW, bh);
 
-  // Filled stepped shapes — like a pyramid/ziggurat pattern
-  const stepW = bh * 0.35;
-  const stepH = bh / 8;
-  const patternW = stepW * 6;
+  // Interlocking staircase rows that fill the entire band
+  const numSteps = floor(random(4, 7));
+  const stepH = bh / numSteps;
+  const stepW = stepH * 1.2;
+  const patternW = stepW * 4; // one full up-down cycle
 
-  g.fill(colors[1 % colors.length]);
-  g.stroke(0, 0, 0, 40);
+  g.stroke(0, 0, 0, 50);
   g.strokeWeight(1);
 
-  for (let px = 0; px < halfW + patternW; px += patternW) {
-    const cx = px + patternW / 2;
-    // Build a stepped pyramid shape
-    const steps = floor(random(3, 5));
-    for (let s = 0; s < steps; s++) {
-      const sw = stepW * (steps - s);
-      const sy = by + bh / 2 - stepH * (s + 1) / 2;
-      const sh = stepH * (s + 1);
-      g.rect(cx - sw / 2, sy, sw, sh);
+  // Draw two interlocking staircase waves
+  for (let layer = 0; layer < 2; layer++) {
+    const col = colors[(layer + 1) % colors.length];
+    g.fill(col);
+    const xOff = layer * patternW / 2;
+
+    for (let px = -patternW + xOff; px < halfW + patternW; px += patternW) {
+      // Rising staircase
+      g.beginShape();
+      let x = px;
+      let y = by + bh; // start at bottom
+      g.vertex(x, y);
+      for (let s = 0; s < numSteps; s++) {
+        g.vertex(x, y - stepH);
+        x += stepW;
+        g.vertex(x, y - stepH);
+        y -= stepH;
+      }
+      // Falling staircase
+      for (let s = 0; s < numSteps; s++) {
+        g.vertex(x, y + stepH);
+        x += stepW;
+        g.vertex(x, y + stepH);
+        y += stepH;
+      }
+      g.vertex(x, by + bh);
+      g.endShape(CLOSE);
     }
   }
 
-  // Second color layer — inverted pyramids
+  // Third color accent — smaller staircases offset
   if (colors.length > 2) {
     g.fill(colors[2]);
-    for (let px = patternW / 2; px < halfW + patternW; px += patternW) {
-      const cx = px + patternW / 2;
-      const steps = 2;
-      for (let s = 0; s < steps; s++) {
-        const sw = stepW * (steps - s);
-        const sy = by + bh / 2 - stepH * (s + 1) / 2;
-        const sh = stepH * (s + 1);
-        g.rect(cx - sw / 2, sy, sw, sh);
+    const smallStepH = stepH * 0.5;
+    const smallStepW = stepW * 0.5;
+    const smallPatternW = smallStepW * 4;
+    const xOff = patternW / 4;
+
+    for (let px = -smallPatternW + xOff; px < halfW + smallPatternW; px += smallPatternW) {
+      g.beginShape();
+      let x = px;
+      let y = by + bh / 2 + numSteps * smallStepH / 2;
+      g.vertex(x, y);
+      for (let s = 0; s < numSteps; s++) {
+        g.vertex(x, y - smallStepH);
+        x += smallStepW;
+        g.vertex(x, y - smallStepH);
+        y -= smallStepH;
       }
+      for (let s = 0; s < numSteps; s++) {
+        g.vertex(x, y + smallStepH);
+        x += smallStepW;
+        g.vertex(x, y + smallStepH);
+        y += smallStepH;
+      }
+      g.vertex(x, by + bh / 2 + numSteps * smallStepH / 2);
+      g.endShape(CLOSE);
     }
   }
 
