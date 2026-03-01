@@ -120,47 +120,85 @@ function mirrorBand(g, by, bh) {
 // --- Motifs ---
 // All motifs draw into the LEFT HALF only (0 to W/2).
 // mirrorBand() handles the right half.
+// All motifs FILL their band area densely — no dark background showing.
+
+function clipBand(g, by, bh) {
+  g.drawingContext.save();
+  g.drawingContext.beginPath();
+  g.drawingContext.rect(0, by, W / 2, bh);
+  g.drawingContext.clip();
+}
+
+function unclipBand(g) {
+  g.drawingContext.restore();
+}
 
 function drawZigzagBand(g, by, bh, colors) {
   const halfW = W / 2;
-  const numLines = floor(random(3, 6));
-  const spacing = bh / (numLines + 1);
-  const zigPeriod = spacing * 1.8;
+  clipBand(g, by, bh);
+
+  // Dense thick zigzag lines that fill the band
+  const numLines = floor(random(5, 9));
+  const spacing = bh / numLines;
+  const zigPeriod = spacing * 2.0;
+  const sw = spacing * 0.85; // thick enough to nearly touch
 
   g.noFill();
-  g.strokeCap(ROUND);
-  g.strokeJoin(ROUND);
-  g.strokeWeight(3);
+  g.strokeCap(SQUARE);
+  g.strokeJoin(MITER);
 
   for (let li = 0; li < numLines; li++) {
     g.stroke(colors[li % colors.length]);
-    const baseY = by + (li + 1) * spacing;
-    const amp = spacing * 0.35;
+    g.strokeWeight(sw);
+    const baseY = by + (li + 0.5) * spacing;
+    const amp = spacing * 0.5;
 
     g.beginShape();
     let up = li % 2 === 0;
-    for (let x = 0; x <= halfW + zigPeriod; x += zigPeriod / 2) {
+    for (let x = -zigPeriod; x <= halfW + zigPeriod; x += zigPeriod / 2) {
       g.vertex(x, baseY + (up ? -amp : amp));
       up = !up;
     }
     g.endShape();
   }
+
+  // Thin dark outlines for definition
+  g.strokeWeight(1);
+  g.stroke(0, 0, 0, 60);
+  for (let li = 0; li < numLines; li++) {
+    const baseY = by + (li + 0.5) * spacing;
+    const amp = spacing * 0.5;
+    g.beginShape();
+    let up = li % 2 === 0;
+    for (let x = -zigPeriod; x <= halfW + zigPeriod; x += zigPeriod / 2) {
+      g.vertex(x, baseY + (up ? -amp : amp));
+      up = !up;
+    }
+    g.endShape();
+  }
+
+  unclipBand(g);
 }
 
 function drawDiamondBand(g, by, bh, colors) {
   const halfW = W / 2;
-  const diamH = bh * 0.65;
-  const diamW = diamH * 0.8;
-  const spacing = diamW * 1.3;
+  clipBand(g, by, bh);
+
+  // Fill background with first color
+  g.noStroke();
+  g.fill(colors[0]);
+  g.rect(0, by, halfW, bh);
+
+  const diamH = bh * 0.85;
+  const diamW = diamH * 0.9;
+  const spacing = diamW * 1.05;
   const centerY = by + bh / 2;
 
-  g.noFill();
-  g.strokeWeight(3);
-  g.strokeJoin(MITER);
-
-  for (let cx = spacing * 0.4; cx < halfW + spacing; cx += spacing) {
-    // Outer diamond
-    g.stroke(colors[0]);
+  for (let cx = spacing * 0.3; cx < halfW + spacing; cx += spacing) {
+    // Filled outer diamond
+    g.fill(colors[1 % colors.length]);
+    g.stroke(0, 0, 0, 50);
+    g.strokeWeight(1);
     g.beginShape();
     g.vertex(cx, centerY - diamH / 2);
     g.vertex(cx + diamW / 2, centerY);
@@ -168,11 +206,11 @@ function drawDiamondBand(g, by, bh, colors) {
     g.vertex(cx - diamW / 2, centerY);
     g.endShape(CLOSE);
 
-    // Inner diamond
-    if (colors.length > 1) {
-      g.stroke(colors[1]);
-      const innerH = diamH * 0.4;
-      const innerW = diamW * 0.4;
+    // Filled inner diamond
+    if (colors.length > 2) {
+      g.fill(colors[2]);
+      const innerH = diamH * 0.45;
+      const innerW = diamW * 0.45;
       g.beginShape();
       g.vertex(cx, centerY - innerH / 2);
       g.vertex(cx + innerW / 2, centerY);
@@ -181,95 +219,121 @@ function drawDiamondBand(g, by, bh, colors) {
       g.endShape(CLOSE);
     }
 
-    // Connecting lines between diamonds
-    if (colors.length > 2) {
-      g.stroke(colors[2]);
-      g.strokeWeight(2);
-      g.line(cx + diamW / 2, centerY, cx + spacing - diamW / 2, centerY);
-      g.strokeWeight(3);
-    }
+    // Small center diamond
+    g.fill(colors[0]);
+    const tinyH = diamH * 0.15;
+    const tinyW = diamW * 0.15;
+    g.beginShape();
+    g.vertex(cx, centerY - tinyH / 2);
+    g.vertex(cx + tinyW / 2, centerY);
+    g.vertex(cx, centerY + tinyH / 2);
+    g.vertex(cx - tinyW / 2, centerY);
+    g.endShape(CLOSE);
   }
+
+  unclipBand(g);
 }
 
 function drawSteppedBand(g, by, bh, colors) {
   const halfW = W / 2;
-  const numLines = floor(random(2, 4));
-  const stepW = bh * 0.5;
-  const stepH = bh / 6;
+  clipBand(g, by, bh);
 
-  g.noFill();
-  g.strokeWeight(3);
-  g.strokeCap(SQUARE);
+  // Fill background
+  g.noStroke();
+  g.fill(colors[0]);
+  g.rect(0, by, halfW, bh);
 
-  for (let li = 0; li < numLines; li++) {
-    g.stroke(colors[li % colors.length]);
-    const baseY = by + bh * (li + 1) / (numLines + 1);
+  // Filled stepped shapes — like a pyramid/ziggurat pattern
+  const stepW = bh * 0.35;
+  const stepH = bh / 8;
+  const patternW = stepW * 6;
 
-    g.beginShape();
-    let cy = baseY;
-    let goingDown = true;
-    for (let x = 0; x <= halfW + stepW; x += stepW) {
-      g.vertex(x, cy);
-      g.vertex(x + stepW * 0.5, cy);
-      cy += goingDown ? stepH : -stepH;
-      g.vertex(x + stepW * 0.5, cy);
-      if (cy > baseY + bh * 0.3 || cy < baseY - bh * 0.3) {
-        goingDown = !goingDown;
+  g.fill(colors[1 % colors.length]);
+  g.stroke(0, 0, 0, 40);
+  g.strokeWeight(1);
+
+  for (let px = 0; px < halfW + patternW; px += patternW) {
+    const cx = px + patternW / 2;
+    // Build a stepped pyramid shape
+    const steps = floor(random(3, 5));
+    for (let s = 0; s < steps; s++) {
+      const sw = stepW * (steps - s);
+      const sy = by + bh / 2 - stepH * (s + 1) / 2;
+      const sh = stepH * (s + 1);
+      g.rect(cx - sw / 2, sy, sw, sh);
+    }
+  }
+
+  // Second color layer — inverted pyramids
+  if (colors.length > 2) {
+    g.fill(colors[2]);
+    for (let px = patternW / 2; px < halfW + patternW; px += patternW) {
+      const cx = px + patternW / 2;
+      const steps = 2;
+      for (let s = 0; s < steps; s++) {
+        const sw = stepW * (steps - s);
+        const sy = by + bh / 2 - stepH * (s + 1) / 2;
+        const sh = stepH * (s + 1);
+        g.rect(cx - sw / 2, sy, sw, sh);
       }
     }
-    g.endShape();
   }
+
+  unclipBand(g);
 }
 
 function drawCrossHatchBand(g, by, bh, colors) {
   const halfW = W / 2;
-  const spacing = bh / floor(random(3, 6));
+  clipBand(g, by, bh);
 
-  g.strokeWeight(2.5);
-  g.strokeCap(ROUND);
+  // Fill background
+  g.noStroke();
+  g.fill(colors[0]);
+  g.rect(0, by, halfW, bh);
 
-  // Clip to band area
-  g.drawingContext.save();
-  g.drawingContext.beginPath();
-  g.drawingContext.rect(0, by, halfW, bh);
-  g.drawingContext.clip();
+  // Thick diagonal lines fill the space
+  const spacing = bh / floor(random(4, 7));
+  const sw = spacing * 0.55;
+
+  g.noFill();
+  g.strokeCap(SQUARE);
 
   // Diagonal lines going down-right
-  g.stroke(colors[0]);
-  for (let offset = -bh; offset < halfW + bh; offset += spacing) {
+  g.stroke(colors[1 % colors.length]);
+  g.strokeWeight(sw);
+  for (let offset = -bh * 2; offset < halfW + bh * 2; offset += spacing) {
     g.line(offset, by, offset + bh, by + bh);
   }
 
   // Diagonal lines going up-right
-  g.stroke(colors.length > 1 ? colors[1] : colors[0]);
-  for (let offset = -bh; offset < halfW + bh; offset += spacing) {
+  g.stroke(colors[2 % colors.length]);
+  g.strokeWeight(sw);
+  for (let offset = -bh * 2; offset < halfW + bh * 2; offset += spacing) {
     g.line(offset, by + bh, offset + bh, by);
   }
 
-  g.drawingContext.restore();
+  unclipBand(g);
 }
 
 function drawNestedRectBand(g, by, bh, colors) {
   const halfW = W / 2;
-  const tileW = bh * 1.1;
-  const numRects = floor(random(3, 6));
+  clipBand(g, by, bh);
 
-  g.noFill();
-  g.strokeWeight(2.5);
+  // Filled concentric rectangles with alternating colors
+  const tileW = bh * 1.05;
+  const numRects = floor(random(4, 7));
+
+  g.strokeWeight(1);
+  g.stroke(0, 0, 0, 40);
   g.strokeJoin(MITER);
 
-  // Clip to band area
-  g.drawingContext.save();
-  g.drawingContext.beginPath();
-  g.drawingContext.rect(0, by, halfW, bh);
-  g.drawingContext.clip();
-
-  for (let tx = 0; tx < halfW + tileW; tx += tileW) {
+  for (let tx = -tileW * 0.5; tx < halfW + tileW; tx += tileW) {
     const cx = tx + tileW / 2;
     const cy = by + bh / 2;
+    // Draw from outer to inner (painter's algorithm)
     for (let ri = 0; ri < numRects; ri++) {
-      g.stroke(colors[ri % colors.length]);
-      const margin = ri * (min(tileW, bh) / (numRects * 2 + 1));
+      g.fill(colors[ri % colors.length]);
+      const margin = ri * (min(tileW, bh) / (numRects * 2));
       g.rect(
         cx - tileW / 2 + margin,
         cy - bh / 2 + margin,
@@ -279,7 +343,7 @@ function drawNestedRectBand(g, by, bh, colors) {
     }
   }
 
-  g.drawingContext.restore();
+  unclipBand(g);
 }
 
 function drawBandMotif(g, band) {
