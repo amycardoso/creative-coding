@@ -243,27 +243,27 @@ function drawSteppedBand(g, by, bh, colors) {
   g.fill(colors[0]);
   g.rect(0, by, halfW, bh);
 
-  // Interlocking staircase rows that fill the entire band
-  const numSteps = floor(random(4, 7));
+  // Interlocking staircase waves — fewer steps so shapes are chunky and fill space
+  const numSteps = floor(random(3, 5));
   const stepH = bh / numSteps;
-  const stepW = stepH * 1.2;
-  const patternW = stepW * 4; // one full up-down cycle
+  const stepW = stepH * 1.0;
+  const cycleW = stepW * numSteps * 2; // full up-down cycle width
 
   g.stroke(0, 0, 0, 50);
   g.strokeWeight(1);
 
-  // Draw two interlocking staircase waves
+  // Two interlocking staircase layers offset by half a cycle
   for (let layer = 0; layer < 2; layer++) {
     const col = colors[(layer + 1) % colors.length];
     g.fill(col);
-    const xOff = layer * patternW / 2;
+    const xOff = layer * cycleW / 2;
 
-    for (let px = -patternW + xOff; px < halfW + patternW; px += patternW) {
-      // Rising staircase
+    for (let px = -cycleW + xOff; px < halfW + cycleW; px += cycleW) {
       g.beginShape();
       let x = px;
-      let y = by + bh; // start at bottom
+      let y = by + bh;
       g.vertex(x, y);
+      // Rising staircase
       for (let s = 0; s < numSteps; s++) {
         g.vertex(x, y - stepH);
         x += stepW;
@@ -282,34 +282,12 @@ function drawSteppedBand(g, by, bh, colors) {
     }
   }
 
-  // Third color accent — smaller staircases offset
+  // Third color accent stripe along the center
   if (colors.length > 2) {
     g.fill(colors[2]);
-    const smallStepH = stepH * 0.5;
-    const smallStepW = stepW * 0.5;
-    const smallPatternW = smallStepW * 4;
-    const xOff = patternW / 4;
-
-    for (let px = -smallPatternW + xOff; px < halfW + smallPatternW; px += smallPatternW) {
-      g.beginShape();
-      let x = px;
-      let y = by + bh / 2 + numSteps * smallStepH / 2;
-      g.vertex(x, y);
-      for (let s = 0; s < numSteps; s++) {
-        g.vertex(x, y - smallStepH);
-        x += smallStepW;
-        g.vertex(x, y - smallStepH);
-        y -= smallStepH;
-      }
-      for (let s = 0; s < numSteps; s++) {
-        g.vertex(x, y + smallStepH);
-        x += smallStepW;
-        g.vertex(x, y + smallStepH);
-        y += smallStepH;
-      }
-      g.vertex(x, by + bh / 2 + numSteps * smallStepH / 2);
-      g.endShape(CLOSE);
-    }
+    g.noStroke();
+    const stripeH = stepH * 0.4;
+    g.rect(0, by + bh / 2 - stripeH / 2, halfW, stripeH);
   }
 
   unclipBand(g);
@@ -319,36 +297,32 @@ function drawCrossHatchBand(g, by, bh, colors) {
   const halfW = W / 2;
   clipBand(g, by, bh);
 
-  // Fill background with palette color (no black gaps)
+  // Fill background with palette color
   g.noStroke();
   g.fill(colors[0]);
   g.rect(0, by, halfW, bh);
 
-  // Thick diagonal lines — spacing tight enough to overlap on the background
-  const numLines = floor(random(5, 8));
-  const spacing = bh / numLines;
-  const sw = spacing * 0.65;
+  // Draw as filled diamond tiles instead of lines — eliminates all gaps
+  const numDiags = floor(random(5, 8));
+  const spacing = bh / numDiags;
+  const halfSpacing = spacing / 2;
 
-  g.noFill();
-  g.strokeCap(SQUARE);
+  g.noStroke();
 
-  // Diagonal lines going down-right
-  g.stroke(colors[1 % colors.length]);
-  g.strokeWeight(sw);
-  for (let offset = -bh * 2; offset < halfW + bh * 2; offset += spacing) {
-    g.line(offset, by, offset + bh, by + bh);
-  }
-
-  // Diagonal lines going up-right
-  if (colors.length > 2) {
-    g.stroke(colors[2]);
-  } else {
-    // Use a darker shade of colors[1] instead of black
-    g.stroke(colors[1 % colors.length]);
-  }
-  g.strokeWeight(sw);
-  for (let offset = -bh * 2; offset < halfW + bh * 2; offset += spacing) {
-    g.line(offset, by + bh, offset + bh, by);
+  // Tile the band with alternating colored diamonds
+  for (let row = -1; row < numDiags * 2 + 2; row++) {
+    for (let col = -1; col < ceil(halfW / halfSpacing) + 2; col++) {
+      const cx = col * halfSpacing;
+      const cy = by + row * halfSpacing;
+      const colorIdx = (row + col) % 2 === 0 ? 1 : (colors.length > 2 ? 2 : 0);
+      g.fill(colors[colorIdx % colors.length]);
+      g.beginShape();
+      g.vertex(cx, cy - halfSpacing);
+      g.vertex(cx + halfSpacing, cy);
+      g.vertex(cx, cy + halfSpacing);
+      g.vertex(cx - halfSpacing, cy);
+      g.endShape(CLOSE);
+    }
   }
 
   unclipBand(g);
