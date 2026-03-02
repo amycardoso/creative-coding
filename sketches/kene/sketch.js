@@ -65,7 +65,7 @@ function generateBands() {
   heights[0] += diff;
 
   // Assign motifs and colors
-  const motifTypes = ['zigzag', 'diamond', 'stepped', 'crosshatch', 'nestedRect'];
+  const motifTypes = ['zigzag', 'diamond', 'stepped', 'crosshatch', 'nestedRect', 'anaconda', 'fishbone'];
   let lastMotif = '';
   let lastColorIdx = -1;
   let y = margin;
@@ -319,14 +319,15 @@ function drawCrossHatchBand(g, by, bh, colors) {
   const halfW = W / 2;
   clipBand(g, by, bh);
 
-  // Fill background
+  // Fill background with palette color (no black gaps)
   g.noStroke();
   g.fill(colors[0]);
   g.rect(0, by, halfW, bh);
 
-  // Thick diagonal lines fill the space
-  const spacing = bh / floor(random(4, 7));
-  const sw = spacing * 0.55;
+  // Thick diagonal lines — spacing tight enough to overlap on the background
+  const numLines = floor(random(5, 8));
+  const spacing = bh / numLines;
+  const sw = spacing * 0.65;
 
   g.noFill();
   g.strokeCap(SQUARE);
@@ -339,7 +340,12 @@ function drawCrossHatchBand(g, by, bh, colors) {
   }
 
   // Diagonal lines going up-right
-  g.stroke(colors[2 % colors.length]);
+  if (colors.length > 2) {
+    g.stroke(colors[2]);
+  } else {
+    // Use a darker shade of colors[1] instead of black
+    g.stroke(colors[1 % colors.length]);
+  }
   g.strokeWeight(sw);
   for (let offset = -bh * 2; offset < halfW + bh * 2; offset += spacing) {
     g.line(offset, by + bh, offset + bh, by);
@@ -379,6 +385,118 @@ function drawNestedRectBand(g, by, bh, colors) {
   unclipBand(g);
 }
 
+function drawAnacondaBand(g, by, bh, colors) {
+  const halfW = W / 2;
+  clipBand(g, by, bh);
+
+  // Fill background
+  g.noStroke();
+  g.fill(colors[0]);
+  g.rect(0, by, halfW, bh);
+
+  // Interlocking hexagonal scales like anaconda skin (Ronin)
+  const scaleH = bh / floor(random(2, 4));
+  const scaleW = scaleH * 1.3;
+  const rows = ceil(bh / scaleH) + 1;
+  const cols = ceil(halfW / scaleW) + 2;
+
+  g.strokeWeight(2);
+  g.stroke(colors[0]);
+  g.strokeJoin(MITER);
+
+  for (let row = -1; row < rows; row++) {
+    const offsetX = (row % 2 === 0) ? 0 : scaleW / 2;
+    for (let col = -1; col < cols; col++) {
+      const cx = col * scaleW + offsetX;
+      const cy = by + row * scaleH + scaleH / 2;
+
+      // Outer hexagonal scale
+      const colorIdx = (row + col) % 2 === 0 ? 1 : (colors.length > 2 ? 2 : 1);
+      g.fill(colors[colorIdx % colors.length]);
+      g.beginShape();
+      g.vertex(cx, cy - scaleH / 2);
+      g.vertex(cx + scaleW / 2, cy - scaleH / 4);
+      g.vertex(cx + scaleW / 2, cy + scaleH / 4);
+      g.vertex(cx, cy + scaleH / 2);
+      g.vertex(cx - scaleW / 2, cy + scaleH / 4);
+      g.vertex(cx - scaleW / 2, cy - scaleH / 4);
+      g.endShape(CLOSE);
+
+      // Inner diamond marking
+      const innerCol = colors.length > 2 ? colors[(colorIdx + 1) % colors.length] : colors[0];
+      g.fill(innerCol);
+      g.noStroke();
+      const iw = scaleW * 0.3;
+      const ih = scaleH * 0.35;
+      g.beginShape();
+      g.vertex(cx, cy - ih / 2);
+      g.vertex(cx + iw / 2, cy);
+      g.vertex(cx, cy + ih / 2);
+      g.vertex(cx - iw / 2, cy);
+      g.endShape(CLOSE);
+      g.stroke(colors[0]);
+      g.strokeWeight(2);
+    }
+  }
+
+  unclipBand(g);
+}
+
+function drawFishboneBand(g, by, bh, colors) {
+  const halfW = W / 2;
+  clipBand(g, by, bh);
+
+  // Fill background
+  g.noStroke();
+  g.fill(colors[0]);
+  g.rect(0, by, halfW, bh);
+
+  // Herringbone / fish-bone pattern — diagonal bars meeting at a spine
+  const numSpines = floor(random(2, 4));
+  const spineSpacing = bh / numSpines;
+  const boneLen = spineSpacing * 0.42;
+  const boneSpacing = boneLen * 0.55;
+  const sw = boneSpacing * 0.7;
+
+  g.strokeCap(SQUARE);
+
+  for (let si = 0; si < numSpines; si++) {
+    const spineY = by + (si + 0.5) * spineSpacing;
+
+    // Spine line
+    g.stroke(colors[1 % colors.length]);
+    g.strokeWeight(sw * 0.6);
+    g.line(0, spineY, halfW, spineY);
+
+    // Bones — diagonal lines angled away from spine
+    g.strokeWeight(sw);
+    for (let x = boneSpacing / 2; x < halfW + boneSpacing; x += boneSpacing) {
+      // Upper bones (angled left)
+      g.stroke(colors[1 % colors.length]);
+      g.line(x, spineY, x - boneLen * 0.6, spineY - boneLen);
+
+      // Lower bones (angled left, mirrored)
+      const lowerCol = colors.length > 2 ? colors[2] : colors[1 % colors.length];
+      g.stroke(lowerCol);
+      g.line(x, spineY, x - boneLen * 0.6, spineY + boneLen);
+    }
+
+    // Fill gaps between bone tips with small accent marks
+    if (colors.length > 2) {
+      g.stroke(colors[2]);
+      g.strokeWeight(sw * 0.4);
+      for (let x = boneSpacing; x < halfW; x += boneSpacing * 2) {
+        const tipY1 = spineY - boneLen;
+        const tipY2 = spineY + boneLen;
+        g.line(x - boneLen * 0.6 - boneSpacing * 0.3, tipY1, x - boneLen * 0.6 + boneSpacing * 0.3, tipY1);
+        g.line(x - boneLen * 0.6 - boneSpacing * 0.3, tipY2, x - boneLen * 0.6 + boneSpacing * 0.3, tipY2);
+      }
+    }
+  }
+
+  unclipBand(g);
+}
+
 function drawBandMotif(g, band) {
   switch (band.motif) {
     case 'zigzag':
@@ -395,6 +513,12 @@ function drawBandMotif(g, band) {
       break;
     case 'nestedRect':
       drawNestedRectBand(g, band.y, band.h, band.colors);
+      break;
+    case 'anaconda':
+      drawAnacondaBand(g, band.y, band.h, band.colors);
+      break;
+    case 'fishbone':
+      drawFishboneBand(g, band.y, band.h, band.colors);
       break;
   }
 }
