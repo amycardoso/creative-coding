@@ -20,16 +20,23 @@ const W = 800;
 const H = 800;
 
 // --- MAHKU-inspired palette ---
-const PALETTE = [
+// Split into dark and bright groups for guaranteed high contrast
+const DARKS = [
+  '#111122', // near-black (key pattern color in authentic kene)
   '#c0392b', // deep crimson
   '#2980b9', // rich blue
-  '#f39c12', // warm gold
   '#27ae60', // forest green
   '#8e44ad', // deep purple
-  '#f5e6ca', // cream white
+  '#d35400', // deep orange/amber
+];
+const BRIGHTS = [
+  '#f0ece2', // clean white
+  '#f39c12', // warm gold
   '#e74c3c', // bright red
   '#1abc9c', // teal
+  '#f0ece2', // clean white (weighted — appears often in real kene)
 ];
+const PALETTE = [...DARKS, ...BRIGHTS];
 const BG_COLOR = '#0a0a12';
 
 // --- Animation ---
@@ -78,14 +85,23 @@ function generateBands() {
     } while (motif === lastMotif && motifTypes.length > 1);
     lastMotif = motif;
 
-    // Pick 2-3 colors, avoiding same first color as previous band
-    let colorIndices;
+    // Pick 2-3 colors: always one dark + one bright for high contrast
+    let bandColors;
     do {
-      colorIndices = pickRandomIndices(PALETTE.length, floor(random(2, 4)));
-    } while (colorIndices[0] === lastColorIdx);
-    lastColorIdx = colorIndices[0];
-
-    const bandColors = colorIndices.map(idx => PALETTE[idx]);
+      const dark = DARKS[floor(random(DARKS.length))];
+      const bright = BRIGHTS[floor(random(BRIGHTS.length))];
+      bandColors = [dark, bright];
+      // 60% chance of a third color
+      if (random() < 0.6) {
+        const pool = random() < 0.5 ? DARKS : BRIGHTS;
+        let third;
+        do {
+          third = pool[floor(random(pool.length))];
+        } while (third === dark || third === bright);
+        bandColors.push(third);
+      }
+    } while (bandColors[0] === lastColorIdx);
+    lastColorIdx = bandColors[0];
 
     bands.push({
       y,
@@ -98,14 +114,7 @@ function generateBands() {
   }
 }
 
-function pickRandomIndices(max, count) {
-  const indices = [];
-  while (indices.length < count) {
-    const idx = floor(random(max));
-    if (!indices.includes(idx)) indices.push(idx);
-  }
-  return indices;
-}
+// pickRandomIndices removed — color picking now uses dark/bright groups
 
 // --- Bilateral symmetry ---
 function mirrorBand(g, by, bh) {
@@ -521,7 +530,7 @@ function generatePattern() {
   }
 
   // Separator lines between bands
-  patternBuffer.stroke('#f5e6ca'); // cream white from palette
+  patternBuffer.stroke('#f0ece2'); // clean white separator
   patternBuffer.strokeWeight(1.5);
   for (let i = 0; i < bands.length - 1; i++) {
     const sepY = bands[i].y + bands[i].h;
@@ -530,7 +539,7 @@ function generatePattern() {
 
   // Thin border around the whole pattern
   patternBuffer.noFill();
-  patternBuffer.stroke('#f5e6ca');
+  patternBuffer.stroke('#f0ece2');
   patternBuffer.strokeWeight(2);
   patternBuffer.rect(1, 1, W - 2, H - 2);
 }
