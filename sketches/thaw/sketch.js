@@ -44,6 +44,13 @@ let mountains = [];
 let trees = [];
 let stars = [];
 
+// Cached color objects (initialized in setup)
+let coldSkyTop, coldSkyBot, warmSkyTop, warmSkyBot;
+let coldMountainColors, warmMountainColors;
+let coldTreeColor, warmTreeColor;
+let coldGroundColor, warmGroundColor;
+let coldParticleColor, warmParticleColor;
+
 function setup() {
   const canvas = createCanvas(W, H);
   canvas.parent('canvas-container');
@@ -53,6 +60,7 @@ function setup() {
   generateMountains();
   generateTrees();
   initParticles(200);
+  cacheColors();
 }
 
 function draw() {
@@ -119,16 +127,26 @@ function generateTrees() {
   }
 }
 
+function cacheColors() {
+  coldSkyTop = color(COLD.sky1);
+  coldSkyBot = color(COLD.sky2);
+  warmSkyTop = color(WARM.sky1);
+  warmSkyBot = color(WARM.sky2);
+  coldMountainColors = [color(COLD.mountain1), color(COLD.mountain2), color(COLD.mountain3)];
+  warmMountainColors = [color(WARM.mountain1), color(WARM.mountain2), color(WARM.mountain3)];
+  coldTreeColor = color(COLD.tree);
+  warmTreeColor = color(WARM.tree);
+  coldGroundColor = color(COLD.ground);
+  warmGroundColor = color(WARM.ground);
+  coldParticleColor = color(200, 220, 255, 150);
+  warmParticleColor = color(255, 180, 60, 180);
+}
+
 // --- Drawing functions ---
 
 function drawSky(progress) {
-  const coldTop = color(COLD.sky1);
-  const coldBot = color(COLD.sky2);
-  const warmTop = color(WARM.sky1);
-  const warmBot = color(WARM.sky2);
-
-  const topColor = lerpColor(coldTop, warmTop, progress);
-  const botColor = lerpColor(coldBot, warmBot, progress);
+  const topColor = lerpColor(coldSkyTop, warmSkyTop, progress);
+  const botColor = lerpColor(coldSkyBot, warmSkyBot, progress);
 
   noStroke();
   for (let y = 0; y < H; y++) {
@@ -153,12 +171,9 @@ function drawSky(progress) {
 }
 
 function drawMountains(progress) {
-  const coldColors = [color(COLD.mountain1), color(COLD.mountain2), color(COLD.mountain3)];
-  const warmColors = [color(WARM.mountain1), color(WARM.mountain2), color(WARM.mountain3)];
-
   noStroke();
   for (let i = 0; i < mountains.length; i++) {
-    const c = lerpColor(coldColors[i], warmColors[i], progress);
+    const c = lerpColor(coldMountainColors[i], warmMountainColors[i], progress);
     fill(c);
     beginShape();
     vertex(0, H);
@@ -171,7 +186,7 @@ function drawMountains(progress) {
 }
 
 function drawTreeline(progress) {
-  const c = lerpColor(color(COLD.tree), color(WARM.tree), progress);
+  const c = lerpColor(coldTreeColor, warmTreeColor, progress);
   noStroke();
   fill(c);
 
@@ -281,7 +296,7 @@ function drawFigure(progress) {
 }
 
 function drawGround(progress) {
-  const c = lerpColor(color(COLD.ground), color(WARM.ground), progress);
+  const c = lerpColor(coldGroundColor, warmGroundColor, progress);
   noStroke();
   fill(c);
   rect(0, H * 0.60, W, H * 0.40);
@@ -302,9 +317,7 @@ function initParticles(count) {
 
 function updateAndDrawParticles(progress) {
   const direction = lerp(1, -1, progress);
-  const coldColor = color(200, 220, 255, 150);
-  const warmColor = color(255, 180, 60, 180);
-  const c = lerpColor(coldColor, warmColor, progress);
+  const c = lerpColor(coldParticleColor, warmParticleColor, progress);
   const sizeScale = lerp(1, 1.5, progress);
 
   noStroke();
@@ -347,9 +360,13 @@ function drawHorizonGlow(progress) {
 
 function getProgress() {
   const t = (millis() / 1000 % CYCLE_DURATION) / CYCLE_DURATION;
-  if (t < 0.33) return 0;
-  if (t < 0.66) return map(t, 0.33, 0.66, 0, 1);
-  return map(t, 0.66, 1.0, 1, 0);
+  let p;
+  if (t < 0.30) p = 0;                              // frozen hold
+  else if (t < 0.55) p = map(t, 0.30, 0.55, 0, 1);  // thaw
+  else if (t < 0.70) p = 1;                          // warmth hold
+  else p = map(t, 0.70, 1.0, 1, 0);                  // fade back
+  // smoothstep easing
+  return p * p * (3 - 2 * p);
 }
 
 function keyPressed() {
