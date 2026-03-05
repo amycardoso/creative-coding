@@ -31,6 +31,8 @@ const SLOW_PHASE_MAX = 150;  // 5s at 30fps
 const BURST_DURATION = 12;   // ~0.4s
 const RECOVERY_DURATION = 45; // ~1.5s
 const SLASH_RADIUS = 40;      // damage radius around slash head
+const MAX_EMBERS = 8;
+const EMBER_SPAWN_CHANCE = 0.02; // per frame during slow phase
 
 // --- Globals ---
 let particles = [];
@@ -40,6 +42,7 @@ let phase = 'slow';
 let phaseTimer = 0;
 let phaseDuration = 120;
 let activeSlashes = [];
+let embers = [];
 
 // --- Particle Class ---
 class Particle {
@@ -174,6 +177,14 @@ class Slash {
         }
       }
 
+      // Kill nearby embers
+      for (const e of embers) {
+        const de = dist(e.pos.x, e.pos.y, head.x, head.y);
+        if (de < SLASH_RADIUS * 1.5) {
+          e.kill();
+        }
+      }
+
       // Paint permanent scar on scar layer
       scarLayer.stroke(220, 30, 20, 150);
       scarLayer.strokeWeight(random(1.5, 3));
@@ -211,6 +222,67 @@ class Slash {
     noStroke();
     fill(220, 30, 20, 40);
     ellipse(head.x, head.y, SLASH_RADIUS, SLASH_RADIUS);
+  }
+}
+
+// --- Ember Class ---
+class Ember {
+  constructor(x, y) {
+    this.pos = createVector(x, y);
+    this.life = 1.0;
+    this.fadeIn = 0;
+    this.size = random(2, 4);
+    this.maxLife = random(60, 120); // frames before natural fade
+    this.age = 0;
+  }
+
+  update() {
+    this.age++;
+    this.fadeIn = min(1, this.fadeIn + 0.05);
+    if (this.age > this.maxLife) {
+      this.life -= 0.02;
+    }
+  }
+
+  kill() {
+    this.life -= 0.1; // fast death when near a slash
+  }
+
+  display() {
+    const alpha = this.life * this.fadeIn * 200;
+    noStroke();
+    // Inner bright core
+    fill(255, 200, 80, alpha);
+    ellipse(this.pos.x, this.pos.y, this.size);
+    // Outer soft glow
+    fill(255, 200, 80, alpha * 0.3);
+    ellipse(this.pos.x, this.pos.y, this.size * 3);
+  }
+
+  isDead() {
+    return this.life <= 0;
+  }
+}
+
+function trySpawnEmber() {
+  if (embers.length >= MAX_EMBERS) return;
+  if (random() > EMBER_SPAWN_CHANCE) return;
+
+  // Pick a random candidate position
+  const x = random(50, width - 50);
+  const y = random(50, height - 50);
+
+  // Check it's far from all particles (a quiet gap)
+  let tooClose = false;
+  for (const p of particles) {
+    if (dist(x, y, p.pos.x, p.pos.y) < 80) {
+      tooClose = true;
+      break;
+    }
+  }
+
+  if (!tooClose) {
+    embers.push(new Ember(x, y));
   }
 }
 
@@ -283,4 +355,16 @@ function draw() {
   }
   // Remove finished slashes
   activeSlashes = activeSlashes.filter(s => !s.done);
+
+  // Spawn embers during calm
+  if (phase === 'slow') {
+    trySpawnEmber();
+  }
+
+  // Update and display embers
+  for (const e of embers) {
+    e.update();
+    e.display();
+  }
+  embers = embers.filter(e => !e.isDead());
 }
