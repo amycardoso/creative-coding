@@ -33,6 +33,7 @@ const RECOVERY_DURATION = 45; // ~1.5s
 const SLASH_RADIUS = 40;      // damage radius around slash head
 const MAX_EMBERS = 8;
 const EMBER_SPAWN_CHANCE = 0.02; // per frame during slow phase
+const REGEN_START_FRAME = 1800; // ~60s at 30fps
 
 // --- Globals ---
 let particles = [];
@@ -43,6 +44,7 @@ let phaseTimer = 0;
 let phaseDuration = 120;
 let activeSlashes = [];
 let embers = [];
+let framesSinceStart = 0;
 
 // --- Particle Class ---
 class Particle {
@@ -128,9 +130,75 @@ class Particle {
     ellipse(this.pos.x, this.pos.y, this.size, this.size);
 
     // Warm amber core
-    fill(255, 180, 60, this.warmth);
-    const coreSize = this.size * 0.6;
-    ellipse(this.pos.x, this.pos.y, coreSize, coreSize);
+    if (this.warmth > 2) {
+      fill(255, 180, 60, this.warmth);
+      const coreSize = this.size * 0.6;
+      ellipse(this.pos.x, this.pos.y, coreSize, coreSize);
+    }
+  }
+}
+
+// --- Spatial Grid for Cohesion ---
+const GRID_CELL_SIZE = COHESION_RADIUS;
+
+function buildSpatialGrid() {
+  const cols = ceil(CANVAS_SIZE / GRID_CELL_SIZE);
+  const grid = {};
+
+  for (const p of particles) {
+    const col = floor(p.pos.x / GRID_CELL_SIZE);
+    const row = floor(p.pos.y / GRID_CELL_SIZE);
+    const key = col + ',' + row;
+    if (!grid[key]) grid[key] = [];
+    grid[key].push(p);
+  }
+
+  return grid;
+}
+
+function getNeighbors(p, grid) {
+  const neighbors = [];
+  const col = floor(p.pos.x / GRID_CELL_SIZE);
+  const row = floor(p.pos.y / GRID_CELL_SIZE);
+
+  for (let dc = -1; dc <= 1; dc++) {
+    for (let dr = -1; dr <= 1; dr++) {
+      const key = (col + dc) + ',' + (row + dr);
+      const cell = grid[key];
+      if (!cell) continue;
+      for (const other of cell) {
+        if (other === p) continue;
+        if (dist(p.pos.x, p.pos.y, other.pos.x, other.pos.y) < COHESION_RADIUS) {
+          neighbors.push(other);
+        }
+      }
+    }
+  }
+
+  return neighbors;
+}
+
+// --- Particle Regeneration ---
+function regenerateParticles() {
+  if (framesSinceStart < REGEN_START_FRAME) return;
+
+  // Only regenerate during slow phase, occasionally
+  if (phase !== 'slow' || random() > 0.01) return;
+
+  // Find a dead/drained particle to replace
+  for (let i = 0; i < particles.length; i++) {
+    if (particles[i].warmth <= 0) {
+      // Spawn at a random edge
+      const side = floor(random(4));
+      let x, y;
+      if (side === 0) { x = random(width); y = 0; }
+      else if (side === 1) { x = width; y = random(height); }
+      else if (side === 2) { x = random(width); y = height; }
+      else { x = 0; y = random(height); }
+
+      particles[i] = new Particle(x, y);
+      break; // Only replace one per call
+    }
   }
 }
 
@@ -330,19 +398,26 @@ function draw() {
 
   updatePhase();
 
+  // Very slow scar aging — scars fade to dark crimson, never fully gone
+  if (frameCount % 3 === 0) {
+    scarLayer.noStroke();
+    scarLayer.fill(0, 0, 0, 2);
+    scarLayer.rect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+  }
+
   // Draw permanent scar layer
   image(scarLayer, 0, 0);
 
-  // Update and display particles
+  // Particle regeneration
+  framesSinceStart++;
+  regenerateParticles();
+
+  // Update and display particles (spatial grid for O(n) neighbor lookup)
+  const grid = buildSpatialGrid();
+
   for (const p of particles) {
     p.applyFlowField();
-    const neighbors = [];
-    for (const other of particles) {
-      if (other === p) continue;
-      if (dist(p.pos.x, p.pos.y, other.pos.x, other.pos.y) < COHESION_RADIUS) {
-        neighbors.push(other);
-      }
-    }
+    const neighbors = getNeighbors(p, grid);
     p.applyCohesion(neighbors);
     p.update();
     p.display();
