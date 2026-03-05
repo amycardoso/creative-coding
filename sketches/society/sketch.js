@@ -26,11 +26,20 @@ const MAX_VEL = 0.8;
 const DRAG = 0.98;
 const COHESION_RADIUS = 60;
 const COHESION_FORCE = 0.02;
+const SLOW_PHASE_MIN = 90;   // 3s at 30fps
+const SLOW_PHASE_MAX = 150;  // 5s at 30fps
+const BURST_DURATION = 12;   // ~0.4s
+const RECOVERY_DURATION = 45; // ~1.5s
+const SLASH_RADIUS = 40;      // damage radius around slash head
 
 // --- Globals ---
 let particles = [];
 let scarLayer;
 let flowTime = 0;
+let phase = 'slow';
+let phaseTimer = 0;
+let phaseDuration = 120;
+let activeSlashes = [];
 
 // --- Particle Class ---
 class Particle {
@@ -122,6 +131,113 @@ class Particle {
   }
 }
 
+// --- Slash Class ---
+class Slash {
+  constructor() {
+    // Start from a random edge
+    const side = floor(random(4));
+    if (side === 0) this.start = createVector(random(width), 0);
+    else if (side === 1) this.start = createVector(width, random(height));
+    else if (side === 2) this.start = createVector(random(width), height);
+    else this.start = createVector(0, random(height));
+
+    // Aim toward center with randomness
+    const target = createVector(
+      width / 2 + random(-150, 150),
+      height / 2 + random(-150, 150)
+    );
+    this.dir = p5.Vector.sub(target, this.start).normalize();
+    this.length = random(300, 500);
+    this.progress = 0;
+    this.speed = random(25, 40); // pixels per frame — fast and violent
+    this.done = false;
+  }
+
+  update() {
+    if (this.progress < this.length) {
+      this.progress += this.speed;
+
+      // Current head position
+      const head = p5.Vector.add(
+        this.start,
+        p5.Vector.mult(this.dir, this.progress)
+      );
+
+      // Scatter nearby particles — this is the violence
+      for (const p of particles) {
+        const d = dist(p.pos.x, p.pos.y, head.x, head.y);
+        if (d < SLASH_RADIUS) {
+          const repel = p5.Vector.sub(p.pos, head);
+          repel.normalize();
+          repel.mult(map(d, 0, SLASH_RADIUS, 5, 1));
+          p.applyImpulse(repel);
+        }
+      }
+
+      // Paint permanent scar on scar layer
+      scarLayer.stroke(220, 30, 20, 150);
+      scarLayer.strokeWeight(random(1.5, 3));
+      const prevProgress = max(0, this.progress - this.speed);
+      const prev = p5.Vector.add(
+        this.start,
+        p5.Vector.mult(this.dir, prevProgress)
+      );
+      scarLayer.line(prev.x, prev.y, head.x, head.y);
+    } else {
+      this.done = true;
+    }
+  }
+
+  display() {
+    if (this.done) return;
+
+    const head = p5.Vector.add(
+      this.start,
+      p5.Vector.mult(this.dir, min(this.progress, this.length))
+    );
+
+    // Draw the visible slash line (tail to head)
+    const tailProgress = max(0, this.progress - 60);
+    const tail = p5.Vector.add(
+      this.start,
+      p5.Vector.mult(this.dir, tailProgress)
+    );
+
+    stroke(220, 30, 20);
+    strokeWeight(3);
+    line(tail.x, tail.y, head.x, head.y);
+
+    // Red glow around the head
+    noStroke();
+    fill(220, 30, 20, 40);
+    ellipse(head.x, head.y, SLASH_RADIUS, SLASH_RADIUS);
+  }
+}
+
+// --- Phase Management ---
+function updatePhase() {
+  phaseTimer++;
+
+  if (phase === 'slow' && phaseTimer >= phaseDuration) {
+    phase = 'burst';
+    phaseTimer = 0;
+    phaseDuration = BURST_DURATION;
+    // Spawn 1-3 slashes
+    const count = floor(random(1, 4));
+    for (let i = 0; i < count; i++) {
+      activeSlashes.push(new Slash());
+    }
+  } else if (phase === 'burst' && phaseTimer >= phaseDuration) {
+    phase = 'recovery';
+    phaseTimer = 0;
+    phaseDuration = RECOVERY_DURATION;
+  } else if (phase === 'recovery' && phaseTimer >= phaseDuration) {
+    phase = 'slow';
+    phaseTimer = 0;
+    phaseDuration = floor(random(SLOW_PHASE_MIN, SLOW_PHASE_MAX));
+  }
+}
+
 // --- p5.js Lifecycle ---
 function setup() {
   pixelDensity(1);
@@ -138,15 +254,16 @@ function setup() {
 
 function draw() {
   background(0, 10);
-
   flowTime += FLOW_SPEED;
 
+  updatePhase();
+
+  // Draw permanent scar layer
   image(scarLayer, 0, 0);
 
+  // Update and display particles
   for (const p of particles) {
     p.applyFlowField();
-
-    // Find neighbors within COHESION_RADIUS
     const neighbors = [];
     for (const other of particles) {
       if (other === p) continue;
@@ -154,9 +271,16 @@ function draw() {
         neighbors.push(other);
       }
     }
-
     p.applyCohesion(neighbors);
     p.update();
     p.display();
   }
+
+  // Update and display slashes
+  for (const s of activeSlashes) {
+    s.update();
+    s.display();
+  }
+  // Remove finished slashes
+  activeSlashes = activeSlashes.filter(s => !s.done);
 }
