@@ -185,7 +185,7 @@
       "title": "Thaw",
       "description": "A lone figure atop Bus 142 in a frozen wilderness. The world slowly transforms from cold isolation to warmth — happiness is only real when shared.",
       "date": "2026-03-05",
-      "media": "sketches/thaw/thaw.png",
+      "media": "sketches/thaw/thaw.gif",
       "tags": ["generative", "narrative", "landscape"],
       "tech": ["p5.js"]
     }

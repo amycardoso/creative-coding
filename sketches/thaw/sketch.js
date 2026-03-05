@@ -11,8 +11,8 @@
  * - S: Save PNG
  */
 
-const W = 1080;
-const H = 720;
+const W = 800;
+const H = 500;
 const CYCLE_DURATION = 15; // seconds
 
 // Cold palette
