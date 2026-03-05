@@ -60,6 +60,8 @@ function draw() {
   drawMountains(progress);
   drawTreeline(progress);
   drawGround(progress);
+  drawBus(progress);
+  drawFigure(progress);
 }
 
 // --- Generation functions ---
@@ -180,6 +182,99 @@ function drawTreeline(progress) {
       triangle(t.x, topY, t.x - layerW / 2, botY, t.x + layerW / 2, botY);
     }
   }
+}
+
+function drawBus(progress) {
+  const busW = 140;
+  const busH = 55;
+  const busX = W * 0.55;
+  const busY = H * 0.60 - busH;
+
+  const bodyColor = lerpColor(color(20, 25, 35), color(40, 35, 30), progress);
+  const windowColor = lerpColor(color(30, 40, 55), color(55, 45, 35), progress);
+
+  noStroke();
+
+  // Bus body
+  fill(bodyColor);
+  rect(busX - busW / 2, busY, busW, busH, 4, 4, 0, 0);
+
+  // Roof — slightly narrower with rounded top
+  rect(busX - busW / 2 + 6, busY - 10, busW - 12, 12, 4, 4, 0, 0);
+
+  // Windows — 4 evenly spaced
+  fill(windowColor);
+  const winMargin = 12;
+  const winGap = 6;
+  const totalWinArea = busW - winMargin * 2;
+  const winW = (totalWinArea - winGap * 3) / 4;
+  const winH = 16;
+  const winY = busY + 10;
+  for (let i = 0; i < 4; i++) {
+    const wx = busX - busW / 2 + winMargin + i * (winW + winGap);
+    rect(wx, winY, winW, winH, 2);
+  }
+
+  // Wheels
+  fill(bodyColor);
+  const wheelR = 7;
+  const wheelY = busY + busH + wheelR * 0.3;
+  ellipse(busX - busW / 2 + 25, wheelY, wheelR * 2, wheelR * 2);
+  ellipse(busX + busW / 2 - 25, wheelY, wheelR * 2, wheelR * 2);
+
+  // "142" text
+  const textColor = lerpColor(color(50, 60, 75), color(75, 65, 50), progress);
+  fill(textColor);
+  textSize(11);
+  textAlign(CENTER, CENTER);
+  textFont('monospace');
+  text('142', busX, busY + busH - 14);
+}
+
+function drawFigure(progress) {
+  const busW = 140;
+  const busH = 55;
+  const busX = W * 0.55;
+  const busY = H * 0.60 - busH;
+  const roofY = busY - 10;
+
+  const figColor = lerpColor(color(20, 25, 35), color(40, 35, 30), progress);
+
+  // Warm glow behind figure during warmth phase
+  if (progress > 0.5) {
+    const glowAlpha = map(progress, 0.5, 1, 0, 40);
+    noStroke();
+    const glowX = busX + 5;
+    const glowY = roofY - 18;
+    for (let i = 4; i >= 1; i--) {
+      fill(220, 160, 60, glowAlpha * (1 - i * 0.2));
+      ellipse(glowX, glowY, i * 18, i * 16);
+    }
+  }
+
+  // Seated figure silhouette facing right
+  const headX = busX + 5;
+  const headY = roofY - 24;
+  const headR = 8;
+
+  noStroke();
+  fill(figColor);
+
+  // Head
+  ellipse(headX, headY, headR * 2, headR * 2);
+
+  // Torso — leaning slightly forward (right)
+  push();
+  stroke(figColor);
+  strokeWeight(5);
+  strokeCap(ROUND);
+  // Torso line from neck down, angled forward
+  line(headX, headY + headR, headX + 3, roofY - 3);
+  // Upper legs — bent, going forward then down
+  line(headX + 3, roofY - 3, headX + 12, roofY - 5);
+  // Lower legs — hanging down
+  line(headX + 12, roofY - 5, headX + 14, roofY);
+  pop();
 }
 
 function drawGround(progress) {
