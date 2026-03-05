@@ -52,16 +52,20 @@ function setup() {
   generateStars(50);
   generateMountains();
   generateTrees();
+  initParticles(200);
 }
 
 function draw() {
   const progress = getProgress();
   drawSky(progress);
   drawMountains(progress);
+  drawHorizonGlow(progress);
   drawTreeline(progress);
   drawGround(progress);
   drawBus(progress);
   drawFigure(progress);
+  updateAndDrawParticles(progress);
+  drawQuote(progress);
 }
 
 // --- Generation functions ---
@@ -232,7 +236,6 @@ function drawBus(progress) {
 }
 
 function drawFigure(progress) {
-  const busW = 140;
   const busH = 55;
   const busX = W * 0.55;
   const busY = H * 0.60 - busH;
@@ -282,6 +285,64 @@ function drawGround(progress) {
   noStroke();
   fill(c);
   rect(0, H * 0.60, W, H * 0.40);
+}
+
+function initParticles(count) {
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: random(W),
+      y: random(H),
+      size: random(1.5, 4),
+      speedY: random(0.3, 1.2),
+      drift: random(-0.3, 0.3),
+      phase: random(TWO_PI),
+    });
+  }
+}
+
+function updateAndDrawParticles(progress) {
+  const direction = lerp(1, -1, progress);
+  const coldColor = color(200, 220, 255, 150);
+  const warmColor = color(255, 180, 60, 180);
+  const c = lerpColor(coldColor, warmColor, progress);
+  const sizeScale = lerp(1, 1.5, progress);
+
+  noStroke();
+  for (const p of particles) {
+    p.y += p.speedY * direction;
+    p.x += p.drift + sin(frameCount * 0.02 + p.phase) * 0.3;
+
+    // Wrap around screen edges
+    if (p.y < 0) p.y = H;
+    if (p.y > H) p.y = 0;
+    if (p.x < 0) p.x = W;
+    if (p.x > W) p.x = 0;
+
+    fill(c);
+    ellipse(p.x, p.y, p.size * sizeScale, p.size * sizeScale);
+  }
+}
+
+function drawQuote(progress) {
+  if (progress <= 0.7) return;
+  const alpha = map(progress, 0.7, 0.9, 0, 220, true);
+  fill(255, 255, 245, alpha);
+  noStroke();
+  textFont('monospace');
+  textSize(17);
+  textAlign(CENTER, CENTER);
+  text('HAPPINESS IS ONLY REAL WHEN SHARED', W / 2, H * 0.20);
+}
+
+function drawHorizonGlow(progress) {
+  if (progress < 0.2) return;
+  const alpha = map(progress, 0.2, 1, 0, 30);
+  noStroke();
+  const horizonY = H * 0.60;
+  for (let i = 5; i >= 1; i--) {
+    fill(230, 160, 50, alpha * (1 - i * 0.15));
+    ellipse(W / 2, horizonY, W * (0.5 + i * 0.15), i * 60);
+  }
 }
 
 function getProgress() {
