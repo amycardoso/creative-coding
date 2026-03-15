@@ -188,15 +188,6 @@
       "media": "sketches/bus-142/bus-142.gif",
       "tags": ["generative", "narrative", "landscape"],
       "tech": ["p5.js"]
-    },
-    {
-      "slug": "society",
-      "title": "Society",
-      "description": "Inspired by Eddie Vedder's Society — communities form and get violently torn apart in an endless loop. The canvas accumulates scars. Nothing heals. Nothing is learned.",
-      "date": "2026-03-05",
-      "media": "sketches/society/society.gif",
-      "tags": ["generative", "agents", "abstract"],
-      "tech": ["p5.js"]
     }
   ]
 }
