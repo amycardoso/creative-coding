@@ -16,46 +16,56 @@ const H = 800;
 const NUM_SEEDS = 500;
 const BORDER_SEEDS = 200;
 
-// Curated Kobra palettes — sophisticated color harmonies
+// Kobra spray paint palettes — bold, vivid, high-saturation colors
+// Based on actual Eduardo Kobra murals and Kobra spray paint chart
 const PALETTES = [
-  { // Sunset warmth
-    name: 'sunset',
+  { // Classic Kobra — full rainbow, maximum impact
+    name: 'classic',
     colors: [
-      [10, 85, 92],  [25, 80, 95],  [45, 75, 98],  // warm oranges/golds
-      [340, 70, 85], [355, 65, 90], [320, 55, 88],  // rose/magentas
-      [190, 60, 75], [210, 65, 80],                  // cool accent teals
+      [0, 90, 88],    // Kobra Red
+      [330, 85, 90],   // Magenta / Fuchsia
+      [50, 95, 100],   // Kobra Yellow
+      [25, 95, 95],    // Kobra Orange
+      [210, 90, 80],   // Kobra Blue
+      [120, 85, 65],   // Bold Green
+      [270, 75, 75],   // Violet
+      [180, 80, 70],   // Turquoise
     ],
   },
-  { // Ocean depths
-    name: 'ocean',
+  { // Warm Mural — reds, oranges, yellows, magentas
+    name: 'warm',
     colors: [
-      [200, 75, 85], [215, 80, 78], [230, 70, 90],  // blues
-      [170, 65, 80], [185, 70, 75], [160, 55, 88],  // teals/cyans
-      [280, 50, 82], [310, 45, 85],                  // purple/violet accents
+      [0, 90, 85],    [355, 85, 90],  // reds
+      [15, 95, 95],   [30, 95, 100],  // oranges
+      [50, 95, 100],  [45, 90, 95],   // yellows
+      [330, 80, 85],  [310, 75, 80],  // magentas/pinks
     ],
   },
-  { // Tropical forest
+  { // Cool Mural — blues, teals, greens, purples
+    name: 'cool',
+    colors: [
+      [210, 90, 80],  [225, 85, 75],  // blues
+      [180, 85, 70],  [165, 80, 75],  // teals
+      [120, 80, 70],  [140, 75, 65],  // greens
+      [270, 70, 80],  [285, 65, 75],  // purples
+    ],
+  },
+  { // Tropical — greens, yellows, oranges, reds
     name: 'tropical',
     colors: [
-      [120, 65, 75], [140, 70, 80], [95, 60, 85],   // greens
-      [50, 80, 95],  [35, 75, 90],  [65, 70, 88],   // yellows/golds
-      [0, 70, 85],   [350, 60, 80],                  // red accents
+      [120, 85, 70],  [100, 80, 80],  // greens
+      [50, 95, 100],  [60, 90, 90],   // yellows
+      [25, 95, 95],   [15, 90, 90],   // oranges
+      [0, 90, 85],    [345, 85, 80],  // reds/crimsons
     ],
   },
-  { // Jewel tones
-    name: 'jewel',
+  { // Cosmic — purples, blues, magentas, teals
+    name: 'cosmic',
     colors: [
-      [270, 65, 78], [290, 60, 82], [250, 70, 75],  // amethyst/purple
-      [340, 70, 80], [355, 65, 85], [15, 75, 88],   // ruby/garnet
-      [170, 60, 70], [195, 55, 78],                  // emerald accents
-    ],
-  },
-  { // Earth & sky
-    name: 'earth',
-    colors: [
-      [25, 60, 70],  [35, 55, 75],  [15, 50, 65],   // warm earth browns
-      [200, 50, 80], [215, 55, 85], [190, 45, 78],   // sky blues
-      [45, 70, 90],  [55, 65, 85],                   // golden accents
+      [270, 80, 78],  [255, 75, 82],  // purples
+      [210, 85, 85],  [195, 80, 78],  // blues
+      [330, 85, 88],  [340, 80, 85],  // magentas
+      [180, 80, 72],  [165, 75, 78],  // teals
     ],
   },
 ];
@@ -112,9 +122,9 @@ function generateLineBuffer() {
   for (let y = 0; y < H; y++) {
     for (let x = 0; x < W; x++) {
       let br = brightnessMap[y][x];
-      if (br < 0.18) {
-        let alpha = map(br, 0, 0.18, 240, 60);
-        let sz = map(br, 0, 0.18, 2.8, 0.8);
+      if (br < 0.15) {
+        let alpha = map(br, 0, 0.15, 245, 40);
+        let sz = map(br, 0, 0.15, 3, 0.6);
         lineBuffer.fill(10, 8, 5, alpha);
         lineBuffer.circle(x, y, sz);
       }
@@ -260,11 +270,11 @@ function assignColors(seeds) {
     let idx = floor(n * paletteColors.length);
     idx = constrain(idx, 0, paletteColors.length - 1);
     let base = paletteColors[idx];
-    // Subtle variation around the palette color
-    let h = (base[0] + random(-12, 12) + 360) % 360;
-    let s = base[1] + random(-8, 8);
-    let b = base[2] + random(-8, 8);
-    colors.push([h, constrain(s, 40, 100), constrain(b, 50, 100)]);
+    // Small variation to keep it vivid but not identical
+    let h = (base[0] + random(-8, 8) + 360) % 360;
+    let s = base[1] + random(-5, 5);
+    let b = base[2] + random(-5, 5);
+    colors.push([h, constrain(s, 65, 100), constrain(b, 60, 100)]);
   }
   return colors;
 }
@@ -306,9 +316,9 @@ function getColorForCell(sx, sy, baseColor, bands) {
     let rotY = -dx * sin(band.angle) + dy * cos(band.angle) + H / 2;
     if (abs(rotY - band.yCenter) < band.width / 2) {
       let h = (random(band.hueRange[0], band.hueRange[1]) + 360) % 360;
-      let s = band.baseSat + random(-10, 10);
-      let b = band.baseBri + random(-10, 10);
-      return [h, constrain(s, 40, 100), constrain(b, 50, 100)];
+      let s = band.baseSat + random(-5, 5);
+      let b = band.baseBri + random(-5, 5);
+      return [h, constrain(s, 65, 100), constrain(b, 60, 100)];
     }
   }
   return baseColor;
@@ -331,6 +341,7 @@ function renderMosaic(seeds, isFaceSeed, voronoi, bands) {
     if (!silhouetteMask[sy] || !silhouetteMask[sy][sx]) continue;
 
     let col = getColorForCell(sx, sy, colors[i], bands);
+    // Bold flat fill — no additional randomization, like real spray paint
     fill(col[0], col[1], col[2]);
     stroke(12, 15, 8);
     strokeWeight(1.2);
