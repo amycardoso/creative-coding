@@ -11,22 +11,51 @@ const W = 600;
 const H = 800;
 
 let refImg;
+let wallBuffer;
 
 function preload() {
   refImg = loadImage('reference.png');
+}
+
+function generateWall() {
+  wallBuffer = createGraphics(W, H);
+  wallBuffer.pixelDensity(1);
+  wallBuffer.loadPixels();
+
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      let gray = 190;
+      gray += (noise(x * 0.02, y * 0.02) - 0.5) * 30;
+      gray += (noise(x * 0.1 + 500, y * 0.1 + 500) - 0.5) * 15;
+
+      if (noise(x * 0.5 + 1000, y * 0.5 + 1000) > 0.75) {
+        gray -= 20;
+      }
+
+      gray = constrain(gray, 160, 220);
+
+      const idx = (y * W + x) * 4;
+      wallBuffer.pixels[idx] = gray;
+      wallBuffer.pixels[idx + 1] = gray;
+      wallBuffer.pixels[idx + 2] = gray;
+      wallBuffer.pixels[idx + 3] = 255;
+    }
+  }
+
+  wallBuffer.updatePixels();
 }
 
 function setup() {
   const canvas = createCanvas(W, H);
   canvas.parent('canvas-container');
   pixelDensity(2);
+  noiseSeed(floor(random(99999)));
+  generateWall();
   noLoop();
 }
 
 function draw() {
-  background(200);
-  // Placeholder — draw reference image to verify it loads
-  image(refImg, 0, 0, W, H);
+  image(wallBuffer, 0, 0);
 }
 
 function mousePressed() {
