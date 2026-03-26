@@ -16,55 +16,62 @@ const H = 800;
 const NUM_SEEDS = 600;
 const BORDER_SEEDS = 120;
 
-// Kobra spray paint palettes — bold, vivid, high-saturation colors
+// Palettes sampled from real Kobra murals
 const PALETTES = [
-  { // Classic Kobra — full rainbow, maximum impact
-    name: 'classic',
+  { // Niemeyer mural — reds, greens, blues, yellows
+    name: 'niemeyer',
     colors: [
-      [0, 90, 88],    // Kobra Red
-      [330, 85, 90],   // Magenta / Fuchsia
-      [50, 95, 100],   // Kobra Yellow
-      [25, 95, 95],    // Kobra Orange
-      [210, 90, 80],   // Kobra Blue
-      [120, 85, 65],   // Bold Green
-      [270, 75, 75],   // Violet
-      [180, 80, 70],   // Turquoise
+      [0, 85, 75],     // Crimson red
+      [350, 70, 85],   // Rose / coral
+      [345, 50, 90],   // Pink
+      [130, 80, 55],   // Forest green
+      [120, 75, 70],   // Kelly green
+      [215, 85, 80],   // Cobalt blue
+      [50, 85, 92],    // Golden yellow
+      [20, 85, 88],    // Deep orange
+      [330, 65, 78],   // Muted magenta
+      [5, 80, 55],     // Maroon
     ],
   },
-  { // Warm Mural — reds, oranges, yellows, magentas
+  { // Warm mural — reds, oranges, pinks, yellows
     name: 'warm',
     colors: [
-      [0, 90, 85],    [355, 85, 90],
-      [15, 95, 95],   [30, 95, 100],
-      [50, 95, 100],  [45, 90, 95],
-      [330, 80, 85],  [310, 75, 80],
+      [0, 85, 80],     // Red
+      [355, 75, 88],   // Warm rose
+      [15, 80, 85],    // Coral
+      [30, 85, 90],    // Orange
+      [50, 85, 92],    // Yellow
+      [345, 55, 88],   // Light pink
+      [5, 75, 55],     // Dark red
+      [330, 60, 80],   // Dusty magenta
     ],
   },
-  { // Cool Mural — blues, teals, greens, purples
+  { // Cool mural — blues, greens, teals
     name: 'cool',
     colors: [
-      [210, 90, 80],  [225, 85, 75],
-      [180, 85, 70],  [165, 80, 75],
-      [120, 80, 70],  [140, 75, 65],
-      [270, 70, 80],  [285, 65, 75],
+      [215, 85, 80],   // Cobalt
+      [200, 75, 70],   // Steel blue
+      [130, 80, 55],   // Forest green
+      [120, 70, 70],   // Green
+      [170, 75, 60],   // Teal
+      [250, 60, 70],   // Slate purple
+      [190, 70, 65],   // Cyan-teal
+      [140, 65, 50],   // Dark green
     ],
   },
-  { // Tropical — greens, yellows, oranges, reds
-    name: 'tropical',
+  { // Full rainbow — all Kobra colors
+    name: 'rainbow',
     colors: [
-      [120, 85, 70],  [100, 80, 80],
-      [50, 95, 100],  [60, 90, 90],
-      [25, 95, 95],   [15, 90, 90],
-      [0, 90, 85],    [345, 85, 80],
-    ],
-  },
-  { // Cosmic — purples, blues, magentas, teals
-    name: 'cosmic',
-    colors: [
-      [270, 80, 78],  [255, 75, 82],
-      [210, 85, 85],  [195, 80, 78],
-      [330, 85, 88],  [340, 80, 85],
-      [180, 80, 72],  [165, 75, 78],
+      [0, 85, 75],     // Crimson
+      [350, 65, 85],   // Rose
+      [215, 85, 80],   // Cobalt blue
+      [130, 80, 55],   // Forest green
+      [50, 85, 92],    // Golden yellow
+      [20, 85, 88],    // Deep orange
+      [330, 65, 78],   // Magenta
+      [270, 55, 65],   // Muted violet
+      [120, 70, 70],   // Green
+      [5, 80, 55],     // Maroon
     ],
   },
 ];
