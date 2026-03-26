@@ -16,9 +16,54 @@ const H = 800;
 const NUM_SEEDS = 500;
 const BORDER_SEEDS = 200;
 
+// Curated Kobra palettes — sophisticated color harmonies
+const PALETTES = [
+  { // Sunset warmth
+    name: 'sunset',
+    colors: [
+      [10, 85, 92],  [25, 80, 95],  [45, 75, 98],  // warm oranges/golds
+      [340, 70, 85], [355, 65, 90], [320, 55, 88],  // rose/magentas
+      [190, 60, 75], [210, 65, 80],                  // cool accent teals
+    ],
+  },
+  { // Ocean depths
+    name: 'ocean',
+    colors: [
+      [200, 75, 85], [215, 80, 78], [230, 70, 90],  // blues
+      [170, 65, 80], [185, 70, 75], [160, 55, 88],  // teals/cyans
+      [280, 50, 82], [310, 45, 85],                  // purple/violet accents
+    ],
+  },
+  { // Tropical forest
+    name: 'tropical',
+    colors: [
+      [120, 65, 75], [140, 70, 80], [95, 60, 85],   // greens
+      [50, 80, 95],  [35, 75, 90],  [65, 70, 88],   // yellows/golds
+      [0, 70, 85],   [350, 60, 80],                  // red accents
+    ],
+  },
+  { // Jewel tones
+    name: 'jewel',
+    colors: [
+      [270, 65, 78], [290, 60, 82], [250, 70, 75],  // amethyst/purple
+      [340, 70, 80], [355, 65, 85], [15, 75, 88],   // ruby/garnet
+      [170, 60, 70], [195, 55, 78],                  // emerald accents
+    ],
+  },
+  { // Earth & sky
+    name: 'earth',
+    colors: [
+      [25, 60, 70],  [35, 55, 75],  [15, 50, 65],   // warm earth browns
+      [200, 50, 80], [215, 55, 85], [190, 45, 78],   // sky blues
+      [45, 70, 90],  [55, 65, 85],                   // golden accents
+    ],
+  },
+];
+
 let refImg;
 let wallBuffer;
 let lineBuffer;
+let currentPalette;
 
 let brightnessMap;
 let silhouetteMask;
@@ -35,20 +80,22 @@ function generateWall() {
 
   for (let y = 0; y < H; y++) {
     for (let x = 0; x < W; x++) {
-      let gray = 190;
-      gray += (noise(x * 0.02, y * 0.02) - 0.5) * 30;
-      gray += (noise(x * 0.1 + 500, y * 0.1 + 500) - 0.5) * 15;
+      let gray = 185;
+      gray += (noise(x * 0.015, y * 0.015) - 0.5) * 35;
+      gray += (noise(x * 0.08 + 500, y * 0.08 + 500) - 0.5) * 18;
+      // Subtle warm tint
+      let r = gray + 3;
+      let g = gray + 1;
+      let b = gray - 2;
 
-      if (noise(x * 0.5 + 1000, y * 0.5 + 1000) > 0.75) {
-        gray -= 20;
+      if (noise(x * 0.5 + 1000, y * 0.5 + 1000) > 0.72) {
+        r -= 15; g -= 15; b -= 12;
       }
 
-      gray = constrain(gray, 160, 220);
-
       const idx = (y * W + x) * 4;
-      wallBuffer.pixels[idx] = gray;
-      wallBuffer.pixels[idx + 1] = gray;
-      wallBuffer.pixels[idx + 2] = gray;
+      wallBuffer.pixels[idx] = constrain(r, 150, 215);
+      wallBuffer.pixels[idx + 1] = constrain(g, 148, 213);
+      wallBuffer.pixels[idx + 2] = constrain(b, 146, 210);
       wallBuffer.pixels[idx + 3] = 255;
     }
   }
@@ -57,18 +104,18 @@ function generateWall() {
 }
 
 function generateLineBuffer() {
-  // Pre-render line art into a buffer for smooth anti-aliased rendering
   lineBuffer = createGraphics(W, H);
   lineBuffer.pixelDensity(2);
   lineBuffer.clear();
   lineBuffer.noStroke();
-  lineBuffer.fill(15);
 
   for (let y = 0; y < H; y++) {
     for (let x = 0; x < W; x++) {
       let br = brightnessMap[y][x];
       if (br < 0.18) {
-        let sz = map(br, 0, 0.18, 3, 1.2);
+        let alpha = map(br, 0, 0.18, 240, 60);
+        let sz = map(br, 0, 0.18, 2.8, 0.8);
+        lineBuffer.fill(10, 8, 5, alpha);
         lineBuffer.circle(x, y, sz);
       }
     }
@@ -162,7 +209,6 @@ function generateSeeds() {
     }
   }
 
-  // Border seeds just outside silhouette boundary
   let placed = 0;
   for (let a = 0; a < BORDER_SEEDS * 50 && placed < BORDER_SEEDS; a++) {
     let x = floor(random(W));
@@ -199,39 +245,43 @@ function computeVoronoi(seeds) {
 }
 
 function assignColors(seeds) {
-  // Assign hues with spatial coherence — nearby cells get similar base hues
-  // Use Perlin noise seeded by position for smooth color zones
-  let hues = [];
-  let colorScale = 0.008;
+  // Use spatial Perlin noise to pick from the curated palette
+  // Creates smooth color zones with sophisticated harmonies
+  let colors = [];
+  let colorScale = 0.007;
   let colorSeed = random(1000);
+  let paletteColors = currentPalette.colors;
 
   for (let i = 0; i < seeds.length; i++) {
     let sx = seeds[i][0];
     let sy = seeds[i][1];
-    // Base hue from spatial noise — creates color zones
-    let baseHue = noise(sx * colorScale + colorSeed, sy * colorScale) * 360;
-    // Add jitter so neighboring cells aren't identical
-    let hue = (baseHue + random(-40, 40) + 360) % 360;
-    hues.push(hue);
+    // Spatial noise picks a palette color index
+    let n = noise(sx * colorScale + colorSeed, sy * colorScale);
+    let idx = floor(n * paletteColors.length);
+    idx = constrain(idx, 0, paletteColors.length - 1);
+    let base = paletteColors[idx];
+    // Subtle variation around the palette color
+    let h = (base[0] + random(-12, 12) + 360) % 360;
+    let s = base[1] + random(-8, 8);
+    let b = base[2] + random(-8, 8);
+    colors.push([h, constrain(s, 40, 100), constrain(b, 50, 100)]);
   }
-  return hues;
+  return colors;
 }
 
 function generatePaintBands() {
   let bands = [];
   let numBands = floor(random(2, 4));
 
-  let families = [
-    [0, 30],     // warm reds/oranges
-    [200, 240],  // cool blues
-    [100, 140],  // greens
-    [270, 310],  // purples
-    [40, 70],    // yellows/golds
-  ];
-
-  shuffle(families, true);
+  // Bands use colors from the current palette for cohesion
+  let paletteColors = currentPalette.colors;
+  let bandIndices = [];
+  for (let i = 0; i < numBands; i++) {
+    bandIndices.push(floor(random(paletteColors.length)));
+  }
 
   for (let i = 0; i < numBands; i++) {
+    let baseColor = paletteColors[bandIndices[i]];
     let angle = random(-PI / 6, PI / 6);
     let yCenter = map(i, 0, numBands, H * 0.15, H * 0.85);
     yCenter += random(-50, 50);
@@ -240,29 +290,34 @@ function generatePaintBands() {
       angle: angle,
       yCenter: yCenter,
       width: bandWidth,
-      hueRange: families[i],
+      hueRange: [baseColor[0] - 15, baseColor[0] + 15],
+      baseSat: baseColor[1],
+      baseBri: baseColor[2],
     });
   }
 
   return bands;
 }
 
-function getHueForCell(sx, sy, baseHue, bands) {
+function getColorForCell(sx, sy, baseColor, bands) {
   for (let band of bands) {
     let dx = sx - W / 2;
     let dy = sy - H / 2;
     let rotY = -dx * sin(band.angle) + dy * cos(band.angle) + H / 2;
     if (abs(rotY - band.yCenter) < band.width / 2) {
-      return random(band.hueRange[0], band.hueRange[1]);
+      let h = (random(band.hueRange[0], band.hueRange[1]) + 360) % 360;
+      let s = band.baseSat + random(-10, 10);
+      let b = band.baseBri + random(-10, 10);
+      return [h, constrain(s, 40, 100), constrain(b, 50, 100)];
     }
   }
-  return baseHue;
+  return baseColor;
 }
 
 function renderMosaic(seeds, isFaceSeed, voronoi, bands) {
   colorMode(HSB, 360, 100, 100);
 
-  let hues = assignColors(seeds);
+  let colors = assignColors(seeds);
 
   for (let i = 0; i < seeds.length; i++) {
     if (!isFaceSeed[i]) continue;
@@ -275,9 +330,9 @@ function renderMosaic(seeds, isFaceSeed, voronoi, bands) {
     if (sy < 0 || sy >= H || sx < 0 || sx >= W) continue;
     if (!silhouetteMask[sy] || !silhouetteMask[sy][sx]) continue;
 
-    let cellHue = getHueForCell(sx, sy, hues[i], bands);
-    fill(cellHue, random(70, 100), random(75, 100));
-    stroke(15, 10, 8);
+    let col = getColorForCell(sx, sy, colors[i], bands);
+    fill(col[0], col[1], col[2]);
+    stroke(12, 15, 8);
     strokeWeight(1.2);
 
     beginShape();
@@ -293,6 +348,8 @@ function renderMosaic(seeds, isFaceSeed, voronoi, bands) {
 function renderSprayEdge() {
   colorMode(HSB, 360, 100, 100, 255);
   noStroke();
+  let paletteColors = currentPalette.colors;
+
   for (let i = 0; i < 3000; i++) {
     let x = floor(random(W));
     let y = floor(random(H));
@@ -313,7 +370,9 @@ function renderSprayEdge() {
     if (ratio > 0.15 && ratio < 0.85) {
       let alpha = map(abs(ratio - 0.5), 0, 0.35, 60, 10);
       if (!inside) alpha *= 0.4;
-      fill(random(360), random(70, 100), random(80, 100), alpha);
+      // Use palette colors for spray too
+      let pc = paletteColors[floor(random(paletteColors.length))];
+      fill(pc[0] + random(-15, 15), pc[1], pc[2], alpha);
       circle(x, y, random(1, 5));
     }
   }
@@ -330,6 +389,7 @@ function setup() {
   noiseSeed(floor(random(99999)));
   generateWall();
   generateLineBuffer();
+  currentPalette = random(PALETTES);
   noLoop();
 }
 
@@ -344,6 +404,7 @@ function draw() {
 }
 
 function mousePressed() {
+  currentPalette = random(PALETTES);
   redraw();
 }
 
