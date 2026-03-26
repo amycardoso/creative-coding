@@ -188,6 +188,15 @@
       "media": "sketches/bus-142/bus-142.gif",
       "tags": ["generative", "narrative", "landscape"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "kobra",
+      "title": "Kobra",
+      "description": "A generative Eduardo Kobra-style mosaic portrait — Voronoi tessellation transforms an indigenous face into kaleidoscopic color blocks on a concrete wall.",
+      "date": "2026-03-25",
+      "media": "sketches/kobra/kobra.png",
+      "tags": ["generative", "abstract", "narrative"],
+      "tech": ["p5.js", "d3-delaunay"]
     }
   ]
 }
