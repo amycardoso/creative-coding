@@ -119,6 +119,60 @@ function generateSeeds() {
   return seeds;
 }
 
+function computeVoronoi(seeds) {
+  let delaunay = d3.Delaunay.from(seeds);
+  let voronoi = delaunay.voronoi([0, 0, W, H]);
+  return voronoi;
+}
+
+function assignColors(count) {
+  let hues = [];
+  for (let i = 0; i < count; i++) {
+    let hue;
+    let attempts = 0;
+    do {
+      hue = random(360);
+      attempts++;
+    } while (attempts < 10 && hues.length > 0 && abs(hue - hues[hues.length - 1]) < 30);
+    hues.push(hue);
+  }
+  return hues;
+}
+
+function renderMosaic(seeds, voronoi) {
+  colorMode(HSB, 360, 100, 100);
+
+  let hues = assignColors(seeds.length);
+
+  for (let i = 0; i < seeds.length; i++) {
+    let cell = voronoi.cellPolygon(i);
+    if (!cell) continue;
+
+    // Check if seed is inside silhouette
+    let sx = floor(seeds[i][0]);
+    let sy = floor(seeds[i][1]);
+    if (sy < 0 || sy >= H || sx < 0 || sx >= W) continue;
+    if (!silhouetteMask[sy] || !silhouetteMask[sy][sx]) continue;
+
+    // Determine outline weight based on edge proximity
+    let edge = (edgeMap[sy] && edgeMap[sy][sx]) ? edgeMap[sy][sx] : 0;
+    let sw = map(edge, 0, 0.5, 1.5, 4);
+    sw = constrain(sw, 1.5, 4);
+
+    fill(hues[i], random(75, 100), random(80, 100));
+    stroke(20, 10, 10);
+    strokeWeight(sw);
+
+    beginShape();
+    for (let j = 0; j < cell.length; j++) {
+      vertex(cell[j][0], cell[j][1]);
+    }
+    endShape(CLOSE);
+  }
+
+  colorMode(RGB, 255);
+}
+
 function setup() {
   const canvas = createCanvas(W, H);
   canvas.parent('canvas-container');
@@ -132,6 +186,9 @@ function setup() {
 
 function draw() {
   image(wallBuffer, 0, 0);
+  let seeds = generateSeeds();
+  let voronoi = computeVoronoi(seeds);
+  renderMosaic(seeds, voronoi);
 }
 
 function mousePressed() {
