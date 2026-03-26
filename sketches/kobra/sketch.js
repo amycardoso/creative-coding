@@ -269,6 +269,7 @@ function draw() {
 }
 
 function mousePressed() {
+  noiseSeed(floor(random(99999)));
   redraw();
 }
 
