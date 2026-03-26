@@ -216,6 +216,38 @@ function renderMosaic(seeds, voronoi, bands) {
   colorMode(RGB, 255);
 }
 
+function renderSprayEdge() {
+  for (let i = 0; i < 2000; i++) {
+    let x = floor(random(W));
+    let y = floor(random(H));
+
+    // Only process near silhouette boundary
+    let inside = silhouetteMask[y] && silhouetteMask[y][x];
+    let neighbors = 0;
+    let total = 0;
+    for (let dy = -3; dy <= 3; dy++) {
+      for (let dx = -3; dx <= 3; dx++) {
+        let ny = y + dy, nx = x + dx;
+        if (ny >= 0 && ny < H && nx >= 0 && nx < W) {
+          total++;
+          if (silhouetteMask[ny] && silhouetteMask[ny][nx]) neighbors++;
+        }
+      }
+    }
+    let ratio = neighbors / total;
+    // Near boundary: ratio is between 0.2 and 0.8
+    if (ratio > 0.2 && ratio < 0.8) {
+      let alpha = map(ratio, 0.2, 0.8, 20, 80);
+      if (!inside) alpha *= 0.5;
+      colorMode(HSB, 360, 100, 100, 255);
+      noStroke();
+      fill(random(360), random(70, 100), random(80, 100), alpha);
+      circle(x, y, random(1, 4));
+    }
+  }
+  colorMode(RGB, 255);
+}
+
 function setup() {
   const canvas = createCanvas(W, H);
   canvas.parent('canvas-container');
@@ -233,6 +265,7 @@ function draw() {
   let voronoi = computeVoronoi(seeds);
   let bands = generatePaintBands();
   renderMosaic(seeds, voronoi, bands);
+  renderSprayEdge();
 }
 
 function mousePressed() {
