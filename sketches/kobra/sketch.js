@@ -13,11 +13,12 @@
 
 const W = 600;
 const H = 800;
-const NUM_SEEDS = 800;
-const BORDER_SEEDS = 150;
+const NUM_SEEDS = 500;
+const BORDER_SEEDS = 200;
 
 let refImg;
 let wallBuffer;
+let lineBuffer;
 
 let brightnessMap;
 let silhouetteMask;
@@ -55,6 +56,25 @@ function generateWall() {
   wallBuffer.updatePixels();
 }
 
+function generateLineBuffer() {
+  // Pre-render line art into a buffer for smooth anti-aliased rendering
+  lineBuffer = createGraphics(W, H);
+  lineBuffer.pixelDensity(2);
+  lineBuffer.clear();
+  lineBuffer.noStroke();
+  lineBuffer.fill(15);
+
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      let br = brightnessMap[y][x];
+      if (br < 0.18) {
+        let sz = map(br, 0, 0.18, 3, 1.2);
+        lineBuffer.circle(x, y, sz);
+      }
+    }
+  }
+}
+
 function processReference() {
   refImg.resize(W, H);
   refImg.loadPixels();
@@ -78,7 +98,6 @@ function processReference() {
 }
 
 function dilateSilhouette() {
-  // Close line gaps in silhouette — any pixel near a bright pixel is also face
   let dilated = [];
   let radius = 4;
   for (let y = 0; y < H; y++) {
@@ -123,9 +142,8 @@ function generateSeeds() {
   let seeds = [];
   let isFaceSeed = [];
   let attempts = 0;
-  let maxAttempts = NUM_SEEDS * 20;
+  let maxAttempts = NUM_SEEDS * 30;
 
-  // Face seeds — weighted by brightness and edges
   while (seeds.length < NUM_SEEDS && attempts < maxAttempts) {
     let x = floor(random(W));
     let y = floor(random(H));
@@ -135,8 +153,8 @@ function generateSeeds() {
 
     let br = brightnessMap[y][x];
     let edge = (edgeMap[y] && edgeMap[y][x]) ? edgeMap[y][x] : 0;
-    let prob = (1 - br) * 0.5 + edge * 8;
-    prob = constrain(prob, 0.02, 1.0);
+    let prob = (1 - br) * 0.4 + edge * 10;
+    prob = constrain(prob, 0.03, 1.0);
 
     if (random() < prob) {
       seeds.push([x, y]);
@@ -144,17 +162,16 @@ function generateSeeds() {
     }
   }
 
-  // Border seeds just outside silhouette boundary — tightly bounds face cells
+  // Border seeds just outside silhouette boundary
   let placed = 0;
   for (let a = 0; a < BORDER_SEEDS * 50 && placed < BORDER_SEEDS; a++) {
     let x = floor(random(W));
     let y = floor(random(H));
     let inside = silhouetteMask[y] && silhouetteMask[y][x];
     if (inside) continue;
-    // Check if any neighbor within 8px is inside the face
     let nearFace = false;
-    for (let dy = -8; dy <= 8; dy += 4) {
-      for (let dx = -8; dx <= 8; dx += 4) {
+    for (let dy = -6; dy <= 6; dy += 3) {
+      for (let dx = -6; dx <= 6; dx += 3) {
         let ny = y + dy, nx = x + dx;
         if (ny >= 0 && ny < H && nx >= 0 && nx < W) {
           if (silhouetteMask[ny] && silhouetteMask[ny][nx]) {
@@ -181,18 +198,20 @@ function computeVoronoi(seeds) {
   return voronoi;
 }
 
-function assignColors(count) {
+function assignColors(seeds) {
+  // Assign hues with spatial coherence — nearby cells get similar base hues
+  // Use Perlin noise seeded by position for smooth color zones
   let hues = [];
-  for (let i = 0; i < count; i++) {
-    let hue;
-    let diff;
-    let attempts = 0;
-    do {
-      hue = random(360);
-      attempts++;
-      diff = hues.length > 0 ? abs(hue - hues[hues.length - 1]) : 360;
-      diff = min(diff, 360 - diff);
-    } while (attempts < 10 && diff < 30);
+  let colorScale = 0.008;
+  let colorSeed = random(1000);
+
+  for (let i = 0; i < seeds.length; i++) {
+    let sx = seeds[i][0];
+    let sy = seeds[i][1];
+    // Base hue from spatial noise — creates color zones
+    let baseHue = noise(sx * colorScale + colorSeed, sy * colorScale) * 360;
+    // Add jitter so neighboring cells aren't identical
+    let hue = (baseHue + random(-40, 40) + 360) % 360;
     hues.push(hue);
   }
   return hues;
@@ -214,9 +233,9 @@ function generatePaintBands() {
 
   for (let i = 0; i < numBands; i++) {
     let angle = random(-PI / 6, PI / 6);
-    let yCenter = map(i, 0, numBands, H * 0.2, H * 0.8);
-    yCenter += random(-40, 40);
-    let bandWidth = random(40, 80);
+    let yCenter = map(i, 0, numBands, H * 0.15, H * 0.85);
+    yCenter += random(-50, 50);
+    let bandWidth = random(60, 120);
     bands.push({
       angle: angle,
       yCenter: yCenter,
@@ -243,10 +262,9 @@ function getHueForCell(sx, sy, baseHue, bands) {
 function renderMosaic(seeds, isFaceSeed, voronoi, bands) {
   colorMode(HSB, 360, 100, 100);
 
-  let hues = assignColors(seeds.length);
+  let hues = assignColors(seeds);
 
   for (let i = 0; i < seeds.length; i++) {
-    // Skip border seeds — they exist only to bound the Voronoi cells
     if (!isFaceSeed[i]) continue;
 
     let cell = voronoi.cellPolygon(i);
@@ -257,13 +275,10 @@ function renderMosaic(seeds, isFaceSeed, voronoi, bands) {
     if (sy < 0 || sy >= H || sx < 0 || sx >= W) continue;
     if (!silhouetteMask[sy] || !silhouetteMask[sy][sx]) continue;
 
-    // Thin uniform cell outlines — line art handles feature definition
-    let sw = 1;
-
     let cellHue = getHueForCell(sx, sy, hues[i], bands);
-    fill(cellHue, random(75, 100), random(80, 100));
-    stroke(20, 10, 10);
-    strokeWeight(sw);
+    fill(cellHue, random(70, 100), random(75, 100));
+    stroke(15, 10, 8);
+    strokeWeight(1.2);
 
     beginShape();
     for (let j = 0; j < cell.length; j++) {
@@ -275,33 +290,18 @@ function renderMosaic(seeds, isFaceSeed, voronoi, bands) {
   colorMode(RGB, 255);
 }
 
-function renderLineArt() {
-  // Overlay the coloring book's bold lines on top of the mosaic
-  noStroke();
-  fill(15);
-  for (let y = 0; y < H; y++) {
-    for (let x = 0; x < W; x++) {
-      let br = brightnessMap[y][x];
-      if (br < 0.18) {
-        let sz = map(br, 0, 0.18, 2.5, 1);
-        circle(x, y, sz);
-      }
-    }
-  }
-}
-
 function renderSprayEdge() {
   colorMode(HSB, 360, 100, 100, 255);
   noStroke();
-  for (let i = 0; i < 2000; i++) {
+  for (let i = 0; i < 3000; i++) {
     let x = floor(random(W));
     let y = floor(random(H));
 
     let inside = silhouetteMask[y] && silhouetteMask[y][x];
     let neighbors = 0;
     let total = 0;
-    for (let dy = -3; dy <= 3; dy++) {
-      for (let dx = -3; dx <= 3; dx++) {
+    for (let dy = -4; dy <= 4; dy++) {
+      for (let dx = -4; dx <= 4; dx++) {
         let ny = y + dy, nx = x + dx;
         if (ny >= 0 && ny < H && nx >= 0 && nx < W) {
           total++;
@@ -310,11 +310,11 @@ function renderSprayEdge() {
       }
     }
     let ratio = neighbors / total;
-    if (ratio > 0.2 && ratio < 0.8) {
-      let alpha = map(ratio, 0.2, 0.8, 20, 80);
-      if (!inside) alpha *= 0.5;
+    if (ratio > 0.15 && ratio < 0.85) {
+      let alpha = map(abs(ratio - 0.5), 0, 0.35, 60, 10);
+      if (!inside) alpha *= 0.4;
       fill(random(360), random(70, 100), random(80, 100), alpha);
-      circle(x, y, random(1, 4));
+      circle(x, y, random(1, 5));
     }
   }
   colorMode(RGB, 255);
@@ -329,6 +329,7 @@ function setup() {
   computeEdges();
   noiseSeed(floor(random(99999)));
   generateWall();
+  generateLineBuffer();
   noLoop();
 }
 
@@ -338,7 +339,7 @@ function draw() {
   let voronoi = computeVoronoi(seeds);
   let bands = generatePaintBands();
   renderMosaic(seeds, isFaceSeed, voronoi, bands);
-  renderLineArt();
+  image(lineBuffer, 0, 0);
   renderSprayEdge();
 }
 
