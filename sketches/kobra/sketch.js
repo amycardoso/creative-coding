@@ -9,6 +9,7 @@
 
 const W = 600;
 const H = 800;
+const NUM_SEEDS = 500;
 
 let refImg;
 let wallBuffer;
@@ -87,6 +88,35 @@ function computeEdges() {
       edgeMap[y][x] = sqrt(gx * gx + gy * gy);
     }
   }
+}
+
+function generateSeeds() {
+  let seeds = [];
+  let attempts = 0;
+  let maxAttempts = NUM_SEEDS * 20;
+
+  while (seeds.length < NUM_SEEDS && attempts < maxAttempts) {
+    let x = floor(random(W));
+    let y = floor(random(H));
+    attempts++;
+
+    // Skip pixels outside silhouette
+    if (!silhouetteMask[y] || !silhouetteMask[y][x]) continue;
+
+    // Acceptance probability based on brightness and edges
+    // Darker pixels (lower brightness) → higher chance → denser cells
+    let br = brightnessMap[y][x];
+    let edge = (edgeMap[y] && edgeMap[y][x]) ? edgeMap[y][x] : 0;
+    // Combine: darker areas + high-edge areas get more points
+    let prob = (1 - br) * 0.7 + edge * 5;
+    prob = constrain(prob, 0.05, 1.0);
+
+    if (random() < prob) {
+      seeds.push([x, y]);
+    }
+  }
+
+  return seeds;
 }
 
 function setup() {
