@@ -192,7 +192,7 @@
     {
       "slug": "kobra",
       "title": "Kobra",
-      "description": "A generative Eduardo Kobra-style mosaic portrait — Voronoi tessellation transforms an indigenous face into kaleidoscopic color blocks with bold spray paint palettes.",
+      "description": "A generative mosaic portrait inspired by Eduardo Kobra's murals — Voronoi tessellation and bold spray paint colors transform an indigenous face into vivid geometric color blocks.",
       "date": "2026-03-25",
       "media": "sketches/kobra/kobra.png",
       "tags": ["generative", "abstract", "narrative"],
