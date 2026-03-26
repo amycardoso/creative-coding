@@ -139,7 +139,49 @@ function assignColors(count) {
   return hues;
 }
 
-function renderMosaic(seeds, voronoi) {
+function generatePaintBands() {
+  let bands = [];
+  let numBands = floor(random(2, 4)); // 2-3 bands
+
+  let families = [
+    [0, 30],     // warm reds/oranges
+    [200, 240],  // cool blues
+    [100, 140],  // greens
+    [270, 310],  // purples
+    [40, 70],    // yellows/golds
+  ];
+
+  shuffle(families, true);
+
+  for (let i = 0; i < numBands; i++) {
+    let angle = random(-PI / 6, PI / 6);
+    let yCenter = map(i, 0, numBands, H * 0.2, H * 0.8);
+    yCenter += random(-40, 40);
+    let bandWidth = random(40, 80);
+    bands.push({
+      angle: angle,
+      yCenter: yCenter,
+      width: bandWidth,
+      hueRange: families[i],
+    });
+  }
+
+  return bands;
+}
+
+function getHueForCell(sx, sy, baseHue, bands) {
+  for (let band of bands) {
+    let dx = sx - W / 2;
+    let dy = sy - H / 2;
+    let rotY = -dx * sin(band.angle) + dy * cos(band.angle) + H / 2;
+    if (abs(rotY - band.yCenter) < band.width / 2) {
+      return random(band.hueRange[0], band.hueRange[1]);
+    }
+  }
+  return baseHue;
+}
+
+function renderMosaic(seeds, voronoi, bands) {
   colorMode(HSB, 360, 100, 100);
 
   let hues = assignColors(seeds.length);
@@ -159,7 +201,8 @@ function renderMosaic(seeds, voronoi) {
     let sw = map(edge, 0, 0.5, 1.5, 4);
     sw = constrain(sw, 1.5, 4);
 
-    fill(hues[i], random(75, 100), random(80, 100));
+    let cellHue = getHueForCell(sx, sy, hues[i], bands);
+    fill(cellHue, random(75, 100), random(80, 100));
     stroke(20, 10, 10);
     strokeWeight(sw);
 
@@ -188,7 +231,8 @@ function draw() {
   image(wallBuffer, 0, 0);
   let seeds = generateSeeds();
   let voronoi = computeVoronoi(seeds);
-  renderMosaic(seeds, voronoi);
+  let bands = generatePaintBands();
+  renderMosaic(seeds, voronoi, bands);
 }
 
 function mousePressed() {
