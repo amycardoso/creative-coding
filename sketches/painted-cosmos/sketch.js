@@ -14,6 +14,10 @@ const W = 928;
 const H = 928;
 const BG = [10, 10, 26]; // #0a0a1a
 
+// --- Render target for offscreen drawing ---
+let renderTarget = null; // null = main canvas
+let staticLayer;
+
 // --- Brush stamps (offscreen buffers) ---
 let brushStamps = [];
 
@@ -71,15 +75,16 @@ function stampBrush(x, y, col, size) {
   if (candidates.length === 0) candidates = brushStamps;
   let stamp = random(candidates);
 
-  push();
-  translate(x, y);
-  rotate(random(TWO_PI));
+  let t = renderTarget || this;
+  t.push();
+  t.translate(x, y);
+  t.rotate(random(TWO_PI));
   let s = size / stamp.size;
-  tint(red(col), green(col), blue(col), alpha(col));
-  image(stamp.img, -stamp.size * s / 2, -stamp.size * s / 2,
-        stamp.size * s, stamp.size * s);
-  noTint();
-  pop();
+  t.tint(red(col), green(col), blue(col), alpha(col));
+  t.image(stamp.img, -stamp.size * s / 2, -stamp.size * s / 2,
+          stamp.size * s, stamp.size * s);
+  t.noTint();
+  t.pop();
 }
 
 // Draw a painterly stroke along a path (array of {x, y} points)
@@ -181,11 +186,12 @@ function drawSparkles(t) {
 }
 
 function drawDust() {
-  noStroke();
+  let target = renderTarget || this;
+  target.noStroke();
   for (let d of dustParticles) {
     let c = d.col;
-    fill(red(c), green(c), blue(c), 100);
-    circle(d.x, d.y, d.r * 2);
+    target.fill(red(c), green(c), blue(c), 100);
+    target.circle(d.x, d.y, d.r * 2);
   }
 }
 
@@ -214,10 +220,11 @@ function generateGalaxies() {
 }
 
 function drawGalaxy(g, t) {
-  push();
-  translate(g.x, g.y);
-  rotate(g.rotation + t * g.rotSpeed);
-  scale(1, 0.4 + abs(g.tilt) * 0.3);
+  let target = renderTarget || this;
+  target.push();
+  target.translate(g.x, g.y);
+  target.rotate(g.rotation + t * g.rotSpeed);
+  target.scale(1, 0.4 + abs(g.tilt) * 0.3);
 
   // Core — concentrated brush stamps
   for (let i = 0; i < 25; i++) {
@@ -261,7 +268,7 @@ function drawGalaxy(g, t) {
     }
   }
 
-  pop();
+  target.pop();
 }
 
 function drawGalaxies(t) {
@@ -440,6 +447,18 @@ function drawComet() {
   }
 }
 
+function renderStaticLayer() {
+  staticLayer = createGraphics(W, H);
+  staticLayer.pixelDensity(1);
+  staticLayer.background(...BG);
+
+  renderTarget = staticLayer;
+  drawDust();
+  drawGalaxies(0);
+  drawPlanets();
+  renderTarget = null;
+}
+
 function setup() {
   const canvas = createCanvas(W, H);
   canvas.parent('canvas-container');
@@ -451,18 +470,21 @@ function setup() {
   generateGalaxies();
   generatePlanets();
   generateComet();
+  renderStaticLayer();
 }
 
 function draw() {
-  background(...BG);
+  image(staticLayer, 0, 0);
   let t = frameCount;
-  drawDust();
-  drawGalaxies(t);
-  drawPlanets();
   drawComet();
   drawStars(t);
   drawSparkles(t);
   updatePlanets();
+
+  // Re-render static layer periodically for planet drift
+  if (frameCount % 120 === 0) {
+    renderStaticLayer();
+  }
 }
 
 function mousePressed() {
@@ -472,6 +494,7 @@ function mousePressed() {
   generateGalaxies();
   generatePlanets();
   generateComet();
+  renderStaticLayer();
 }
 
 function keyPressed() {
