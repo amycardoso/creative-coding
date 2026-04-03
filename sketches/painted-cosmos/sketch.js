@@ -283,8 +283,32 @@ function generatePlanets() {
     let hasRing = i >= solidCount;
     if (hasRing) r = random(25, 55);
 
-    let px = random(r + 20, W - r - 20);
-    let py = random(r + 20, H - r - 20);
+    // Overlap avoidance
+    let placed = false;
+    let attempts = 0;
+    let px, py;
+    while (!placed && attempts < 100) {
+      px = random(r + 20, W - r - 20);
+      py = random(r + 20, H - r - 20);
+      placed = true;
+      // Avoid galaxy centers
+      for (let g of galaxies) {
+        if (dist(px, py, g.x, g.y) < g.radius * 0.4 + r) {
+          placed = false;
+          break;
+        }
+      }
+      // Avoid other planets
+      if (placed) {
+        for (let op of planets) {
+          if (dist(px, py, op.x, op.y) < op.r + r + 10) {
+            placed = false;
+            break;
+          }
+        }
+      }
+      attempts++;
+    }
 
     planets.push({
       x: px,
@@ -442,7 +466,12 @@ function draw() {
 }
 
 function mousePressed() {
-  // Will regenerate composition later
+  generateStars();
+  generateSparkles();
+  generateDust();
+  generateGalaxies();
+  generatePlanets();
+  generateComet();
 }
 
 function keyPressed() {
