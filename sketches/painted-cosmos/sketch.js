@@ -200,20 +200,20 @@ let galaxies = [];
 
 function generateGalaxies() {
   galaxies = [];
-  let count = floor(random(2, 5));
+  let count = floor(random(2, 4));
   for (let i = 0; i < count; i++) {
-    let r = random(120, 300);
+    let r = random(100, 240);
 
     // Overlap avoidance between galaxies
     let placed = false;
     let attempts = 0;
     let gx, gy;
-    while (!placed && attempts < 80) {
+    while (!placed && attempts < 150) {
       gx = random(r, W - r);
       gy = random(r, H - r);
       placed = true;
       for (let og of galaxies) {
-        if (dist(gx, gy, og.x, og.y) < og.radius * 0.6 + r * 0.6) {
+        if (dist(gx, gy, og.x, og.y) < og.radius + r + 40) {
           placed = false;
           break;
         }
@@ -256,10 +256,10 @@ function drawGalaxy(g, t) {
               random(20, 45));
   }
 
-  // Spiral arms — dense stamps for continuous painted arcs
+  // Spiral arms — heavily overlapping stamps for continuous painted arcs
   for (let arm = 0; arm < g.numArms; arm++) {
     let armOffset = (TWO_PI / g.numArms) * arm;
-    let steps = 150;
+    let steps = 200;
 
     for (let i = 0; i < steps; i++) {
       let frac = i / steps;
@@ -269,29 +269,33 @@ function drawGalaxy(g, t) {
       let ay = sin(theta) * r;
 
       // Slight jitter for organic feel
-      ax += random(-r * 0.03, r * 0.03);
-      ay += random(-r * 0.03, r * 0.03);
+      ax += random(-r * 0.02, r * 0.02);
+      ay += random(-r * 0.02, r * 0.02);
 
-      // Color: pink near core, gold near edge
+      // Color: mostly pink/magenta, gold only as outer accent
       let col;
-      if (frac < 0.4) {
-        col = lerpColor(random(g.pinkColors), random(g.goldColors), frac * 2.5);
+      if (frac < 0.6) {
+        col = random(g.pinkColors);
+      } else if (frac < 0.8) {
+        col = lerpColor(random(g.pinkColors), random(g.goldColors), (frac - 0.6) * 5);
       } else {
-        col = random(g.goldColors);
+        col = random(random() < 0.4 ? g.pinkColors : g.goldColors);
       }
-      let a = map(frac, 0, 1, 230, 80);
-      let sz = map(frac, 0, 1, 38, 16);
+      let a = map(frac, 0, 1, 240, 100);
+      let sz = map(frac, 0, 1, 42, 20);
 
+      // Main stamp
       stampBrush(ax, ay, color(red(col), green(col), blue(col), a), sz);
 
-      // Extra stamp for width/density on inner arms
-      if (frac < 0.6) {
-        let perpAngle = theta + HALF_PI;
-        let spread = sz * 0.4;
-        let bx = ax + cos(perpAngle) * random(-spread, spread);
-        let by = ay + sin(perpAngle) * random(-spread, spread);
-        stampBrush(bx, by, color(red(col), green(col), blue(col), a * 0.6),
-                  sz * 0.7);
+      // Perpendicular fill stamps for width — continuous thick arc
+      let perpAngle = theta + HALF_PI;
+      let spread = sz * 0.5;
+      for (let j = 0; j < 2; j++) {
+        let offset = random(-spread, spread);
+        let bx = ax + cos(perpAngle) * offset;
+        let by = ay + sin(perpAngle) * offset;
+        stampBrush(bx, by, color(red(col), green(col), blue(col), a * 0.7),
+                  sz * 0.65);
       }
     }
   }
