@@ -87,17 +87,6 @@ function stampBrush(x, y, col, size) {
   t.pop();
 }
 
-// Draw a painterly stroke along a path (array of {x, y} points)
-function brushStroke(points, col, size, spacing) {
-  spacing = spacing || size * 0.4;
-  for (let i = 0; i < points.length; i++) {
-    let p = points[i];
-    let jx = p.x + random(-size * 0.1, size * 0.1);
-    let jy = p.y + random(-size * 0.1, size * 0.1);
-    let jSize = size * random(0.8, 1.2);
-    stampBrush(jx, jy, col, jSize);
-  }
-}
 
 // --- Color palette ---
 const PALETTE = {
