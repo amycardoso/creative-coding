@@ -203,9 +203,27 @@ function generateGalaxies() {
   let count = floor(random(2, 5));
   for (let i = 0; i < count; i++) {
     let r = random(120, 300);
+
+    // Overlap avoidance between galaxies
+    let placed = false;
+    let attempts = 0;
+    let gx, gy;
+    while (!placed && attempts < 80) {
+      gx = random(r, W - r);
+      gy = random(r, H - r);
+      placed = true;
+      for (let og of galaxies) {
+        if (dist(gx, gy, og.x, og.y) < og.radius * 0.6 + r * 0.6) {
+          placed = false;
+          break;
+        }
+      }
+      attempts++;
+    }
+
     galaxies.push({
-      x: random(r, W - r),
-      y: random(r, H - r),
+      x: gx,
+      y: gy,
       radius: r,
       tilt: random(-0.6, 0.6),
       rotation: random(TWO_PI),
@@ -226,22 +244,22 @@ function drawGalaxy(g, t) {
   target.rotate(g.rotation + t * g.rotSpeed);
   target.scale(1, 0.4 + abs(g.tilt) * 0.3);
 
-  // Core — concentrated brush stamps
-  for (let i = 0; i < 25; i++) {
+  // Core — dense concentrated brush stamps
+  for (let i = 0; i < 50; i++) {
     let angle = random(TWO_PI);
-    let dist = random(g.coreSize);
-    let cx = cos(angle) * dist;
-    let cy = sin(angle) * dist;
+    let d = random(g.coreSize);
+    let cx = cos(angle) * d;
+    let cy = sin(angle) * d;
     let col = random(g.pinkColors);
-    let a = map(dist, 0, g.coreSize, 220, 80);
+    let a = map(d, 0, g.coreSize, 240, 120);
     stampBrush(cx, cy, color(red(col), green(col), blue(col), a),
-              random(15, 35));
+              random(20, 45));
   }
 
-  // Spiral arms
+  // Spiral arms — dense stamps for continuous painted arcs
   for (let arm = 0; arm < g.numArms; arm++) {
     let armOffset = (TWO_PI / g.numArms) * arm;
-    let steps = 60;
+    let steps = 150;
 
     for (let i = 0; i < steps; i++) {
       let frac = i / steps;
@@ -250,21 +268,31 @@ function drawGalaxy(g, t) {
       let ax = cos(theta) * r;
       let ay = sin(theta) * r;
 
-      // Jitter for organic feel
-      ax += random(-r * 0.05, r * 0.05);
-      ay += random(-r * 0.05, r * 0.05);
+      // Slight jitter for organic feel
+      ax += random(-r * 0.03, r * 0.03);
+      ay += random(-r * 0.03, r * 0.03);
 
       // Color: pink near core, gold near edge
       let col;
-      if (frac < 0.5) {
-        col = lerpColor(random(g.pinkColors), random(g.goldColors), frac * 2);
+      if (frac < 0.4) {
+        col = lerpColor(random(g.pinkColors), random(g.goldColors), frac * 2.5);
       } else {
         col = random(g.goldColors);
       }
-      let a = map(frac, 0, 1, 200, 60);
-      let sz = map(frac, 0, 1, 30, 12);
+      let a = map(frac, 0, 1, 230, 80);
+      let sz = map(frac, 0, 1, 38, 16);
 
       stampBrush(ax, ay, color(red(col), green(col), blue(col), a), sz);
+
+      // Extra stamp for width/density on inner arms
+      if (frac < 0.6) {
+        let perpAngle = theta + HALF_PI;
+        let spread = sz * 0.4;
+        let bx = ax + cos(perpAngle) * random(-spread, spread);
+        let by = ay + sin(perpAngle) * random(-spread, spread);
+        stampBrush(bx, by, color(red(col), green(col), blue(col), a * 0.6),
+                  sz * 0.7);
+      }
     }
   }
 
@@ -338,27 +366,27 @@ function generatePlanets() {
 function drawPlanet(p) {
   let c = p.col;
 
-  // Base sphere — multiple overlapping brush stamps
-  let stamps = max(8, floor(p.r * 0.8));
+  // Base sphere — dense overlapping brush stamps for solid coverage
+  let stamps = max(15, floor(p.r * 1.5));
   for (let i = 0; i < stamps; i++) {
     let angle = random(TWO_PI);
-    let dist = random(p.r * 0.6);
-    let sx = p.x + cos(angle) * dist;
-    let sy = p.y + sin(angle) * dist;
-    let a = map(dist, 0, p.r * 0.6, 220, 100);
+    let d = random(p.r * 0.5);
+    let sx = p.x + cos(angle) * d;
+    let sy = p.y + sin(angle) * d;
+    let a = map(d, 0, p.r * 0.5, 240, 140);
     stampBrush(sx, sy, color(red(c), green(c), blue(c), a),
-              random(p.r * 0.3, p.r * 0.6));
+              random(p.r * 0.4, p.r * 0.8));
   }
 
   // Dark crescent (shadow)
   let shadowAngle = p.highlightAngle + PI;
   let shadowX = p.x + cos(shadowAngle) * p.r * 0.3;
   let shadowY = p.y + sin(shadowAngle) * p.r * 0.3;
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 8; i++) {
     stampBrush(
-      shadowX + random(-p.r * 0.1, p.r * 0.1),
-      shadowY + random(-p.r * 0.1, p.r * 0.1),
-      color(5, 5, 20, 120),
+      shadowX + random(-p.r * 0.15, p.r * 0.15),
+      shadowY + random(-p.r * 0.15, p.r * 0.15),
+      color(5, 5, 20, 100),
       p.r * random(0.4, 0.7)
     );
   }
@@ -366,17 +394,17 @@ function drawPlanet(p) {
   // Highlight spot
   let hlX = p.x + cos(p.highlightAngle) * p.r * 0.3;
   let hlY = p.y + sin(p.highlightAngle) * p.r * 0.3;
-  stampBrush(hlX, hlY, color(255, 255, 255, 80), p.r * 0.25);
+  stampBrush(hlX, hlY, color(255, 255, 255, 90), p.r * 0.3);
 
-  // Ring (if applicable)
+  // Ring (if applicable) — dense stamps for continuous ring
   if (p.hasRing) {
-    let ringSteps = 40;
+    let ringSteps = 120;
     for (let i = 0; i < ringSteps; i++) {
       let angle = (TWO_PI / ringSteps) * i;
       let rx = p.x + cos(angle) * p.r * 1.8;
       let ry = p.y + sin(angle) * p.r * 1.8 * p.ringTilt;
       let rc = p.ringColor;
-      stampBrush(rx, ry, color(red(rc), green(rc), blue(rc), 160), 8);
+      stampBrush(rx, ry, color(red(rc), green(rc), blue(rc), 180), 10);
     }
   }
 }
