@@ -244,6 +244,18 @@ function drawGalaxy(g, t) {
   target.rotate(g.rotation + t * g.rotSpeed);
   target.scale(1, 0.4 + abs(g.tilt) * 0.3);
 
+  // Ambient nebula fill — soft glow between arms to reduce dark gaps
+  for (let i = 0; i < 60; i++) {
+    let angle = random(TWO_PI);
+    let d = random(g.radius * 0.8);
+    let nx = cos(angle) * d;
+    let ny = sin(angle) * d;
+    let col = random(g.pinkColors);
+    let a = map(d, 0, g.radius * 0.8, 50, 15);
+    stampBrush(nx, ny, color(red(col), green(col), blue(col), a),
+              random(25, 50));
+  }
+
   // Core — dense concentrated brush stamps
   for (let i = 0; i < 50; i++) {
     let angle = random(TWO_PI);
@@ -318,9 +330,9 @@ function generatePlanets() {
   let ringedCount = floor(random(1, 4));
 
   for (let i = 0; i < solidCount + ringedCount; i++) {
-    let r = random(10, 70);
+    let r = random(18, 70);
     let hasRing = i >= solidCount;
-    if (hasRing) r = random(25, 55);
+    if (hasRing) r = random(28, 55);
 
     // Overlap avoidance
     let placed = false;
@@ -437,12 +449,12 @@ let comet;
 function generateComet() {
   comet = {
     t: random(1),
-    speed: random(0.001, 0.002),
-    p0: { x: random(-100, 0), y: random(H * 0.1, H * 0.4) },
-    p1: { x: random(W * 0.3, W * 0.5), y: random(-50, H * 0.2) },
-    p2: { x: random(W * 0.5, W * 0.7), y: random(H * 0.6, H * 0.9) },
-    p3: { x: random(W, W + 100), y: random(H * 0.3, H * 0.6) },
-    trailLength: 25,
+    speed: random(0.0008, 0.0015),
+    p0: { x: random(-80, W * 0.15), y: random(H * 0.05, H * 0.35) },
+    p1: { x: random(W * 0.25, W * 0.5), y: random(-30, H * 0.25) },
+    p2: { x: random(W * 0.5, W * 0.75), y: random(H * 0.5, H * 0.85) },
+    p3: { x: random(W * 0.85, W + 80), y: random(H * 0.2, H * 0.6) },
+    trailLength: 35,
   };
 }
 
@@ -457,20 +469,21 @@ function bezierPoint2D(p0, p1, p2, p3, t) {
 function drawComet() {
   let head = bezierPoint2D(comet.p0, comet.p1, comet.p2, comet.p3, comet.t);
 
-  // Trail
+  // Trail — longer, wider, more visible
   for (let i = comet.trailLength; i > 0; i--) {
-    let tt = comet.t - i * 0.008;
+    let tt = comet.t - i * 0.006;
     if (tt < 0) tt += 1;
     let tp = bezierPoint2D(comet.p0, comet.p1, comet.p2, comet.p3, tt);
     let frac = 1 - i / comet.trailLength;
-    let a = frac * 180;
-    let sz = frac * 18 + 4;
+    let a = frac * 200;
+    let sz = frac * 25 + 5;
     stampBrush(tp.x, tp.y, color(232, 67, 147, a), sz);
   }
 
-  // Head glow
-  stampBrush(head.x, head.y, color(214, 48, 49, 240), 22);
-  stampBrush(head.x, head.y, color(255, 180, 180, 180), 12);
+  // Head glow — bigger and brighter
+  stampBrush(head.x, head.y, color(214, 48, 49, 250), 30);
+  stampBrush(head.x, head.y, color(255, 200, 200, 200), 18);
+  stampBrush(head.x, head.y, color(255, 255, 255, 140), 8);
 
   // Advance
   comet.t += comet.speed;
