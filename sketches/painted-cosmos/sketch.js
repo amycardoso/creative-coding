@@ -368,6 +368,54 @@ function updatePlanets() {
   }
 }
 
+// --- Comet ---
+let comet;
+
+function generateComet() {
+  comet = {
+    t: random(1),
+    speed: random(0.001, 0.002),
+    p0: { x: random(-100, 0), y: random(H * 0.1, H * 0.4) },
+    p1: { x: random(W * 0.3, W * 0.5), y: random(-50, H * 0.2) },
+    p2: { x: random(W * 0.5, W * 0.7), y: random(H * 0.6, H * 0.9) },
+    p3: { x: random(W, W + 100), y: random(H * 0.3, H * 0.6) },
+    trailLength: 25,
+  };
+}
+
+function bezierPoint2D(p0, p1, p2, p3, t) {
+  let mt = 1 - t;
+  return {
+    x: mt * mt * mt * p0.x + 3 * mt * mt * t * p1.x + 3 * mt * t * t * p2.x + t * t * t * p3.x,
+    y: mt * mt * mt * p0.y + 3 * mt * mt * t * p1.y + 3 * mt * t * t * p2.y + t * t * t * p3.y,
+  };
+}
+
+function drawComet() {
+  let head = bezierPoint2D(comet.p0, comet.p1, comet.p2, comet.p3, comet.t);
+
+  // Trail
+  for (let i = comet.trailLength; i > 0; i--) {
+    let tt = comet.t - i * 0.008;
+    if (tt < 0) tt += 1;
+    let tp = bezierPoint2D(comet.p0, comet.p1, comet.p2, comet.p3, tt);
+    let frac = 1 - i / comet.trailLength;
+    let a = frac * 180;
+    let sz = frac * 18 + 4;
+    stampBrush(tp.x, tp.y, color(232, 67, 147, a), sz);
+  }
+
+  // Head glow
+  stampBrush(head.x, head.y, color(214, 48, 49, 240), 22);
+  stampBrush(head.x, head.y, color(255, 180, 180, 180), 12);
+
+  // Advance
+  comet.t += comet.speed;
+  if (comet.t > 1) {
+    generateComet();
+  }
+}
+
 function setup() {
   const canvas = createCanvas(W, H);
   canvas.parent('canvas-container');
@@ -378,6 +426,7 @@ function setup() {
   generateDust();
   generateGalaxies();
   generatePlanets();
+  generateComet();
 }
 
 function draw() {
@@ -386,6 +435,7 @@ function draw() {
   drawDust();
   drawGalaxies(t);
   drawPlanets();
+  drawComet();
   drawStars(t);
   drawSparkles(t);
   updatePlanets();
