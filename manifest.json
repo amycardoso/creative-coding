@@ -197,6 +197,15 @@
       "media": "sketches/kobra/kobra.png",
       "tags": ["generative", "abstract", "narrative"],
       "tech": ["p5.js", "d3-delaunay"]
+    },
+    {
+      "slug": "painted-cosmos",
+      "title": "Painted Cosmos",
+      "description": "A hand-painted cosmic scene — spiral galaxies, colorful planets, twinkling stars, and a drifting comet rendered with thick gouache brush strokes on deep navy.",
+      "date": "2026-04-03",
+      "media": "sketches/painted-cosmos/painted-cosmos.png",
+      "tags": ["generative", "space", "abstract"],
+      "tech": ["p5.js"]
     }
   ]
 }
