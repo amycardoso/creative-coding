@@ -94,15 +94,117 @@ function brushStroke(points, col, size, spacing) {
   }
 }
 
+// --- Color palette ---
+const PALETTE = {
+  galaxyPink: ['#e84393', '#fd79a8', '#d63031'],
+  galaxyGold: ['#fdcb6e', '#f9ca24', '#e1b12c'],
+  planets: ['#e84393', '#e17055', '#00cec9', '#0984e3', '#6ab04c', '#a29bfe', '#dfe6e9'],
+  dust: ['#fd79a8', '#a29bfe', '#e84393'],
+};
+
+// --- Scene objects ---
+let stars = [];
+let sparkles = [];
+let dustParticles = [];
+
+function generateStars() {
+  stars = [];
+  let count = floor(random(250, 400));
+  for (let i = 0; i < count; i++) {
+    stars.push({
+      x: random(W),
+      y: random(H),
+      r: random(0.5, 2.5),
+      phase: random(TWO_PI),
+      speed: random(0.02, 0.06),
+      brightness: random(150, 255),
+    });
+  }
+}
+
+function generateSparkles() {
+  sparkles = [];
+  let count = floor(random(10, 20));
+  for (let i = 0; i < count; i++) {
+    sparkles.push({
+      x: random(W),
+      y: random(H),
+      size: random(4, 14),
+      phase: random(TWO_PI),
+      speed: random(0.01, 0.03),
+    });
+  }
+}
+
+function generateDust() {
+  dustParticles = [];
+  let count = floor(random(120, 200));
+  for (let i = 0; i < count; i++) {
+    dustParticles.push({
+      x: random(W),
+      y: random(H),
+      r: random(0.5, 2),
+      col: color(random(PALETTE.dust)),
+    });
+  }
+}
+
+function drawStars(t) {
+  noStroke();
+  for (let s of stars) {
+    let twinkle = map(sin(t * s.speed + s.phase), -1, 1, 0.3, 1.0);
+    let a = s.brightness * twinkle;
+    fill(255, 255, 255, a);
+    circle(s.x, s.y, s.r * 2);
+  }
+}
+
+function drawSparkles(t) {
+  stroke(255, 255, 255);
+  noFill();
+  for (let s of sparkles) {
+    let pulse = map(sin(t * s.speed + s.phase), -1, 1, 0.5, 1.0);
+    let sz = s.size * pulse;
+    let a = 200 * pulse;
+    stroke(255, 255, 255, a);
+    strokeWeight(1.2);
+    // 4-point cross
+    line(s.x - sz, s.y, s.x + sz, s.y);
+    line(s.x, s.y - sz, s.x, s.y + sz);
+    // Smaller diagonal cross
+    let d = sz * 0.5;
+    strokeWeight(0.8);
+    line(s.x - d, s.y - d, s.x + d, s.y + d);
+    line(s.x - d, s.y + d, s.x + d, s.y - d);
+  }
+  noStroke();
+}
+
+function drawDust() {
+  noStroke();
+  for (let d of dustParticles) {
+    let c = d.col;
+    fill(red(c), green(c), blue(c), 100);
+    circle(d.x, d.y, d.r * 2);
+  }
+}
+
 function setup() {
   const canvas = createCanvas(W, H);
   canvas.parent('canvas-container');
   pixelDensity(1);
   initBrushStamps();
+  generateStars();
+  generateSparkles();
+  generateDust();
 }
 
 function draw() {
   background(...BG);
+  let t = frameCount;
+  drawDust();
+  drawStars(t);
+  drawSparkles(t);
 }
 
 function mousePressed() {
