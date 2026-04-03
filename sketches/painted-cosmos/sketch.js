@@ -189,6 +189,87 @@ function drawDust() {
   }
 }
 
+// --- Galaxies ---
+let galaxies = [];
+
+function generateGalaxies() {
+  galaxies = [];
+  let count = floor(random(2, 5));
+  for (let i = 0; i < count; i++) {
+    let r = random(120, 300);
+    galaxies.push({
+      x: random(r, W - r),
+      y: random(r, H - r),
+      radius: r,
+      tilt: random(-0.6, 0.6),
+      rotation: random(TWO_PI),
+      rotSpeed: random(0.0005, 0.0015) * (random() > 0.5 ? 1 : -1),
+      numArms: floor(random(2, 4)),
+      armWind: random(2.5, 4.0),
+      pinkColors: PALETTE.galaxyPink.map(c => color(c)),
+      goldColors: PALETTE.galaxyGold.map(c => color(c)),
+      coreSize: r * random(0.15, 0.25),
+    });
+  }
+}
+
+function drawGalaxy(g, t) {
+  push();
+  translate(g.x, g.y);
+  rotate(g.rotation + t * g.rotSpeed);
+  scale(1, 0.4 + abs(g.tilt) * 0.3);
+
+  // Core — concentrated brush stamps
+  for (let i = 0; i < 25; i++) {
+    let angle = random(TWO_PI);
+    let dist = random(g.coreSize);
+    let cx = cos(angle) * dist;
+    let cy = sin(angle) * dist;
+    let col = random(g.pinkColors);
+    let a = map(dist, 0, g.coreSize, 220, 80);
+    stampBrush(cx, cy, color(red(col), green(col), blue(col), a),
+              random(15, 35));
+  }
+
+  // Spiral arms
+  for (let arm = 0; arm < g.numArms; arm++) {
+    let armOffset = (TWO_PI / g.numArms) * arm;
+    let steps = 60;
+
+    for (let i = 0; i < steps; i++) {
+      let frac = i / steps;
+      let theta = armOffset + frac * g.armWind * PI;
+      let r = g.coreSize * 0.5 + frac * (g.radius - g.coreSize * 0.5);
+      let ax = cos(theta) * r;
+      let ay = sin(theta) * r;
+
+      // Jitter for organic feel
+      ax += random(-r * 0.05, r * 0.05);
+      ay += random(-r * 0.05, r * 0.05);
+
+      // Color: pink near core, gold near edge
+      let col;
+      if (frac < 0.5) {
+        col = lerpColor(random(g.pinkColors), random(g.goldColors), frac * 2);
+      } else {
+        col = random(g.goldColors);
+      }
+      let a = map(frac, 0, 1, 200, 60);
+      let sz = map(frac, 0, 1, 30, 12);
+
+      stampBrush(ax, ay, color(red(col), green(col), blue(col), a), sz);
+    }
+  }
+
+  pop();
+}
+
+function drawGalaxies(t) {
+  for (let g of galaxies) {
+    drawGalaxy(g, t);
+  }
+}
+
 function setup() {
   const canvas = createCanvas(W, H);
   canvas.parent('canvas-container');
@@ -197,12 +278,14 @@ function setup() {
   generateStars();
   generateSparkles();
   generateDust();
+  generateGalaxies();
 }
 
 function draw() {
   background(...BG);
   let t = frameCount;
   drawDust();
+  drawGalaxies(t);
   drawStars(t);
   drawSparkles(t);
 }
