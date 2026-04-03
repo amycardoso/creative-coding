@@ -270,6 +270,104 @@ function drawGalaxies(t) {
   }
 }
 
+// --- Planets ---
+let planets = [];
+
+function generatePlanets() {
+  planets = [];
+  let solidCount = floor(random(6, 11));
+  let ringedCount = floor(random(1, 4));
+
+  for (let i = 0; i < solidCount + ringedCount; i++) {
+    let r = random(10, 70);
+    let hasRing = i >= solidCount;
+    if (hasRing) r = random(25, 55);
+
+    let px = random(r + 20, W - r - 20);
+    let py = random(r + 20, H - r - 20);
+
+    planets.push({
+      x: px,
+      y: py,
+      r: r,
+      col: color(random(PALETTE.planets)),
+      hasRing: hasRing,
+      ringTilt: random(0.2, 0.5),
+      ringColor: color(random(PALETTE.galaxyGold)),
+      driftX: random(-0.05, 0.05),
+      driftY: random(-0.05, 0.05),
+      highlightAngle: random(TWO_PI),
+    });
+  }
+
+  // Sort by size so big ones are behind
+  planets.sort((a, b) => b.r - a.r);
+}
+
+function drawPlanet(p) {
+  let c = p.col;
+
+  // Base sphere — multiple overlapping brush stamps
+  let stamps = max(8, floor(p.r * 0.8));
+  for (let i = 0; i < stamps; i++) {
+    let angle = random(TWO_PI);
+    let dist = random(p.r * 0.6);
+    let sx = p.x + cos(angle) * dist;
+    let sy = p.y + sin(angle) * dist;
+    let a = map(dist, 0, p.r * 0.6, 220, 100);
+    stampBrush(sx, sy, color(red(c), green(c), blue(c), a),
+              random(p.r * 0.3, p.r * 0.6));
+  }
+
+  // Dark crescent (shadow)
+  let shadowAngle = p.highlightAngle + PI;
+  let shadowX = p.x + cos(shadowAngle) * p.r * 0.3;
+  let shadowY = p.y + sin(shadowAngle) * p.r * 0.3;
+  for (let i = 0; i < 5; i++) {
+    stampBrush(
+      shadowX + random(-p.r * 0.1, p.r * 0.1),
+      shadowY + random(-p.r * 0.1, p.r * 0.1),
+      color(5, 5, 20, 120),
+      p.r * random(0.4, 0.7)
+    );
+  }
+
+  // Highlight spot
+  let hlX = p.x + cos(p.highlightAngle) * p.r * 0.3;
+  let hlY = p.y + sin(p.highlightAngle) * p.r * 0.3;
+  stampBrush(hlX, hlY, color(255, 255, 255, 80), p.r * 0.25);
+
+  // Ring (if applicable)
+  if (p.hasRing) {
+    let ringSteps = 40;
+    for (let i = 0; i < ringSteps; i++) {
+      let angle = (TWO_PI / ringSteps) * i;
+      let rx = p.x + cos(angle) * p.r * 1.8;
+      let ry = p.y + sin(angle) * p.r * 1.8 * p.ringTilt;
+      let rc = p.ringColor;
+      stampBrush(rx, ry, color(red(rc), green(rc), blue(rc), 160), 8);
+    }
+  }
+}
+
+function drawPlanets() {
+  for (let p of planets) {
+    drawPlanet(p);
+  }
+}
+
+function updatePlanets() {
+  for (let p of planets) {
+    p.x += p.driftX;
+    p.y += p.driftY;
+    // Wrap around
+    if (p.x < -p.r) p.x = W + p.r;
+    if (p.x > W + p.r) p.x = -p.r;
+    if (p.y < -p.r) p.y = H + p.r;
+    if (p.y > H + p.r) p.y = -p.r;
+  }
+}
+
 function setup() {
   const canvas = createCanvas(W, H);
   canvas.parent('canvas-container');
@@ -279,6 +377,7 @@ function setup() {
   generateSparkles();
   generateDust();
   generateGalaxies();
+  generatePlanets();
 }
 
 function draw() {
@@ -286,8 +385,10 @@ function draw() {
   let t = frameCount;
   drawDust();
   drawGalaxies(t);
+  drawPlanets();
   drawStars(t);
   drawSparkles(t);
+  updatePlanets();
 }
 
 function mousePressed() {
