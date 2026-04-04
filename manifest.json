@@ -206,6 +206,15 @@
       "media": "sketches/painted-cosmos/painted-cosmos.gif",
       "tags": ["generative", "space", "abstract"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "starry-swirl",
+      "title": "Starry Swirl",
+      "description": "A Van Gogh / James R. Eads–inspired night sky — luminous gold-edged swirls flow across a deep navy void, with twinkling stars and a glowing moon.",
+      "date": "2026-04-04",
+      "media": "sketches/starry-swirl/starry-swirl.png",
+      "tags": ["generative", "shader", "landscape"],
+      "tech": ["p5.js", "GLSL"]
     }
   ]
 }
