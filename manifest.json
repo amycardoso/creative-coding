@@ -215,6 +215,15 @@
       "media": "sketches/starry-swirl/starry-swirl.gif",
       "tags": ["generative", "shader", "landscape"],
       "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "abstract-chaos",
+      "title": "Abstract Chaos",
+      "description": "Dense generative geometric abstraction — overlapping circles, rectangles, and curved ribbons in warm oranges, pinks, and corals with teal contrast. Click to regenerate.",
+      "date": "2026-04-05",
+      "media": "sketches/abstract-chaos/abstract-chaos.png",
+      "tags": ["generative", "abstract"],
+      "tech": ["p5.js"]
     }
   ]
 }
