@@ -224,6 +224,15 @@
       "media": "sketches/abstract-chaos/abstract-chaos.png",
       "tags": ["generative", "abstract"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "mineral-moon",
+      "title": "Mineral Moon",
+      "description": "A raymarched lunar sphere reveals hidden mineral colors — titanium blues, iron oxide ambers, and olivine greens glow beneath crater-pocked terrain, inspired by Artemis II's mineral color observations.",
+      "date": "2026-04-12",
+      "media": "sketches/mineral-moon/mineral-moon.gif",
+      "tags": ["generative", "shader", "space"],
+      "tech": ["p5.js", "GLSL"]
     }
   ]
 }
