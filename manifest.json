@@ -233,6 +233,15 @@
       "media": "sketches/mineral-moon/mineral-moon.gif",
       "tags": ["generative", "shader", "space"],
       "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "sediment",
+      "title": "Sediment",
+      "description": "Rose curves accumulate one by one on a black canvas — love as geology, each line a stratum of time.",
+      "date": "2026-05-23",
+      "media": "sketches/sediment/sediment.png",
+      "tags": ["generative", "geometric", "accumulation"],
+      "tech": ["p5.js"]
     }
   ]
 }
