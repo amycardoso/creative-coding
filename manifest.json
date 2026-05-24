@@ -242,6 +242,15 @@
       "media": "sketches/sediment/sediment.gif",
       "tags": ["generative", "geometric", "accumulation"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "crimson-dusk",
+      "title": "Crimson Dusk",
+      "description": "Warm crimson skies dissolve into a purple ocean — a sailboat and lifeguard tower silhouetted against the dusk. Each render is unique.",
+      "date": "2026-05-23",
+      "media": "sketches/crimson-dusk/crimson-dusk.png",
+      "tags": ["generative", "landscape"],
+      "tech": ["p5.js"]
     }
   ]
 }
