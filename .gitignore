@@ -1,3 +1,4 @@
 .claude/
 *.mp3
-.docs/
+docs/
+.superpowers/
