@@ -251,6 +251,15 @@
       "media": "sketches/crimson-dusk/crimson-dusk.png",
       "tags": ["generative", "landscape"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "golden-dawn",
+      "title": "Golden Dawn",
+      "description": "A mountain cabin at first light — deep purple sky dissolving into vivid gold, sharp pine silhouettes, and a morning star still hanging in the upper sky. Each render is unique.",
+      "date": "2026-05-24",
+      "media": "sketches/golden-dawn/golden-dawn.png",
+      "tags": ["generative", "landscape"],
+      "tech": ["p5.js"]
     }
   ]
 }
