@@ -1,9 +1,11 @@
 /**
  * Astrophage
  *
- * A slowly breathing alien sky inspired by Project Hail Mary.
- * High-contrast marbled astrophage-green bleeding into molten orange,
- * produced by domain-warped fBm and rendered entirely in a GLSL shader.
+ * Diagonal rain of relativistic light inspired by Project Hail Mary —
+ * long motion-blurred streaks drift across the frame through a prismatic
+ * spectrum (molten gold -> magenta -> violet -> blue-green), shot through
+ * with glittering specular sparkles over deep black. Rendered entirely in a
+ * GLSL shader; streaks scroll on a seamless loop.
  *
  * Controls:
  * - Press S to save a PNG
@@ -12,7 +14,7 @@
 
 const WIDTH = 800;
 const HEIGHT = 800;
-const LOOP_SECONDS = 30.0;
+const LOOP_SECONDS = 24.0;
 
 let skyShader;
 let seedOffset = 0.0;
@@ -33,106 +35,102 @@ void main() {
 const fragShader = `
 precision highp float;
 
-uniform float u_time;       // looping phase in [0, 2*PI)
+uniform float u_time;       // normalized loop time in [0, 1)
 uniform vec2 u_resolution;
 uniform float u_seed;
 
 varying vec2 vUv;
 
-float hash(vec2 p) {
+#define TAU 6.2831853
+
+// Periodic value noise: lattice wraps on PERIOD so scrolling by whole
+// periods is seamless (key to a loopable rain of streaks).
+float phash(vec2 p, float period) {
+  p = mod(p, period);
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
 }
 
-float noise(vec2 p) {
+float pnoise(vec2 p, float period) {
   vec2 i = floor(p);
   vec2 f = fract(p);
   f = f * f * (3.0 - 2.0 * f);
-  float a = hash(i);
-  float b = hash(i + vec2(1.0, 0.0));
-  float c = hash(i + vec2(0.0, 1.0));
-  float d = hash(i + vec2(1.0, 1.0));
+  float a = phash(i, period);
+  float b = phash(i + vec2(1.0, 0.0), period);
+  float c = phash(i + vec2(0.0, 1.0), period);
+  float d = phash(i + vec2(1.0, 1.0), period);
   return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
 }
 
-float fbm(vec2 p) {
-  float value = 0.0;
-  float amplitude = 0.5;
-  float frequency = 1.0;
-  for (int i = 0; i < 6; i++) {
-    value += amplitude * noise(p * frequency);
-    amplitude *= 0.5;
-    frequency *= 2.0;
-  }
-  return value;
-}
-
-// Fine spiral-curl warp: rotate the sample position by a noise-driven angle so
-// the field folds into tight paisley vortices, then ridge the result so the
-// curls read as bright thin filaments (the reference's little swirls).
-float swirl(vec2 p, float t) {
-  for (int i = 0; i < 4; i++) {
-    float a = fbm(p * 1.8 + t) * 6.2831853;
-    p += vec2(cos(a), sin(a)) * 0.55;
-  }
-  float n = fbm(p);
-  return 1.0 - abs(2.0 * n - 1.0); // ridged -> sharp veins
+// Prismatic spectrum: molten gold -> orange -> magenta -> violet -> blue -> teal.
+vec3 spectrum(float t) {
+  t = clamp(t, 0.0, 1.0);
+  vec3 gold    = vec3(1.00, 0.62, 0.12);
+  vec3 orange  = vec3(0.98, 0.34, 0.10);
+  vec3 magenta = vec3(0.85, 0.12, 0.45);
+  vec3 violet  = vec3(0.42, 0.18, 0.72);
+  vec3 blue    = vec3(0.16, 0.34, 0.88);
+  vec3 teal    = vec3(0.12, 0.78, 0.62);
+  vec3 c = mix(gold, orange, smoothstep(0.0, 0.2, t));
+  c = mix(c, magenta, smoothstep(0.2, 0.42, t));
+  c = mix(c, violet, smoothstep(0.42, 0.6, t));
+  c = mix(c, blue, smoothstep(0.6, 0.8, t));
+  c = mix(c, teal, smoothstep(0.8, 1.0, t));
+  return c;
 }
 
 void main() {
-  vec2 uv = vUv;
+  vec2 uv = vUv - 0.5;
   uv.x *= u_resolution.x / u_resolution.y;
-  vec2 p = uv * 3.0 + u_seed;
 
-  // Seamless loop: every time term is periodic in u_time (phase 0..2*PI).
-  float phase = u_time;
-  vec2 drift  = vec2(cos(phase), sin(phase)) * 0.6;
-  vec2 drift2 = vec2(cos(phase * 2.0), sin(phase * 2.0)) * 0.25;
-  float breath = 0.85 + 0.15 * sin(phase);
+  // Diagonal streak basis (~60 deg): 'along' runs down the streaks, 'across'
+  // separates the lanes.
+  vec2 dir = normalize(vec2(0.5, 0.866));
+  vec2 perp = vec2(-dir.y, dir.x);
+  float along = dot(uv, dir);
+  float across = dot(uv, perp);
 
-  // Two levels of domain warping fold smooth gradients into marbled swirls.
-  vec2 q = vec2(fbm(p + drift),
-                fbm(p + vec2(5.2, 1.3) + drift));
+  float period = 16.0;
+  float seed = u_seed;
 
-  vec2 r = vec2(fbm(p + 4.0 * breath * q + vec2(1.7, 9.2) + drift2),
-                fbm(p + 4.0 * breath * q + vec2(8.3, 2.8) + drift2));
+  // Seamless scroll: advance by whole periods over the loop.
+  float scroll = u_time * period;
 
-  float base = fbm(p + 4.0 * breath * r);
+  // Layered streaks: each layer = lane brightness (high freq across) modulated
+  // by drifting dashes (scrolled along). Different speeds give parallax depth.
+  float streak = 0.0;
+  for (int k = 0; k < 3; k++) {
+    float fk = float(k);
+    float laneFreq = 9.0 + fk * 7.0;
+    float speed = 3.0 + fk * 2.0;          // whole-number * period => loops
+    float w = 0.6 - fk * 0.15;
 
-  // Fine spiral curls layered onto the large marbled structure. Ridged veins
-  // are added (not averaged) so the swirls stay crisp instead of blurring.
-  // Gate the veins by the base so they only brighten already-lit gas, leaving
-  // the dark troughs as breathing room.
-  float curls = swirl(p * 3.6 + 2.0 * r, phase);
-  float veins = smoothstep(0.62, 0.98, curls);
-  float f = clamp(base + veins * 0.3 * smoothstep(0.3, 0.7, base), 0.0, 1.0);
+    float lane = pnoise(vec2(across * laneFreq + seed + fk * 31.0, 0.0), period);
+    float dash = pnoise(vec2(across * laneFreq * 0.5 + seed,
+                             along * 2.2 - scroll * speed), period);
+    float s = lane * dash;
+    s = pow(smoothstep(0.35, 1.0, s), 2.2);  // thin, bright filaments
+    streak += s * w;
+  }
 
-  // Large-scale region mask: decides whether an area reads green or molten.
-  // Low-frequency so it paints big zones (like the reference), not specks.
-  float region = fbm(p * 0.55 + r * 1.5 + drift * 0.5);
-  region = smoothstep(0.42, 0.72, region);
+  // Glittering specular sparkles riding along the streaks.
+  float sp = pnoise(vec2(across * 80.0 + seed, along * 40.0 - scroll * 4.0), period);
+  float sparkle = pow(smoothstep(0.78, 1.0, sp), 6.0) * 1.6;
 
-  // Astrophage palette
-  vec3 shadow    = vec3(0.02, 0.03, 0.02);  // near-black trough
-  vec3 deepGreen = vec3(0.05, 0.25, 0.06);
-  vec3 acidGreen = vec3(0.45, 0.95, 0.18);  // bright green core
-  vec3 deepAmber = vec3(0.35, 0.16, 0.02);  // dark molten body
-  vec3 molten    = vec3(0.98, 0.42, 0.05);  // bright orange
-  vec3 emberGold = vec3(1.00, 0.78, 0.20);  // hottest highlight
+  float intensity = streak + sparkle;
 
-  // Green regime: shadow -> deep green -> acid green by structure.
-  vec3 green = mix(shadow, deepGreen, smoothstep(0.25, 0.5, f));
-  green = mix(green, acidGreen, smoothstep(0.5, 0.85, f));
+  // Prismatic band runs corner-to-corner across the streaks, drifting slowly.
+  float band = across * 0.9 + 0.5 + 0.06 * sin(u_time * TAU);
+  vec3 col = spectrum(band);
 
-  // Molten regime: shadow -> deep amber -> orange -> gold by structure.
-  vec3 fire = mix(shadow, deepAmber, smoothstep(0.22, 0.45, f));
-  fire = mix(fire, molten, smoothstep(0.45, 0.72, f));
-  fire = mix(fire, emberGold, smoothstep(0.78, 0.98, f));
+  // A touch of per-streak hue shift so adjacent rays differ.
+  col = mix(col, spectrum(band + 0.12), smoothstep(0.4, 1.2, streak));
 
-  // Blend the two regimes across the frame.
-  vec3 col = mix(green, fire, region);
+  col *= intensity;
+  col += sparkle * vec3(1.0, 0.95, 0.85);  // white-hot sparkle cores
 
-  // Deepen troughs for high contrast (avoid soft-fog washout).
-  col *= smoothstep(0.08, 0.5, base) * 0.92 + 0.08;
+  // Deep black between the rays; gentle filmic-ish lift on the brights.
+  col = col / (col + 0.65);
+  col = pow(col, vec3(0.85));
 
   gl_FragColor = vec4(col, 1.0);
 }
@@ -147,9 +145,9 @@ function setup() {
 }
 
 function draw() {
-  const phase = ((millis() / 1000.0) % LOOP_SECONDS) / LOOP_SECONDS * TWO_PI;
+  const loopT = (millis() / 1000.0 % LOOP_SECONDS) / LOOP_SECONDS;
   skyShader.setUniform('u_resolution', [width, height]);
-  skyShader.setUniform('u_time', phase);
+  skyShader.setUniform('u_time', loopT);
   skyShader.setUniform('u_seed', seedOffset);
   rect(-width / 2, -height / 2, width, height);
 }
