@@ -67,13 +67,15 @@ float fbm(vec2 p) {
 }
 
 // Fine spiral-curl warp: rotate the sample position by a noise-driven angle so
-// the field folds into tight paisley vortices (the reference's little swirls).
+// the field folds into tight paisley vortices, then ridge the result so the
+// curls read as bright thin filaments (the reference's little swirls).
 float swirl(vec2 p, float t) {
-  for (int i = 0; i < 3; i++) {
-    float a = fbm(p * 1.5 + t) * 6.2831853;
-    p += vec2(cos(a), sin(a)) * 0.35;
+  for (int i = 0; i < 4; i++) {
+    float a = fbm(p * 1.8 + t) * 6.2831853;
+    p += vec2(cos(a), sin(a)) * 0.55;
   }
-  return fbm(p);
+  float n = fbm(p);
+  return 1.0 - abs(2.0 * n - 1.0); // ridged -> sharp veins
 }
 
 void main() {
@@ -96,9 +98,11 @@ void main() {
 
   float base = fbm(p + 4.0 * breath * r);
 
-  // Fine spiral curls layered onto the large marbled structure.
-  float curls = swirl(p * 2.2 + 2.0 * r, phase);
-  float f = mix(base, curls, 0.5);
+  // Fine spiral curls layered onto the large marbled structure. Ridged veins
+  // are added (not averaged) so the swirls stay crisp instead of blurring.
+  float curls = swirl(p * 3.6 + 2.0 * r, phase);
+  float veins = smoothstep(0.55, 0.95, curls);
+  float f = clamp(base + veins * 0.5, 0.0, 1.0);
 
   // Large-scale region mask: decides whether an area reads green or molten.
   // Low-frequency so it paints big zones (like the reference), not specks.
