@@ -66,6 +66,16 @@ float fbm(vec2 p) {
   return value;
 }
 
+// Fine spiral-curl warp: rotate the sample position by a noise-driven angle so
+// the field folds into tight paisley vortices (the reference's little swirls).
+float swirl(vec2 p, float t) {
+  for (int i = 0; i < 3; i++) {
+    float a = fbm(p * 1.5 + t) * 6.2831853;
+    p += vec2(cos(a), sin(a)) * 0.35;
+  }
+  return fbm(p);
+}
+
 void main() {
   vec2 uv = vUv;
   uv.x *= u_resolution.x / u_resolution.y;
@@ -84,7 +94,11 @@ void main() {
   vec2 r = vec2(fbm(p + 4.0 * breath * q + vec2(1.7, 9.2) + drift2),
                 fbm(p + 4.0 * breath * q + vec2(8.3, 2.8) + drift2));
 
-  float f = fbm(p + 4.0 * breath * r);
+  float base = fbm(p + 4.0 * breath * r);
+
+  // Fine spiral curls layered onto the large marbled structure.
+  float curls = swirl(p * 2.2 + 2.0 * r, phase);
+  float f = mix(base, curls, 0.5);
 
   // Large-scale region mask: decides whether an area reads green or molten.
   // Low-frequency so it paints big zones (like the reference), not specks.
