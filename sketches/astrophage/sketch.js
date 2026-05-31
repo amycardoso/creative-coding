@@ -132,7 +132,7 @@ void main() {
   vec3 col = mix(green, fire, region);
 
   // Deepen troughs for high contrast (avoid soft-fog washout).
-  col *= smoothstep(0.08, 0.5, f) * 0.92 + 0.08;
+  col *= smoothstep(0.08, 0.5, base) * 0.92 + 0.08;
 
   gl_FragColor = vec4(col, 1.0);
 }
