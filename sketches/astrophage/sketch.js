@@ -100,9 +100,11 @@ void main() {
 
   // Fine spiral curls layered onto the large marbled structure. Ridged veins
   // are added (not averaged) so the swirls stay crisp instead of blurring.
+  // Gate the veins by the base so they only brighten already-lit gas, leaving
+  // the dark troughs as breathing room.
   float curls = swirl(p * 3.6 + 2.0 * r, phase);
-  float veins = smoothstep(0.55, 0.95, curls);
-  float f = clamp(base + veins * 0.5, 0.0, 1.0);
+  float veins = smoothstep(0.62, 0.98, curls);
+  float f = clamp(base + veins * 0.3 * smoothstep(0.3, 0.7, base), 0.0, 1.0);
 
   // Large-scale region mask: decides whether an area reads green or molten.
   // Low-frequency so it paints big zones (like the reference), not specks.
@@ -130,7 +132,7 @@ void main() {
   vec3 col = mix(green, fire, region);
 
   // Deepen troughs for high contrast (avoid soft-fog washout).
-  col *= smoothstep(0.1, 0.55, f) * 0.85 + 0.15;
+  col *= smoothstep(0.08, 0.5, f) * 0.92 + 0.08;
 
   gl_FragColor = vec4(col, 1.0);
 }
