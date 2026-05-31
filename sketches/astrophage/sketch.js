@@ -86,21 +86,30 @@ void main() {
 
   float f = fbm(p + 4.0 * breath * r);
 
+  // Large-scale region mask: decides whether an area reads green or molten.
+  // Low-frequency so it paints big zones (like the reference), not specks.
+  float region = fbm(p * 0.55 + r * 1.5 + drift * 0.5);
+  region = smoothstep(0.42, 0.72, region);
+
   // Astrophage palette
   vec3 shadow    = vec3(0.02, 0.03, 0.02);  // near-black trough
   vec3 deepGreen = vec3(0.05, 0.25, 0.06);
-  vec3 acidGreen = vec3(0.45, 0.95, 0.18);  // bright core
-  vec3 amber     = vec3(0.95, 0.65, 0.10);
-  vec3 molten    = vec3(0.95, 0.30, 0.05);
+  vec3 acidGreen = vec3(0.45, 0.95, 0.18);  // bright green core
+  vec3 deepAmber = vec3(0.35, 0.16, 0.02);  // dark molten body
+  vec3 molten    = vec3(0.98, 0.42, 0.05);  // bright orange
+  vec3 emberGold = vec3(1.00, 0.78, 0.20);  // hottest highlight
 
-  // Base body from the final structure: shadow -> deep green -> acid green.
-  vec3 col = mix(shadow, deepGreen, smoothstep(0.25, 0.5, f));
-  col = mix(col, acidGreen, smoothstep(0.5, 0.85, f));
+  // Green regime: shadow -> deep green -> acid green by structure.
+  vec3 green = mix(shadow, deepGreen, smoothstep(0.25, 0.5, f));
+  green = mix(green, acidGreen, smoothstep(0.5, 0.85, f));
 
-  // Warp channels push molten orange into the eddies for contrast.
-  float heat = smoothstep(0.4, 0.9, r.y) * smoothstep(0.3, 0.8, q.x);
-  col = mix(col, amber, heat * 0.7);
-  col = mix(col, molten, smoothstep(0.7, 1.0, r.y) * 0.5);
+  // Molten regime: shadow -> deep amber -> orange -> gold by structure.
+  vec3 fire = mix(shadow, deepAmber, smoothstep(0.22, 0.45, f));
+  fire = mix(fire, molten, smoothstep(0.45, 0.72, f));
+  fire = mix(fire, emberGold, smoothstep(0.78, 0.98, f));
+
+  // Blend the two regimes across the frame.
+  vec3 col = mix(green, fire, region);
 
   // Deepen troughs for high contrast (avoid soft-fog washout).
   col *= smoothstep(0.1, 0.55, f) * 0.85 + 0.15;
