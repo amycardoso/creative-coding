@@ -93,50 +93,53 @@ void main() {
   float seed = u_seed;
   float scroll = u_time;   // advance by whole periods over the loop => seamless
 
-  // Dense field of long, thin parallel streaks. Each layer is a set of lanes:
-  // a high across-frequency picks thin lines; each lane's brightness varies
-  // SLOWLY along its length (long wavelength) so the rays stay continuous,
-  // scrolling to make them rain. Layers differ in scale/speed for parallax.
+  // Dense, even field of long parallel streaks. Each layer is a set of lanes;
+  // each lane has its own width and a long, drifting brightness along its
+  // length so rays stay continuous as they rain. Layers differ in scale/speed
+  // for parallax. A soft glow term keeps the whole field luminous.
   float streak = 0.0;
-  float hueJitter = 0.0;
+  float glow = 0.0;
   for (int k = 0; k < 4; k++) {
     float fk = float(k);
-    float laneFreq = 60.0 + fk * 34.0;          // many fine lanes
+    float laneFreq = 45.0 + fk * 30.0;          // many fine lanes
     float speed = (4.0 + fk * 3.0);             // whole numbers => loops
-    float w = 0.9 - fk * 0.12;
+    float w = 1.0 - fk * 0.12;
 
-    // Thin line mask across the lanes.
     float lanePos = across * laneFreq + seed * 7.0 + fk * 17.0;
     float laneId = floor(lanePos);
     float laneFrac = fract(lanePos);
-    float line = smoothstep(0.5, 0.92, 1.0 - abs(laneFrac - 0.5) * 2.0);
 
-    // Per-lane existence (only some lanes are lit) + long, drifting brightness.
-    float lit = pnoise(vec2(laneId * 0.13, seed), period);
-    float bright = pnoise(vec2(laneId * 0.37,
-                               along * 1.1 - scroll * speed), period);
-    float s = line * smoothstep(0.45, 1.0, lit) * pow(bright, 2.0);
-    streak += s * w;
-    hueJitter += laneId * 0.0007;
+    // Per-lane random width => some rays thick, some hair-thin (not corduroy).
+    float wid = mix(0.12, 0.5, phash(vec2(laneId, fk + 3.0), period));
+    float d = abs(laneFrac - 0.5);
+    float core = smoothstep(wid, 0.0, d);       // sharp bright core
+    float halo = smoothstep(0.5, 0.0, d);       // soft glow around it
+
+    // Long, drifting brightness; nearly all lanes lit for an even field.
+    float bright = pnoise(vec2(laneId * 0.31,
+                               along * 1.0 - scroll * speed), period);
+    bright = 0.25 + 0.75 * smoothstep(0.2, 0.95, bright);
+
+    streak += core * bright * w;
+    glow += halo * bright * w * 0.18;
   }
 
   // Glittering specular sparkles riding along the streaks.
-  float sp = pnoise(vec2(across * 120.0 + seed, along * 50.0 - scroll * 9.0), period);
-  float sparkle = pow(smoothstep(0.82, 1.0, sp), 5.0) * 2.0 * smoothstep(0.05, 0.4, streak);
+  float sp = pnoise(vec2(across * 130.0 + seed, along * 55.0 - scroll * 9.0), period);
+  float sparkle = pow(smoothstep(0.8, 1.0, sp), 4.0) * 2.4 * smoothstep(0.04, 0.35, streak + glow);
 
   // Prismatic band runs corner-to-corner, drifting slowly.
   float band = across * 0.85 + 0.5 + 0.06 * sin(u_time * TAU);
-  vec3 col = spectrum(band + hueJitter);
+  vec3 col = spectrum(band);
 
-  // Light up the whole field: streaks emit their spectral color, plus a faint
-  // ambient nebular glow so black gaps aren't dead.
-  float intensity = streak * 2.6 + 0.04;
+  // Luminous emission: bright cores + soft halo glow, color from the spectrum.
+  float intensity = streak * 3.0 + glow * 2.2 + 0.05;
   col *= intensity;
-  col += sparkle * vec3(1.0, 0.96, 0.88);     // white-hot sparkle cores
+  col += sparkle * vec3(1.0, 0.97, 0.9);      // white-hot sparkle cores
 
-  // Filmic-ish lift so brights bloom without clipping; keep deep blacks.
-  col = col / (col + 0.5);
-  col = pow(col, vec3(0.8));
+  // Filmic tone curve: blooms the brights, keeps deep blacks between rays.
+  col = col / (col + 0.45);
+  col = pow(col, vec3(0.78));
 
   gl_FragColor = vec4(col, 1.0);
 }
