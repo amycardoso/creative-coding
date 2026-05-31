@@ -1,11 +1,12 @@
 /**
- * Astrophage
+ * Redshift
  *
- * Diagonal rain of relativistic light inspired by Project Hail Mary —
- * long motion-blurred streaks drift across the frame through a prismatic
- * spectrum (molten gold -> magenta -> violet -> blue-green), shot through
- * with glittering specular sparkles over deep black. Rendered entirely in a
- * GLSL shader; streaks scroll on a seamless loop.
+ * Inspired by Ryland Grace's relativistic spacewalk in Project Hail Mary:
+ * as the Hail Mary nears light-speed, starlight Doppler-shifts into a
+ * prismatic rain of streaks (gold/redshift -> magenta -> violet -> blue/
+ * blueshift), shot through with glittering sparkles over deep black. The
+ * rainbow streaking echoes the film's signature lens look. Rendered entirely
+ * in a GLSL shader; streaks scroll on a seamless loop.
  *
  * Controls:
  * - Press S to save a PNG
@@ -170,7 +171,7 @@ function draw() {
 
 function keyPressed() {
   if (key === 's' || key === 'S') {
-    saveCanvas('astrophage', 'png');
+    saveCanvas('redshift', 'png');
   } else if (key === ' ') {
     seedOffset += 137.5;
   }
