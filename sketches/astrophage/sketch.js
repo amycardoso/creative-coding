@@ -62,14 +62,15 @@ float pnoise(vec2 p, float period) {
 }
 
 // Prismatic spectrum: molten gold -> orange -> magenta -> violet -> blue -> teal.
+// Punchy, fully-saturated stops so the rays glow like the poster.
 vec3 spectrum(float t) {
   t = clamp(t, 0.0, 1.0);
-  vec3 gold    = vec3(1.00, 0.62, 0.12);
-  vec3 orange  = vec3(0.98, 0.34, 0.10);
-  vec3 magenta = vec3(0.85, 0.12, 0.45);
-  vec3 violet  = vec3(0.42, 0.18, 0.72);
-  vec3 blue    = vec3(0.16, 0.34, 0.88);
-  vec3 teal    = vec3(0.12, 0.78, 0.62);
+  vec3 gold    = vec3(1.00, 0.74, 0.16);
+  vec3 orange  = vec3(1.00, 0.36, 0.06);
+  vec3 magenta = vec3(1.00, 0.10, 0.52);
+  vec3 violet  = vec3(0.56, 0.18, 1.00);
+  vec3 blue    = vec3(0.12, 0.42, 1.00);
+  vec3 teal    = vec3(0.05, 0.95, 0.70);
   vec3 c = mix(gold, orange, smoothstep(0.0, 0.2, t));
   c = mix(c, magenta, smoothstep(0.2, 0.42, t));
   c = mix(c, violet, smoothstep(0.42, 0.6, t));
@@ -133,16 +134,21 @@ void main() {
   float band = across * 0.85 + 0.5 + 0.06 * sin(u_time * TAU);
   vec3 col = spectrum(band);
 
-  // Luminous emission: bright cores + faint halo glow, color from the spectrum.
-  float intensity = streak * 3.2 + glow * 1.4;
+  // Luminous emission: bright cores + halo glow, color from the spectrum.
+  float intensity = streak * 4.6 + glow * 2.0;
   col *= intensity;
+
+  // Boost saturation so the rays read as vivid jewel tones, not washed pastel.
+  float lum = dot(col, vec3(0.299, 0.587, 0.114));
+  col = mix(vec3(lum), col, 1.5);
+
   col += sparkle * vec3(1.0, 0.97, 0.9);      // white-hot sparkle cores
 
-  // Gentle highlight rolloff only (no shadow lift) -> deep saturated blacks.
-  col = col / (col + 0.85);
-  col = pow(col, vec3(0.9));
+  // Highlight rolloff with a brighter knee -> rays bloom while blacks stay deep.
+  col = col / (col + 0.6);
+  col = pow(col, vec3(0.82));
 
-  gl_FragColor = vec4(col, 1.0);
+  gl_FragColor = vec4(max(col, 0.0), 1.0);
 }
 `;
 
