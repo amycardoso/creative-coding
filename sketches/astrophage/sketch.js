@@ -115,31 +115,32 @@ void main() {
     float core = smoothstep(wid, 0.0, d);       // sharp bright core
     float halo = smoothstep(0.5, 0.0, d);       // soft glow around it
 
-    // Long, drifting brightness; nearly all lanes lit for an even field.
+    // Long, drifting brightness that genuinely falls to zero, so streaks fade
+    // in and out and clusters of light emerge from black (not a full field).
     float bright = pnoise(vec2(laneId * 0.31,
-                               along * 1.0 - scroll * speed), period);
-    bright = 0.25 + 0.75 * smoothstep(0.2, 0.95, bright);
+                               along * 1.2 - scroll * speed), period);
+    bright = pow(smoothstep(0.42, 1.0, bright), 1.6);
 
     streak += core * bright * w;
-    glow += halo * bright * w * 0.18;
+    glow += halo * bright * w * 0.12;
   }
 
   // Glittering specular sparkles riding along the streaks.
   float sp = pnoise(vec2(across * 130.0 + seed, along * 55.0 - scroll * 9.0), period);
-  float sparkle = pow(smoothstep(0.8, 1.0, sp), 4.0) * 2.4 * smoothstep(0.04, 0.35, streak + glow);
+  float sparkle = pow(smoothstep(0.82, 1.0, sp), 4.0) * 2.6 * smoothstep(0.05, 0.4, streak + glow);
 
   // Prismatic band runs corner-to-corner, drifting slowly.
   float band = across * 0.85 + 0.5 + 0.06 * sin(u_time * TAU);
   vec3 col = spectrum(band);
 
-  // Luminous emission: bright cores + soft halo glow, color from the spectrum.
-  float intensity = streak * 3.0 + glow * 2.2 + 0.05;
+  // Luminous emission: bright cores + faint halo glow, color from the spectrum.
+  float intensity = streak * 3.2 + glow * 1.4;
   col *= intensity;
   col += sparkle * vec3(1.0, 0.97, 0.9);      // white-hot sparkle cores
 
-  // Filmic tone curve: blooms the brights, keeps deep blacks between rays.
-  col = col / (col + 0.45);
-  col = pow(col, vec3(0.78));
+  // Gentle highlight rolloff only (no shadow lift) -> deep saturated blacks.
+  col = col / (col + 0.85);
+  col = pow(col, vec3(0.9));
 
   gl_FragColor = vec4(col, 1.0);
 }
