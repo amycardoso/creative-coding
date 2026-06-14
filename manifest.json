@@ -332,6 +332,15 @@
       "media": "sketches/sob-a-lua/sob-a-lua.png",
       "tags": ["generative", "landscape", "abstract"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "gargantua",
+      "title": "Gargantua",
+      "description": "A black hole rendered with real per-pixel gravitational lensing: light rays bend toward the singularity, so the far side of the incandescent accretion disk arcs up and over the event horizon. A photon ring hugs the dark silhouette, Doppler beaming brightens the side rotating toward us, and the starfield behind is lensed into a faint Einstein ring.",
+      "date": "2026-06-14",
+      "media": "sketches/gargantua/gargantua.gif",
+      "tags": ["generative", "shader", "abstract"],
+      "tech": ["p5.js", "GLSL"]
     }
   ]
 }
