@@ -314,6 +314,15 @@
       "media": "sketches/marajoara/marajoara.png",
       "tags": ["generative", "geometric", "abstract"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "torcida",
+      "title": "Torcida",
+      "description": "A Copa do Mundo crowd mosaic: a whole stand of supporters holds up coloured cards that together form the bandeira do Brasil, while an ola (Mexican wave) sweeps across the terraces — fans rising, cards lifting and catching the light, camera flashes sparking through the crowd. Brasilidade as collective joy.",
+      "date": "2026-06-14",
+      "media": "sketches/torcida/torcida.gif",
+      "tags": ["generative", "abstract"],
+      "tech": ["p5.js"]
     }
   ]
 }
