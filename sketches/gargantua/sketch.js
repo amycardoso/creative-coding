@@ -25,6 +25,12 @@ let theShader;
 let seed = 7.0;
 let inclination = 0.14;     // radians above the disk plane (near edge-on)
 let turbOffset = [0.0, 0.0];
+let captureT = null;        // set by the capture driver; null during viewing
+
+function loopTime() {
+  if (captureT !== null) return captureT;
+  return ((millis() / 1000.0) % LOOP_SECONDS) / LOOP_SECONDS;
+}
 
 const vert = `
 precision highp float;
@@ -216,10 +222,22 @@ function setup() {
   theShader = createShader(vert, frag);
   noStroke();
   applySeed();
+
+  // Inert during normal viewing; the capture driver calls this per frame.
+  window.__captureFrame = (i, n) => {
+    captureT = (((i % n) + n) % n) / n;
+    redraw();
+  };
+
+  const p = new URLSearchParams(window.location.search);
+  if (p.has("f") && p.has("n")) {
+    noLoop();
+    window.__captureFrame(parseInt(p.get("f"), 10), Math.max(1, parseInt(p.get("n"), 10)));
+  }
 }
 
 function draw() {
-  const phase = ((millis() / 1000) % LOOP_SECONDS) / LOOP_SECONDS;
+  const phase = loopTime();
   shader(theShader);
   theShader.setUniform("uResolution", [width, height]);
   theShader.setUniform("uTime", phase * TAU);
