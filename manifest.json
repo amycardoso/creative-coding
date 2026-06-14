@@ -305,6 +305,15 @@
       "media": "sketches/alegria/alegria.png",
       "tags": ["generative", "abstract"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "marajoara",
+      "title": "Marajoara",
+      "description": "After the pre-Columbian ceramic art of Marajó Island at the mouth of the Amazon (c. 400–1300 CE) — registers of interlocking spirals, stepped frets, dogtooth triangles and concentric lozenges in red and black on a buff slip. Brazil's deepest visual root: brasilidade reaching back to its indigenous origins. Each load is a unique vessel.",
+      "date": "2026-06-14",
+      "media": "sketches/marajoara/marajoara.png",
+      "tags": ["generative", "geometric", "abstract"],
+      "tech": ["p5.js"]
     }
   ]
 }
