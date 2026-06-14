@@ -1,10 +1,11 @@
 /**
  * Sob a Lua
  *
- * A study in afro-brasilidade after contemporary painters of the Black night:
- * a lone figure stands with a parasol beneath a gold crescent moon, on the edge
- * of still water that holds the sky. Indigo, gold and quiet. Each load is a new
- * night.
+ * A study in afro-brasilidade after the contemporary painters of the Black
+ * night: a figure with luminous blue-black skin stands with a parasol beneath a
+ * gold crescent moon, on the edge of still water that holds the sky. The deep
+ * indigo-and-gold rendering of Black skin is the genre's signature gesture.
+ * Each load is a new night.
  *
  * Controls:
  * - Press S to save a PNG
@@ -15,7 +16,8 @@ const WIDTH = 800;
 const HEIGHT = 800;
 const HORIZON = Math.round(HEIGHT * 0.66);
 
-const FIG = [7, 10, 24];        // near-black indigo silhouette
+const FIG = [40, 46, 100];      // luminous blue-black skin
+const FIG_HI = [108, 138, 198]; // moonlight rim / highlight on skin
 const GOLD = [233, 187, 96];
 const MOON = [244, 214, 138];
 
@@ -36,7 +38,7 @@ function limb(g, pts, ws) {
   }
 }
 
-function figure(g, cx, feetY, H, parasolTilt) {
+function figure(g, cx, feetY, H, parasolTilt, moonX) {
   const Y = (h) => feetY - h * H;     // height in heads above the feet
   const X = (x) => cx + x * H;
   g.noStroke(); g.fill(FIG[0], FIG[1], FIG[2]); g.rectMode(CENTER);
@@ -92,9 +94,19 @@ function figure(g, cx, feetY, H, parasolTilt) {
   for (let i = 1; i < n; i++) { const x = topX - R + (2 * R) * (i / n); g.line(topX, cyc - R * 0.6, x, cyc); }
   g.noStroke(); g.fill(GOLD[0], GOLD[1], GOLD[2]); g.circle(topX, cyc - R * 0.62, H * 0.4);
 
-  // subtle moon-side rim light on the head
-  g.noFill(); g.stroke(120, 140, 190, 90); g.strokeWeight(2);
-  g.circle(cx, Y(7.0), 1.7 * H);
+  // ---- moonlight on the blue skin (rim light on the moon side) ----
+  const ms = (moonX > cx) ? 1 : -1;
+  g.noFill(); g.stroke(FIG_HI[0], FIG_HI[1], FIG_HI[2], 210); g.strokeCap(ROUND);
+  g.strokeWeight(H * 0.16);
+  g.arc(cx, Y(7.0), 1.7 * H, 1.7 * H, ms > 0 ? -Math.PI / 2 : Math.PI / 2, ms > 0 ? Math.PI / 2 : 3 * Math.PI / 2); // head
+  g.strokeWeight(H * 0.14);
+  g.line(X(ms * 1.28), Y(5.9), X(ms * 0.86), Y(3.5));   // torso side
+  g.line(X(ms * 0.55), Y(3.3), X(ms * 0.58), Y(0.3));   // near leg
+  // soft cheek highlight + specular
+  g.noStroke(); g.fill(FIG_HI[0], FIG_HI[1], FIG_HI[2], 120); g.circle(cx + ms * 0.4 * H, Y(7.05), 1.0 * H);
+  g.fill(200, 218, 245, 210); g.circle(cx + ms * 0.5 * H, Y(7.18), 0.34 * H);
+  // faint warm bounce from the gold parasol on the crown
+  g.fill(GOLD[0], GOLD[1], GOLD[2], 45); g.ellipse(cx, Y(7.75), 1.5 * H, 0.5 * H);
 }
 
 // ---- scene -----------------------------------------------------------------
@@ -127,8 +139,8 @@ function drawAbove(g) {
   let x = 0; while (x <= WIDTH) { g.vertex(x, HORIZON - rr(2, 26)); x += rr(18, 46); }
   g.vertex(WIDTH, HORIZON); g.endShape(CLOSE);
 
-  // the figure at the water's edge
-  figure(g, rr(0.4, 0.6) * WIDTH, HORIZON, rr(20, 23), rr(-0.4, 0.4));
+  // the figure at the water's edge (lit from the moon side)
+  figure(g, rr(0.42, 0.58) * WIDTH, HORIZON, rr(25, 28), rr(-0.4, 0.4), mx);
 }
 
 function draw() {
