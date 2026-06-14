@@ -323,6 +323,15 @@
       "media": "sketches/torcida/torcida.gif",
       "tags": ["generative", "abstract"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "sob-a-lua",
+      "title": "Sob a Lua",
+      "description": "A study in afro-brasilidade: a lone figure stands with a parasol beneath a gold crescent moon, at the edge of still water that holds the sky. Indigo, gold and quiet — each load a new night.",
+      "date": "2026-06-14",
+      "media": "sketches/sob-a-lua/sob-a-lua.png",
+      "tags": ["generative", "landscape", "abstract"],
+      "tech": ["p5.js"]
     }
   ]
 }
