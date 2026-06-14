@@ -296,6 +296,15 @@
       "media": "sketches/antropofagia/antropofagia.gif",
       "tags": ["generative", "shader", "abstract"],
       "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "alegria",
+      "title": "Alegria",
+      "description": "A generative Brazilian pop-art mosaic in the joyful spirit of Romero Britto — thick black outlines, organic patchwork cells of super-saturated tropical colour packed with pattern, scattered with bold motifs and confetti. Brasilidade as pure festa. Each load is unique.",
+      "date": "2026-06-13",
+      "media": "sketches/alegria/alegria.png",
+      "tags": ["generative", "abstract"],
+      "tech": ["p5.js"]
     }
   ]
 }
