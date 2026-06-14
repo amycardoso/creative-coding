@@ -278,6 +278,24 @@
       "media": "sketches/calcadao/calcadao.gif",
       "tags": ["generative", "geometric", "abstract"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "a-curva",
+      "title": "A Curva",
+      "description": "An homage to Oscar Niemeyer's free-flowing curve — sail columns, a dome and a leaning blade in white concrete, standing at the edge of a still reflecting pool while the sun arcs through golden hour. A study in brasilidade: the sensual curve of Brasília modernism.",
+      "date": "2026-06-13",
+      "media": "sketches/a-curva/a-curva.gif",
+      "tags": ["generative", "landscape", "abstract"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "antropofagia",
+      "title": "Antropofagia",
+      "description": "\"Tupi or not Tupi.\" A cold imported Concrete-art grid is devoured by swelling organic forms in Tarsila do Amaral's caipira palette, digested into sensual tropical colour and then revealed again — an endless breathing enactment of Oswald de Andrade's 1928 cannibalist manifesto, the founding idea of brasilidade.",
+      "date": "2026-06-13",
+      "media": "sketches/antropofagia/antropofagia.gif",
+      "tags": ["generative", "shader", "abstract"],
+      "tech": ["p5.js", "GLSL"]
     }
   ]
 }

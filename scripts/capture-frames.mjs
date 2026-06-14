@@ -30,6 +30,9 @@ fs.rmSync(PROFILE, { recursive: true, force: true });
 
 const chrome = spawn(CHROME, [
   '--headless=new', '--disable-gpu', '--hide-scrollbars',
+  // Software-render WebGL/GLSL sketches (recent Chrome gates SwiftShader behind
+  // this flag when the GPU is off).
+  '--enable-unsafe-swiftshader',
   `--remote-debugging-port=${PORT}`, `--user-data-dir=${PROFILE}`,
   `--window-size=${WIDTH},${HEIGHT}`, 'about:blank',
 ], { stdio: 'ignore' });
