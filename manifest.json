@@ -269,6 +269,15 @@
       "media": "sketches/redshift/redshift.gif",
       "tags": ["generative", "shader", "abstract"],
       "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "calcadao",
+      "title": "Calçadão",
+      "description": "Roberto Burle Marx's Copacabana promenade rebuilt stone by stone — sinuous black-and-white waves of Portuguese mosaic slowly drifting like the sea they imitate. A study in brasilidade: foreign technique digested into something unmistakably Brazilian.",
+      "date": "2026-06-13",
+      "media": "sketches/calcadao/calcadao.gif",
+      "tags": ["generative", "geometric", "abstract"],
+      "tech": ["p5.js"]
     }
   ]
 }
