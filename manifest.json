@@ -429,6 +429,16 @@
       "media": "sketches/cimatica/cimatica.gif",
       "tags": ["generative", "simulation", "geometric"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "logograma",
+      "title": "Logograma",
+      "description": "Heptapod ink, after Arrival. A circular logogram writes itself on pale fog: a hand-unsteady ring exhales flame-shaped plumes of ink-in-water that fray into smoke and splatter, holds its complete form with a barely-alive shimmer, then inhales back to nothing. The loop is a strict palindrome — it plays identically forward and backward, the way heptapods read time — and the live sketch writes a different glyph each breath, an endless sentence.",
+      "date": "2026-08-30",
+      "category": "abstract",
+      "media": "sketches/logograma/logograma.gif",
+      "tags": ["generative", "narrative", "abstract"],
+      "tech": ["p5.js"]
     }
   ]
 }
