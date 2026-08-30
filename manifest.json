@@ -399,6 +399,16 @@
       "media": "sketches/pulsar/pulsar.gif",
       "tags": ["generative", "simulation", "space"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "frevo",
+      "title": "Frevo",
+      "description": "Recife carnival as pure geometry — the frevo umbrella exploded into four concentric rings of colored arc segments that never rotate smoothly: each ring snaps forward on its own syncopated 16th-note pattern at 180 BPM, the staccato of the passo, while radial line bursts crack around the mandala on the offbeats like passistas leaping. No figures, no umbrella — just the colors and the syncopation.",
+      "date": "2026-08-30",
+      "category": "brasilidade",
+      "media": "sketches/frevo/frevo.gif",
+      "tags": ["generative", "geometric", "abstract"],
+      "tech": ["p5.js"]
     }
   ]
 }
