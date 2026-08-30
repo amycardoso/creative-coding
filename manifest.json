@@ -419,6 +419,16 @@
       "media": "sketches/interferencia/interferencia.gif",
       "tags": ["generative", "geometric", "abstract"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "cimatica",
+      "title": "Cimática",
+      "description": "Chladni figures — geometry born from vibration. Fourteen thousand sand grains ride a vibrating square plate, drifting toward the nodal lines where the plate stands still and getting shaken hardest where it moves most; grain-grain exclusion spreads the piles into the continuous sand ridges real plates show. The loop sweeps six standing-wave modes of increasing intricacy: at each transition the settled figure bursts apart and recrystallizes into the next, pure standing-wave physics with nothing drawn but the grains.",
+      "date": "2026-08-30",
+      "category": "abstract",
+      "media": "sketches/cimatica/cimatica.gif",
+      "tags": ["generative", "simulation", "geometric"],
+      "tech": ["p5.js"]
     }
   ]
 }
