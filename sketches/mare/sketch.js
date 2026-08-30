@@ -131,7 +131,7 @@ function renderFrame(f) {
     // fade to black
     const k = (f - DRAW_FRAMES - BREATHE_FRAMES) / FADE_FRAMES;
     noStroke();
-    fill(BG[0], BG[1], BG[2], k * 255);
+    fill(BG[0], BG[1], BG[2], Math.min(1, k * 1.25) * 255);
     rect(0, 0, width, height);
   }
 
