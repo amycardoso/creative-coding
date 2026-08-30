@@ -439,6 +439,16 @@
       "media": "sketches/logograma/logograma.gif",
       "tags": ["generative", "narrative", "abstract"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "paralaxe",
+      "title": "Paralaxe Temporal",
+      "description": "All moments at once, after Arrival. One thin-lined figure journeys a Lissajous orbit, its shape morphing as it goes — and every frame draws the entire journey simultaneously: ninety translucent ghosts, the figure at every phase of its loop, past and future overlaid in a single image. What animates is not the figure but when you are: a bright present sweeps through the stack, its glow reaching symmetrically into the future and the past.",
+      "date": "2026-08-30",
+      "category": "abstract",
+      "media": "sketches/paralaxe/paralaxe.gif",
+      "tags": ["generative", "geometric", "abstract"],
+      "tech": ["p5.js"]
     }
   ]
 }
