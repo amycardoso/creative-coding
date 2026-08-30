@@ -379,6 +379,16 @@
       "media": "sketches/gargantua/gargantua.gif",
       "tags": ["generative", "shader", "abstract"],
       "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "mare",
+      "title": "Maré",
+      "description": "One lunar month of real tide at Porto de Itaqui, São Luís — Brazil's most dramatic tides — computed from published harmonic constituents (M2, S2, N2, K1, O1, M4) and drawn as a spiral: one turn per lunar day, ~29.5 turns, with spring and neap cycles emerging as waves of wild and calm rings.",
+      "date": "2026-08-30",
+      "category": "data-viz",
+      "media": "sketches/mare/mare.gif",
+      "tags": ["data-visualization", "generative"],
+      "tech": ["p5.js"]
     }
   ]
 }
