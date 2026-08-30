@@ -449,6 +449,16 @@
       "media": "sketches/paralaxe/paralaxe.gif",
       "tags": ["generative", "geometric", "abstract"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "luar-do-sertao",
+      "title": "Luar do Sertão",
+      "description": "A moonlit night over the sertão — a huge low moon washes an indigo-to-teal sky, mandacaru cacti and a lone windmill stand in silhouette against the serra, and fireflies drift over the caatinga. Night companion to Crimson Dusk and Golden Dawn; each render is unique.",
+      "date": "2026-08-30",
+      "category": "landscape",
+      "media": "sketches/luar-do-sertao/luar-do-sertao.png",
+      "tags": ["generative", "landscape", "brasilidade"],
+      "tech": ["p5.js"]
     }
   ]
 }
