@@ -25,3 +25,70 @@ function tideHeight(hours) {
   }
   return h;
 }
+
+// ---------- geometry ----------
+const WIDTH = 800, HEIGHT = 800;
+const STEP_H = 0.1;                 // one point every 6 simulated minutes
+const BG = [2, 10, 12];             // #020a0c
+const COL_LOW  = [14, 84, 88];      // abyssal teal (neap / low water)
+const COL_HIGH = [210, 250, 255];   // luminous cyan-white (spring highs)
+const SILVER = [200, 210, 222];     // moonlight accent
+
+let pts = [];                        // {x, y, h} centered on (0,0)
+let R0, R1, pg;
+
+function buildSpiral(s) {
+  R0 = 0.07 * s;
+  R1 = 0.46 * s;
+  const spacing = (R1 - R0) / DAYS;  // radial gap between consecutive turns
+  pts = [];
+  for (let t = 0; t <= TOTAL_H; t += STEP_H) {
+    const ang = (t / LUNAR_DAY_H) * TWO_PI - HALF_PI;
+    const h = tideHeight(t);
+    const r = R0 + (R1 - R0) * (t / TOTAL_H) + (h / MAX_AMP) * spacing * 0.85;
+    pts.push({ x: Math.cos(ang) * r, y: Math.sin(ang) * r, h });
+  }
+}
+
+function segColor(h) {
+  const u = pow(constrain((h / MAX_AMP + 1) / 2, 0, 1), 1.5);
+  return color(
+    lerp(COL_LOW[0], COL_HIGH[0], u),
+    lerp(COL_LOW[1], COL_HIGH[1], u),
+    lerp(COL_LOW[2], COL_HIGH[2], u)
+  );
+}
+
+function segWeight(h) {
+  return 0.5 + 1.3 * Math.abs(h) / MAX_AMP;
+}
+
+// Draw polyline segments [from, to) into graphics buffer g.
+function drawSegments(g, from, to) {
+  g.push();
+  g.translate(g.width / 2, g.height / 2);
+  for (let i = Math.max(1, from); i < to; i++) {
+    const a = pts[i - 1], b = pts[i];
+    g.stroke(segColor(b.h));
+    g.strokeWeight(segWeight(b.h));
+    g.line(a.x, a.y, b.x, b.y);
+  }
+  g.pop();
+}
+
+function setup() {
+  const c = createCanvas(WIDTH, HEIGHT);
+  c.parent("canvas-container");
+  pixelDensity(1);
+  buildSpiral(Math.min(WIDTH, HEIGHT));
+  pg = createGraphics(WIDTH, HEIGHT);
+  pg.pixelDensity(1);
+  // Static render for now — Task 3 replaces this with the animated loop.
+  drawSegments(pg, 1, pts.length);
+  noLoop();
+}
+
+function draw() {
+  background(BG[0], BG[1], BG[2]);
+  image(pg, 0, 0);
+}
