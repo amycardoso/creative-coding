@@ -459,6 +459,16 @@
       "media": "sketches/luar-do-sertao/luar-do-sertao.png",
       "tags": ["generative", "landscape", "brasilidade"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "ipe-no-cerrado",
+      "title": "Ipê no Cerrado",
+      "description": "Golden hour in the cerrado — a twisted ipê-amarelo in full bloom sheds glowing yellow blossoms over termite mounds, against a pink-to-lilac sky. The tortuous crown is grown by recursive branching, so every render is a different tree.",
+      "date": "2026-08-30",
+      "category": "landscape",
+      "media": "sketches/ipe-no-cerrado/ipe-no-cerrado.png",
+      "tags": ["generative", "landscape", "brasilidade"],
+      "tech": ["p5.js"]
     }
   ]
 }
