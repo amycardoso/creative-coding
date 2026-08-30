@@ -409,6 +409,16 @@
       "media": "sketches/frevo/frevo.gif",
       "tags": ["generative", "geometric", "abstract"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "interferencia",
+      "title": "Interferência",
+      "description": "Moiré wave interference from nothing but straight lines — a field of hue-cycling rainbow stripes shines through two black picket-fence gratings that tilt and drift against each other. Every mark is a straight line; the waves, ripples and rolling bands are pure interference, a pattern that lives only in the space between the gratings, morphing from broad rolling bands to tight woven mesh as the fences swing through alignment.",
+      "date": "2026-08-30",
+      "category": "abstract",
+      "media": "sketches/interferencia/interferencia.gif",
+      "tags": ["generative", "geometric", "abstract"],
+      "tech": ["p5.js"]
     }
   ]
 }
