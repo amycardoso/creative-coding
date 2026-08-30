@@ -39,19 +39,19 @@ let R0, R1, pg;
 
 function buildSpiral(s) {
   R0 = 0.07 * s;
-  R1 = 0.46 * s;
+  R1 = 0.42 * s;
   const spacing = (R1 - R0) / DAYS;  // radial gap between consecutive turns
   pts = [];
   for (let t = 0; t <= TOTAL_H; t += STEP_H) {
     const ang = (t / LUNAR_DAY_H) * TWO_PI - HALF_PI;
     const h = tideHeight(t);
-    const r = R0 + (R1 - R0) * (t / TOTAL_H) + (h / MAX_AMP) * spacing * 0.85;
+    const r = R0 + (R1 - R0) * (t / TOTAL_H) + (h / MAX_AMP) * spacing * 5.0;
     pts.push({ x: Math.cos(ang) * r, y: Math.sin(ang) * r, h });
   }
 }
 
 function segColor(h) {
-  const u = pow(constrain((h / MAX_AMP + 1) / 2, 0, 1), 1.5);
+  const u = pow(constrain((h / MAX_AMP + 1) / 2, 0, 1), 2.2);
   return color(
     lerp(COL_LOW[0], COL_HIGH[0], u),
     lerp(COL_LOW[1], COL_HIGH[1], u),
@@ -60,7 +60,7 @@ function segColor(h) {
 }
 
 function segWeight(h) {
-  return 0.5 + 1.3 * Math.abs(h) / MAX_AMP;
+  return 0.4 + 1.8 * Math.abs(h) / MAX_AMP;
 }
 
 // Draw polyline segments [from, to) into graphics buffer g.
