@@ -76,6 +76,89 @@ function drawSegments(g, from, to) {
   g.pop();
 }
 
+// ---------- timeline (frame-driven; deterministic for capture) ----------
+const FPS = 60;
+const DRAW_FRAMES = 35 * FPS;      // month draws itself
+const BREATHE_FRAMES = 9 * FPS;    // completed form breathes
+const FADE_FRAMES = 3 * FPS;       // fade to black, then loop
+const LOOP_FRAMES = DRAW_FRAMES + BREATHE_FRAMES + FADE_FRAMES;
+
+let frame = 0;
+let drawnIdx = 0;        // how many points are already in pg (live mode)
+let captureMode = false; // capture rebuilds pg from scratch every frame
+
+function targetIdx(f) {
+  const p = constrain(f / DRAW_FRAMES, 0, 1);
+  return Math.floor(p * (pts.length - 1)) + 1;
+}
+
+function renderFrame(f) {
+  const idx = targetIdx(f);
+  if (captureMode || idx < drawnIdx) {
+    pg.clear();
+    drawSegments(pg, 1, idx);
+  } else {
+    drawSegments(pg, drawnIdx, idx);
+  }
+  drawnIdx = idx;
+
+  background(BG[0], BG[1], BG[2]);
+  image(pg, 0, 0);
+
+  if (f < DRAW_FRAMES) {
+    // glowing "now" head leading the line
+    const p = pts[idx - 1];
+    push();
+    translate(width / 2, height / 2);
+    noStroke();
+    fill(SILVER[0], SILVER[1], SILVER[2], 30); circle(p.x, p.y, 14);
+    fill(SILVER[0], SILVER[1], SILVER[2], 90); circle(p.x, p.y, 6);
+    fill(255, 255, 255, 220); circle(p.x, p.y, 2.5);
+    pop();
+  } else if (f < DRAW_FRAMES + BREATHE_FRAMES) {
+    // moon-silver pulse sweeping outward through the rings, twice
+    const k = ((f - DRAW_FRAMES) / BREATHE_FRAMES) * 2 % 1;
+    const rr = lerp(R0, R1, k);
+    push();
+    translate(width / 2, height / 2);
+    noFill();
+    const a = 46 * Math.sin(Math.PI * k); // soft in/out
+    stroke(SILVER[0], SILVER[1], SILVER[2], a);
+    strokeWeight(lerp(R1 - R0, (R1 - R0) * 0.4, k) / DAYS * 2.2);
+    circle(0, 0, rr * 2);
+    pop();
+  } else {
+    // fade to black
+    const k = (f - DRAW_FRAMES - BREATHE_FRAMES) / FADE_FRAMES;
+    noStroke();
+    fill(BG[0], BG[1], BG[2], k * 255);
+    rect(0, 0, width, height);
+  }
+
+  drawMoonDot(f);
+}
+
+// Center moon-phase dot: brightness tracks the synodic month
+// (new at both ends of the drawn month, full mid-month).
+function drawMoonDot(f) {
+  const day = constrain(f / DRAW_FRAMES, 0, 1) * DAYS;
+  const illum = 0.5 * (1 - Math.cos((TWO_PI * day) / 29.5));
+  push();
+  translate(width / 2, height / 2);
+  noStroke();
+  fill(
+    lerp(BG[0], SILVER[0], illum),
+    lerp(BG[1], SILVER[1], illum),
+    lerp(BG[2], SILVER[2], illum)
+  );
+  circle(0, 0, 14);
+  noFill();
+  stroke(SILVER[0], SILVER[1], SILVER[2], 70);
+  strokeWeight(1);
+  circle(0, 0, 14);
+  pop();
+}
+
 function setup() {
   const c = createCanvas(WIDTH, HEIGHT);
   c.parent("canvas-container");
@@ -83,12 +166,26 @@ function setup() {
   buildSpiral(Math.min(WIDTH, HEIGHT));
   pg = createGraphics(WIDTH, HEIGHT);
   pg.pixelDensity(1);
-  // Static render for now — Task 3 replaces this with the animated loop.
-  drawSegments(pg, 1, pts.length);
-  noLoop();
+
+  // Inert during normal viewing; the capture driver calls this per frame.
+  window.__captureFrame = (i, n) => {
+    captureMode = true;
+    frame = Math.floor(((((i % n) + n) % n) / n) * LOOP_FRAMES);
+    redraw();
+  };
+
+  const p = new URLSearchParams(window.location.search);
+  if (p.has("f") && p.has("n")) {
+    noLoop();
+    window.__captureFrame(parseInt(p.get("f"), 10), Math.max(1, parseInt(p.get("n"), 10)));
+  }
 }
 
 function draw() {
-  background(BG[0], BG[1], BG[2]);
-  image(pg, 0, 0);
+  renderFrame(frame);
+  frame = (frame + 1) % LOOP_FRAMES;
+}
+
+function keyPressed() {
+  if (key === "s" || key === "S") saveCanvas("mare", "png");
 }
