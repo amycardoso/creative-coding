@@ -142,7 +142,7 @@ function renderFrame(f) {
 // (new at both ends of the drawn month, full mid-month).
 function drawMoonDot(f) {
   const day = constrain(f / DRAW_FRAMES, 0, 1) * DAYS;
-  const illum = 0.5 * (1 - Math.cos((TWO_PI * day) / 29.5));
+  const illum = 0.5 * (1 - Math.cos((TWO_PI * day) / DAYS));
   push();
   translate(width / 2, height / 2);
   noStroke();
