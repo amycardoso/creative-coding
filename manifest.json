@@ -389,6 +389,16 @@
       "media": "sketches/mare/mare.gif",
       "tags": ["data-visualization", "generative"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "pulsar",
+      "title": "Pulsar",
+      "description": "PSR B1919+21 — the first pulsar ever detected (Jocelyn Bell Burnell, 1967) — beating at its real 1.3373-second rotation period. Each line is one turn of the neutron star, written as the radio beam sweeps past and stacked into the waterfall made famous by Unknown Pleasures; sub-pulses drift steadily across the window pulse after pulse, the drifting-subpulse phenomenon this pulsar actually exhibits.",
+      "date": "2026-08-30",
+      "category": "space",
+      "media": "sketches/pulsar/pulsar.gif",
+      "tags": ["generative", "simulation", "space"],
+      "tech": ["p5.js"]
     }
   ]
 }
