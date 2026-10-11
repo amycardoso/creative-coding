@@ -25,7 +25,7 @@
 
 const W = 800, H = 800;
 const M = 50;
-const C = 8;                     // px per grid cell
+const C = 12;                    // px per grid cell
 const G = Math.floor((W - 2 * M) / C);
 const WALKERS = 2600;
 const FAR = 5;                   // walkers start at least this many cells from the cluster
@@ -137,7 +137,7 @@ function renderPhase(t) {
     push();
     translate(x, y);
     rotate(s.ang + HALF_PI);
-    textSize(Math.max(8, 15 - s.depth * 0.1));
+    textSize(Math.max(12, 21 - s.depth * 0.18));
     text(letter, 0, 0);
     pop();
   }
