@@ -14,7 +14,9 @@ sketches/
 ├── space/           # cosmos and physics
 ├── data-viz/        # real-data visualizations
 └── series/
+    ├── arrival/          # Logograma, Paralaxe Temporal
     ├── handmaids-tale/   # Fluxo, Contida, Nomes, Maioria
+    ├── interstellar/     # Time Dilation, Endurance, Gargantua
     └── reflexoes/        # Pilha de Areia, Mitose, Cópia da Cópia, Queimada, Bolhas, Feira
 ```
 

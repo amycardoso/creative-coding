@@ -9,6 +9,16 @@
       "slug": "reflexoes",
       "title": "Reflexões",
       "description": "Six simple rules whose collective behaviour becomes a question: finitude, the self and the other, memory, climate, polarization and inequality."
+    },
+    {
+      "slug": "interstellar",
+      "title": "Interstellar",
+      "description": "After Christopher Nolan's Interstellar. Three ways of showing time bending near Gargantua: rings that turn at different rates, a clock with one hand per gravitational field, and the black hole itself with light bent around it."
+    },
+    {
+      "slug": "arrival",
+      "title": "Arrival",
+      "description": "After Denis Villeneuve's Arrival. The heptapods' circular writing and their way of seeing every moment at once."
     }
   ],
   "sketches": [
@@ -68,8 +78,9 @@
       "description": "Concentric time rings visualizing relativistic time dilation near a black hole. Inner rings crawl, outer rings spin freely.",
       "date": "2026-02-09",
       "category": "space",
-      "media": "sketches/space/time-dilation/time-dilation.gif",
-      "tags": ["generative", "simulation", "space"],
+      "series": "interstellar",
+      "media": "sketches/series/interstellar/time-dilation/time-dilation.gif",
+      "tags": ["generative", "simulation", "space", "interstellar"],
       "tech": ["p5.js"]
     },
     {
@@ -78,8 +89,9 @@
       "description": "Three clock hands sweep at different gravitational time rates — Earth, orbit, and Miller's planet — making relativistic time dilation tangible through real system time.",
       "date": "2026-02-09",
       "category": "space",
-      "media": "sketches/space/endurance/endurance.gif",
-      "tags": ["generative", "simulation", "space"],
+      "series": "interstellar",
+      "media": "sketches/series/interstellar/endurance/endurance.gif",
+      "tags": ["generative", "simulation", "space", "interstellar"],
       "tech": ["p5.js"]
     },
     {
@@ -388,8 +400,9 @@
       "description": "A black hole rendered with real per-pixel gravitational lensing: light rays bend toward the singularity, so the far side of the incandescent accretion disk arcs up and over the event horizon. A photon ring hugs the dark silhouette, Doppler beaming brightens the side rotating toward us, and the starfield behind is lensed into a faint Einstein ring.",
       "date": "2026-06-14",
       "category": "space",
-      "media": "sketches/space/gargantua/gargantua.gif",
-      "tags": ["generative", "shader", "abstract"],
+      "series": "interstellar",
+      "media": "sketches/series/interstellar/gargantua/gargantua.gif",
+      "tags": ["generative", "shader", "abstract", "interstellar"],
       "tech": ["p5.js", "GLSL"]
     },
     {
@@ -448,8 +461,9 @@
       "description": "Heptapod ink, after Arrival. A circular logogram writes itself on pale fog: a hand-unsteady ring exhales flame-shaped plumes of ink-in-water that fray into smoke and splatter, holds its complete form with a barely-alive shimmer, then inhales back to nothing. The loop is a strict palindrome — it plays identically forward and backward, the way heptapods read time — and the live sketch writes a different glyph each breath, an endless sentence.",
       "date": "2026-08-30",
       "category": "abstract",
-      "media": "sketches/abstract/logograma/logograma.gif",
-      "tags": ["generative", "narrative", "abstract"],
+      "series": "arrival",
+      "media": "sketches/series/arrival/logograma/logograma.gif",
+      "tags": ["generative", "narrative", "abstract", "arrival"],
       "tech": ["p5.js"]
     },
     {
@@ -458,8 +472,9 @@
       "description": "All moments at once, after Arrival. One thin-lined figure journeys a Lissajous orbit, its shape morphing as it goes — and every frame draws the entire journey simultaneously: ninety translucent ghosts, the figure at every phase of its loop, past and future overlaid in a single image. What animates is not the figure but when you are: a bright present sweeps through the stack, its glow reaching symmetrically into the future and the past.",
       "date": "2026-08-30",
       "category": "abstract",
-      "media": "sketches/abstract/paralaxe/paralaxe.gif",
-      "tags": ["generative", "geometric", "abstract"],
+      "series": "arrival",
+      "media": "sketches/series/arrival/paralaxe/paralaxe.gif",
+      "tags": ["generative", "geometric", "abstract", "arrival"],
       "tech": ["p5.js"]
     },
     {
