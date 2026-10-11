@@ -529,6 +529,16 @@
       "media": "sketches/carborundum/carborundum.gif",
       "tags": ["generative", "erosion", "simulation", "typography", "handmaids-tale"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "maioria",
+      "title": "Maioria",
+      "description": "After Margaret Atwood's The Handmaid's Tale: conformity that spreads with no one giving the order. In a majority-rule cellular automaton every cell becomes whatever most of its neighbours are, so red takes over on its own. A few cells never convert and weigh on the cells around them, keeping small white islands open. Then the pressure lifts in a wave from those cells and the vote runs again.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "media": "sketches/maioria/maioria.gif",
+      "tags": ["generative", "cellular-automata", "emergence", "handmaids-tale"],
+      "tech": ["p5.js"]
     }
   ]
 }
