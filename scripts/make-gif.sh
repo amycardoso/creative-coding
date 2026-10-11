@@ -19,8 +19,10 @@ FPS="${3:-18}"
 SIZE="${4:-800}"
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SKETCH_DIR="$ROOT/sketches/$SLUG"
-[ -d "$SKETCH_DIR" ] || { echo "no such sketch: $SKETCH_DIR"; exit 1; }
+# Sketches live under sketches/<category>/<slug> or sketches/series/<series>/<slug>.
+SKETCH_DIR="$(find "$ROOT/sketches" -mindepth 2 -maxdepth 3 -type d -name "$SLUG" | head -n 1)"
+[ -n "$SKETCH_DIR" ] || { echo "no such sketch: $SLUG"; exit 1; }
+SKETCH_PATH="${SKETCH_DIR#$ROOT/}"
 
 PORT=8732
 FRAMES_DIR="/tmp/${SLUG}_frames"
@@ -38,7 +40,7 @@ sleep 1
 echo "[2/3] capturing $FRAMES frames"
 rm -rf "$FRAMES_DIR"; mkdir -p "$FRAMES_DIR"
 node "$ROOT/scripts/capture-frames.mjs" \
-  "http://localhost:$PORT/sketches/$SLUG/index.html" \
+  "http://localhost:$PORT/$SKETCH_PATH/index.html" \
   "$FRAMES_DIR" "$FRAMES" "$SIZE" "$SIZE"
 
 echo "[3/3] encoding GIF (bayer dither) -> $OUT"
