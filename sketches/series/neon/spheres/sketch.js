@@ -1,7 +1,7 @@
 /**
  * Spheres
  *
- * Neon #5: a rainbow that is the record of its own growth.
+ * Neon #4: a rainbow that is the record of its own growth.
  *
  * Gray–Scott reaction–diffusion seeded with seven drops (planets). With
  * these rates (f = 0.055, k = 0.062) the reaction spreads as coral-like

@@ -1,7 +1,7 @@
 /**
  * Pixel Sort
  *
- * Neon #3: a rule that only touches what is bright enough.
+ * Neon #2: a rule that only touches what is bright enough.
  *
  * A domain-warped noise field is posterised into seven flat neon inks.
  * Then every column is pixel-sorted: wherever a run of pixels is brighter

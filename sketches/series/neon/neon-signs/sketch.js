@@ -1,7 +1,7 @@
 /**
  * Neon Signs
  *
- * Neon #4: a city written in a language nobody taught it.
+ * Neon #3: a city written in a language nobody taught it.
  *
  * The facade is cut into sign panels by recursive subdivision. Every sign is
  * written in an invented script: a seeded alphabet of 28 glyphs, each one a
