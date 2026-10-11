@@ -479,6 +479,16 @@
       "media": "sketches/xilogravura/xilogravura.gif",
       "tags": ["generative", "woodcut", "typography", "brasilidade"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "azulejaria",
+      "title": "Azulejaria",
+      "description": "After Athos Bulcão, who let the workers laying his tiles in Brasília choose each one's turn on the wall. Here the wall keeps being re-laid: four waves cross a glazed blue-and-white panel (a diagonal sweep, a scatter, a ripple, a snake) and every tile they touch lifts and turns a quarter, until each has made a full turn and the first panel returns. Crackle, pooled glaze and chipped edges; the light stays put while the tiles turn under it.",
+      "date": "2026-10-11",
+      "category": "brasilidade",
+      "media": "sketches/azulejaria/azulejaria.gif",
+      "tags": ["generative", "tiles", "pattern", "brasilidade"],
+      "tech": ["p5.js"]
     }
   ]
 }
