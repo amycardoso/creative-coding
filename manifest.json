@@ -489,6 +489,66 @@
       "media": "sketches/azulejaria/azulejaria.gif",
       "tags": ["generative", "tiles", "pattern", "brasilidade"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "pilha-de-areia",
+      "title": "Pilha de Areia",
+      "description": "Reflexões #1, finitude. The Bak–Tang–Wiesenfeld sandpile: 52,000 grains fall one at a time on the centre of a grid and every cell that holds four topples onto its neighbours. Nobody draws the mandala; it is what thousands of small collapses leave behind, and no one can tell which grain will set off the avalanche. At the end of the loop the wind takes the pile and the table is empty again.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "media": "sketches/pilha-de-areia/pilha-de-areia.gif",
+      "tags": ["generative", "simulation", "cellular-automaton", "reflexoes"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "mitose",
+      "title": "Mitose",
+      "description": "Reflexões #2, o eu e o outro. Gray–Scott reaction–diffusion in the mitosis regime, started from a single drop of ink. A spot that grows too large cannot feed its own middle, so it splits; every spot on the page descends from the first one and is shaped by the neighbours that keep it from spreading. The ink dries back into the paper and a new drop falls.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "media": "sketches/mitose/mitose.gif",
+      "tags": ["generative", "simulation", "reaction-diffusion", "reflexoes"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "copia-da-copia",
+      "title": "Cópia da Cópia",
+      "description": "Reflexões #3, memória. A portrait from 1962 is photocopied, then the copy is copied, fifteen times, each pass faithful to the sheet it was given and not to the first. Enlargement, a crooked sheet, blur and the toner threshold do the forgetting: the date goes first, then the eyes, until only the shape of someone is left. Remembering copies the last recollection, not the event.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "media": "sketches/copia-da-copia/copia-da-copia.gif",
+      "tags": ["generative", "simulation", "iteration", "reflexoes"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "queimada",
+      "title": "Queimada",
+      "description": "Reflexões #4, clima. A forest-fire cellular automaton seen from above. The forest grew patch by patch; the rule for burning is the same for every tree, and what changes is how often a spark lands. The first burns a clearing, then they come closer together and the fronts meet. Afterwards the ash cools, the soil shows and the forest grows back cell by cell into exactly what it was, which the real one cannot do.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "media": "sketches/queimada/queimada.gif",
+      "tags": ["generative", "simulation", "cellular-automaton", "climate", "reflexoes"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "bolhas",
+      "title": "Bolhas",
+      "description": "Reflexões #5, polarização. Schelling's segregation model in two riso inks. Each dot only asks that 40% of its neighbours be like it, otherwise it moves to a random empty place. Nobody asks for sides, yet round after round the page sorts itself into territories and the share of like neighbours climbs past 80%. At the end every dot goes back to where it started.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "media": "sketches/bolhas/bolhas.gif",
+      "tags": ["generative", "simulation", "agents", "risograph", "reflexoes"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "feira",
+      "title": "Feira",
+      "description": "Reflexões #6, desigualdade. The yard-sale model: 400 people start with the same amount and trade by betting a tenth of the poorer one's money on a fair coin. Every trade is even, yet after 400,000 of them the richest 1% hold about a quarter of everything and most people are a speck. At the end of the loop everything is shared out again, the only move that brings the first page back.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "media": "sketches/feira/feira.gif",
+      "tags": ["generative", "simulation", "agents", "inequality", "reflexoes"],
+      "tech": ["p5.js"]
     }
   ]
 }
