@@ -274,5 +274,6 @@ function keyPressed() {
   if (key === ' ') {
     seed = Math.floor(Math.random() * 1e6);
     build();
+    if (!isLooping()) redraw();
   }
 }
