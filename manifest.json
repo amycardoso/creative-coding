@@ -21,6 +21,11 @@
       "description": "After Denis Villeneuve's Arrival. The heptapods' circular writing and their way of seeing every moment at once."
     },
     {
+      "slug": "grande-sertao",
+      "title": "Grande Sertão: Veredas",
+      "description": "After João Guimarães Rosa's novel. Three systems from the sertão: rivers that a terrain carves by itself, a crossing that never shows its start or end, and a whirlwind that is only where the field turns."
+    },
+    {
       "slug": "neon",
       "title": "Neon",
       "description": "Strong colours, stadium lights and cyberpunk city signs. Each piece is a system that organises itself: crowds that synchronise, wires that route around each other, pixels sorted by a threshold, an invented script, a reaction whose colour is its own history."
@@ -630,6 +635,39 @@
       "series": "reflexoes",
       "media": "sketches/series/reflexoes/feira/feira.gif",
       "tags": ["generative", "simulation", "agents", "inequality", "reflexoes"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "veredas",
+      "title": "Veredas",
+      "description": "Grande Sertão: Veredas #1. A terrain made of noise and water that only knows how to go downhill: every frame the ground is flooded from the edges so no drop gets stuck (priority-flood), then each cell passes all the rain it received to its steepest neighbour (D8 flow accumulation). Nobody draws a river; the black lines are only where a lot of rain happened to pass, and where the flood had to fill a hollow the water stands still, cut as horizontal lines like a woodcut lagoa. The ground breathes through the loop and the rivers redraw themselves: a tributary is captured, a branch dries, another takes its place.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "series": "grande-sertao",
+      "media": "sketches/series/grande-sertao/veredas/veredas.gif",
+      "tags": ["generative", "simulation", "terrain", "grande-sertao"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "travessia",
+      "title": "Travessia",
+      "description": "Grande Sertão: Veredas #2. A random spanning tree grows over a coarse grid, and walking around it with the tree always on the same hand gives one path that passes through every cell of a finer grid and never crosses itself. The whole labyrinth stays faint, like a track in dust; only a stretch of it is carved, black with a white gouge down the middle, cut at the head while the tail lets go. Head and tail go round at the same speed, so the picture never shows where the crossing began or where it ends, only the middle of it.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "series": "grande-sertao",
+      "media": "sketches/series/grande-sertao/travessia/travessia.gif",
+      "tags": ["generative", "maze", "labyrinth", "grande-sertao"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "redemoinho",
+      "title": "Redemoinho",
+      "description": "Grande Sertão: Veredas #3. Two thousand short tapered ink strokes, each a streamline traced through a vector field on red-earth paper. The field is a slow noise wind that combs the strokes into the grain of a dry pasture, plus a single vortex that turns them around a moving centre and pulls them inwards. The strokes never travel, they only turn as the field under them turns: through the loop a whirlwind is born out of nothing, crosses the pasture, gathers every line around its eye and lets them go again.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "series": "grande-sertao",
+      "media": "sketches/series/grande-sertao/redemoinho/redemoinho.gif",
+      "tags": ["generative", "flow-field", "vector-field", "grande-sertao"],
       "tech": ["p5.js"]
     },
     {
