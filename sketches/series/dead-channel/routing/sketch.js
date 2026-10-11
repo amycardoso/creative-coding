@@ -71,7 +71,8 @@ function route() {
         if (j === tgt) { found = true; break; }
       }
     }
-    if (!found) continue;
+    // an unroutable pair gives its pads back so later nets may use the space
+    if (!found) { used[src] = -1; used[tgt] = -1; continue; }
     const path = [];
     for (let c = tgt; ; c = prev[c]) { path.unshift(c); if (c === src) break; }
     for (const c of path) used[c] = n;
@@ -107,7 +108,7 @@ const px = c => OX + (c % G + 0.5) * CS, py = c => OY + (((c / G) | 0) + 0.5) * 
 function drawPad(p, col, a) {
   noStroke(); fill(col[0], col[1], col[2], a);
   circle(OX + (p[0] + 0.5) * CS, OY + (p[1] + 0.5) * CS, CS * 1.9);
-  fill(BG[0], BG[1], BG[2]); circle(OX + (p[0] + 0.5) * CS, OY + (p[1] + 0.5) * CS, CS * 0.8);
+  fill(BG[0], BG[1], BG[2], a); circle(OX + (p[0] + 0.5) * CS, OY + (p[1] + 0.5) * CS, CS * 0.8);
 }
 
 function renderPhase(t) {

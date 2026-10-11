@@ -13,6 +13,10 @@
     }
     main { display: flex; flex-direction: column; align-items: center; gap: 20px; }
     #canvas-container { box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
+    @media (max-width: 800px) {
+      main, #canvas-container { width: 100%; }
+      #canvas-container canvas { display: block; width: 100% !important; height: auto !important; }
+    }
   </style>
 </head>
 <body>
