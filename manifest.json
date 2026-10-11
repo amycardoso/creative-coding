@@ -1,4 +1,16 @@
 {
+  "series": [
+    {
+      "slug": "handmaids-tale",
+      "title": "The Handmaid's Tale",
+      "description": "After Margaret Atwood's novel. Four systems about control and conformity, each with something that does not follow the rule."
+    },
+    {
+      "slug": "reflexoes",
+      "title": "Reflexões",
+      "description": "Six simple rules whose collective behaviour becomes a question: finitude, the self and the other, memory, climate, polarization and inequality."
+    }
+  ],
   "sketches": [
     {
       "slug": "erosion-of-discourse",
@@ -531,7 +543,7 @@
       "category": "abstract",
       "series": "handmaids-tale",
       "media": "sketches/series/handmaids-tale/maioria/maioria.gif",
-      "tags": ["generative", "cellular-automata", "emergence", "handmaids-tale"],
+      "tags": ["generative", "cellular-automaton", "emergence", "handmaids-tale"],
       "tech": ["p5.js"]
     },
     {
