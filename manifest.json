@@ -28,7 +28,7 @@
     {
       "slug": "dead-channel",
       "title": "Dead Channel",
-      "description": "After William Gibson's Neuromancer: \"The sky above the port was the color of television, tuned to a dead channel.\" Strong neon colours and systems that organise themselves out of noise and signal: wires that route around each other, pixels sorted by a threshold, an excitable facade of signs in an invented script, a virus flooding a maze of ICE, static that freezes into colour."
+      "description": "Strong neon colours and the grain of a TV tuned to a dead channel. Five systems that organise themselves out of noise and signal: wires that route around each other, pixels sorted by a threshold, a facade of signs that light each other up, a virus flooding a maze, static that freezes into colour."
     }
   ],
   "sketches": [
@@ -706,23 +706,23 @@
     {
       "slug": "ice",
       "title": "ICE",
-      "description": "Dead Channel #4, after Gibson's Neuromancer. The ICE is a perfect maze carved by a recursive backtracker around a sealed core. A virus cracks a few random walls and floods the corridors breadth-first from three entry points; colour is how many steps it needed, from yellow at the breach to violet at the end of its run. Time runs out before it reaches the core, and the ICE closes again.",
+      "description": "Dead Channel #4. ICE, intrusion countermeasures: the firewall as a perfect maze carved by a recursive backtracker around a sealed core. A virus cracks a few random walls and floods the corridors breadth-first from three entry points; colour is how many steps it needed, from yellow at the breach to violet at the end of its run. Time runs out before it reaches the core, and the ICE closes again.",
       "date": "2026-10-11",
       "category": "abstract",
       "series": "dead-channel",
       "media": "sketches/series/dead-channel/ice/ice.gif",
-      "tags": ["generative", "maze", "algorithm", "pathfinding", "neuromancer", "dead-channel"],
+      "tags": ["generative", "maze", "algorithm", "pathfinding", "dead-channel"],
       "tech": ["p5.js"]
     },
     {
       "slug": "chiba-sky",
       "title": "Chiba Sky",
-      "description": "Dead Channel #5, after the first line of Neuromancer: \"the sky above the port was the color of television, tuned to a dead channel.\" Each colour channel is an Ising model: pixels prefer to agree with their neighbours while temperature shakes them. Hot, it is dead-channel static; a cold front climbs the screen and the channels freeze into flat neon territories, until the heat returns and melts them back into static.",
+      "description": "Dead Channel #5. A sky the colour of a television tuned to a dead channel. Each colour channel is an Ising model: pixels prefer to agree with their neighbours while temperature shakes them. Hot, it is static; a cold front climbs the screen and the channels freeze into flat neon territories, until the heat returns and melts them back into static.",
       "date": "2026-10-11",
       "category": "abstract",
       "series": "dead-channel",
       "media": "sketches/series/dead-channel/chiba-sky/chiba-sky.gif",
-      "tags": ["generative", "simulation", "ising", "noise", "neuromancer", "dead-channel"],
+      "tags": ["generative", "simulation", "ising", "noise", "dead-channel"],
       "tech": ["p5.js"]
     }
   ]
