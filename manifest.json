@@ -499,6 +499,16 @@
       "media": "sketches/fluxo/fluxo.gif",
       "tags": ["generative", "flow-field", "plotter", "handmaids-tale"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "contida",
+      "title": "Contida",
+      "description": "After Margaret Atwood's The Handmaid's Tale. A Gray-Scott reaction-diffusion system, the chemistry of coral and fingerprints, grows from a few seeds inside a rigid grid of walls. Each colony fills its own cell, but wherever the grid is cracked the pattern finds the gap and gets through. Then the ink drains back into the paper and the seeds start over.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "media": "sketches/contida/contida.gif",
+      "tags": ["generative", "reaction-diffusion", "simulation", "handmaids-tale"],
+      "tech": ["p5.js"]
     }
   ]
 }
