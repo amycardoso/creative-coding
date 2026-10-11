@@ -23,7 +23,7 @@
     {
       "slug": "grande-sertao",
       "title": "Grande Sertão: Veredas",
-      "description": "After João Guimarães Rosa's novel. Four systems from the sertão: rivers that a terrain carves by itself, a crossing that never shows its start or end, a whirlwind that is only where the field turns, and the book's first word growing into everything else."
+      "description": "After João Guimarães Rosa's novel. Three systems from the sertão: rivers that a terrain carves by itself, a crossing that never shows its start or end, and a whirlwind that is only where the field turns."
     }
   ],
   "sketches": [
@@ -663,17 +663,6 @@
       "series": "grande-sertao",
       "media": "sketches/series/grande-sertao/redemoinho/redemoinho.gif",
       "tags": ["generative", "flow-field", "vector-field", "grande-sertao"],
-      "tech": ["p5.js"]
-    },
-    {
-      "slug": "nonada",
-      "title": "Nonada",
-      "description": "Grande Sertão: Veredas #4. The novel opens with one word, \"Nonada\", and here that word seeds a diffusion-limited aggregate. Walkers wander from open ground until they touch the cluster and stick, so the word grows branches like frost or a river delta. Each stuck cell is printed as the next letter along its chain, turned the way the branch grew, so walking outwards along any branch spells n-o-n-a-d-a again and again. The aggregate grows in the order the walkers arrived, holds, and is taken back until only the word is left.",
-      "date": "2026-10-11",
-      "category": "abstract",
-      "series": "grande-sertao",
-      "media": "sketches/series/grande-sertao/nonada/nonada.gif",
-      "tags": ["generative", "typography", "dla", "grande-sertao"],
       "tech": ["p5.js"]
     }
   ]
