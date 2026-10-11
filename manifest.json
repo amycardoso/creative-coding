@@ -695,7 +695,7 @@
     {
       "slug": "neon-signs",
       "title": "Neon Signs",
-      "description": "Neon #3. A facade cut into sign panels by recursive subdivision, every sign written in an invented script: 28 glyphs, each a short walk on a 3x4 grid, chained into words by a tiny Markov model. Each sign lights stroke by stroke, stutters, goes dark and returns with a new word on its own clock.",
+      "description": "Neon #3. A facade cut into sign panels by recursive subdivision, every sign written in an invented script: 28 glyphs, each a short walk on a 3x4 grid, chained into words by a tiny Markov model. Nobody switches the signs: they form an excitable medium (Greenberg–Hastings), where a dark sign lights when a sign it touches is lit and then glows down before it can fire again. Waves of light cross the facade; the rule is deterministic, so the loop is the cycle the facade falls into. Each firing shows a new word.",
       "date": "2026-10-11",
       "category": "abstract",
       "series": "neon",

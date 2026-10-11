@@ -9,16 +9,19 @@
  * each glyph has three favourite successors (a tiny Markov chain), so the
  * same clusters keep coming back and the signs read like a real language.
  *
- * Each sign lives on its own clock: its tubes light up stroke by stroke,
- * hold, stutter, go dark, and the sign comes back with a new word. Signs
- * repeat 1 to 3 times per loop, so the whole facade loops seamlessly.
+ * Nobody switches the signs. They form an excitable medium (Greenberg–
+ * Hastings): a dark sign lights up when a sign it touches is lit, then
+ * glows down through a few steps of afterglow during which it cannot fire
+ * again. Waves of light run across the facade and collide. The rule is
+ * deterministic, so the facade must eventually repeat itself: the loop is
+ * that cycle, found by remembering every state. Each time a sign fires it
+ * shows the next word of its own list.
  *
  * Controls:
  * - Press S to save a PNG
  */
 
 const W = 800, H = 800;
-const LOOP_SECONDS = 16;
 const GLYPHS = 28;
 const BG = [14, 12, 22];
 const PALETTE = [
@@ -26,7 +29,7 @@ const PALETTE = [
   [255, 120, 30], [140, 70, 255], [255, 40, 60],
 ];
 
-let alphabet = [], next = [], signs = [], ground;
+let alphabet = [], next = [], signs = [], cycle = [], ground;
 
 function buildAlphabet() {
   const steps = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, 1]];
@@ -69,14 +72,60 @@ function buildFacade() {
     const pitch = (vertical ? gw : gs) * 1.7, rows = Math.max(1, Math.floor((short - gap * 2) / pitch));
     const len = vertical ? h : w;
     const n = Math.max(1, Math.floor((len - gap * 2) / ((vertical ? gs : gw) + gap)));
-    const cycles = random([1, 2, 2, 3]);
-    const words = [];
-    for (let k = 0; k < cycles; k++) { const lines = []; for (let r = 0; r < rows; r++) lines.push(word(n)); words.push(lines); }
     signs.push({
-      x, y, w, h, vertical, gs, gw, gap, n, rows, pitch, cycles, words,
-      phase: random(), col: random(PALETTE), inv: random() < 0.3,
-      sw: Math.max(2, gs * 0.09), flick: random(1000),
+      x, y, w, h, raw: [x0, y0, w0, h0], vertical, gs, gw, gap, n, rows, pitch,
+      col: random(PALETTE), inv: random() < 0.3, sw: Math.max(2, gs * 0.09),
+      rest: 3 + (random(4) | 0),              // refractory steps after firing
     });
+  }
+}
+
+// neighbours: panels whose rectangles share a stretch of border
+function linkSigns() {
+  const touch = (a, b) => {
+    const [ax, ay, aw, ah] = a.raw, [bx, by, bw, bh] = b.raw, e = 0.5;
+    const ovX = Math.min(ax + aw, bx + bw) - Math.max(ax, bx), ovY = Math.min(ay + ah, by + bh) - Math.max(ay, by);
+    return (ovY > 10 && (Math.abs(ax + aw - bx) < e || Math.abs(bx + bw - ax) < e))
+        || (ovX > 10 && (Math.abs(ay + ah - by) < e || Math.abs(by + bh - ay) < e));
+  };
+  for (const a of signs) a.nb = signs.map((b, j) => (a !== b && touch(a, b)) ? j : -1).filter(j => j >= 0);
+}
+
+// Greenberg–Hastings excitable medium on the facade graph: 0 = dark, 1 = firing, 2..rest+1 = afterglow.
+// A dark sign fires when a neighbour is firing. The rule is deterministic, so the facade must fall into a
+// cycle; the loop is that cycle, found by remembering every state.
+function simulate() {
+  for (let attempt = 0; ; attempt++) {
+    let st = signs.map(() => random() < 0.3 ? 1 : (random() < 0.5 ? 0 : 2 + (random(3) | 0)));
+    const step = a => a.map((v, i) => {
+      if (v === 0) return signs[i].nb.some(j => a[j] === 1) ? 1 : 0;
+      return v >= signs[i].rest + 1 ? 0 : v + 1;
+    });
+    const seen = new Map(), hist = [];
+    for (let k = 0; k < 4000; k++) {
+      const key = st.join(',');
+      if (seen.has(key)) {
+        const cyc = hist.slice(seen.get(key));
+        const lit = new Set(); cyc.forEach(a => a.forEach((v, i) => { if (v === 1) lit.add(i); }));
+        // keep a cycle long enough to read but short enough to loop, in which most of the facade takes part
+        if (cyc.length >= 24 && cyc.length <= 72 && lit.size > signs.length * 0.7) { cycle = cyc; return; }
+        break;
+      }
+      seen.set(key, k); hist.push(st); st = step(st);
+    }
+  }
+}
+
+// each firing of a sign shows the next word of its own list
+function assignWords() {
+  for (let i = 0; i < signs.length; i++) {
+    const s = signs[i]; s.words = []; s.wordAt = [];
+    // the word shown at step k is the one from its latest firing (wrapping around the cycle)
+    const fires = cycle.map(a => a[i] === 1);
+    const nFire = Math.max(1, fires.filter(Boolean).length);
+    for (let f = 0; f < nFire; f++) { const lines = []; for (let r = 0; r < s.rows; r++) lines.push(word(s.n)); s.words.push(lines); }
+    let cur = nFire - 1;
+    for (let k = 0; k < cycle.length; k++) { if (fires[k]) cur = (cur + 1) % nFire; s.wordAt.push(cur); }
   }
 }
 
@@ -91,8 +140,8 @@ function buildGround() {
   ground.updatePixels();
 }
 
-// draw a sign's lines of text, but only the first `amount` (0..1) of its total tube length
-function drawWord(s, lines, amount, ink) {
+// draw a sign's lines of text
+function drawWord(s, lines, ink) {
   const total = s.n * ((s.vertical ? s.gs : s.gw) + s.gap) - s.gap;
   const block = (s.rows - 1) * s.pitch;
   const segs = [];
@@ -103,44 +152,38 @@ function drawWord(s, lines, amount, ink) {
     for (const st of alphabet[g]) for (let k = 1; k < st.length; k++) {
       const ax = gx + st[k - 1][0] / 2 * s.gw, ay = gy + st[k - 1][1] / 3 * s.gs;
       const bx = gx + st[k][0] / 2 * s.gw, by = gy + st[k][1] / 3 * s.gs;
-      segs.push([ax, ay, bx, by, Math.hypot(bx - ax, by - ay)]);
+      segs.push([ax, ay, bx, by]);
     }
   }));
-  let budget = amount * segs.reduce((a, q) => a + q[4], 0);
   stroke(ink); strokeWeight(s.sw); strokeCap(ROUND); noFill();
-  for (const [ax, ay, bx, by, l] of segs) {
-    if (budget <= 0) break;
-    const f = Math.min(1, budget / l);
-    line(ax, ay, ax + (bx - ax) * f, ay + (by - ay) * f);
-    budget -= l;
-  }
+  for (const [ax, ay, bx, by] of segs) line(ax, ay, bx, by);
 }
 
 function renderPhase(t) {
   image(ground, 0, 0);
-  for (const s of signs) {
-    const u = (t * s.cycles + s.phase) % 1;
-    const k = Math.floor(((t * s.cycles + s.phase) % s.cycles));
-    const c = s.col;
-    // stutter: a few quick drop-outs just before the sign dies
-    const stutter = u > 0.8 && u < 0.88 && noise(s.flick, u * 60) < 0.45;
-    const on = u < 0.88 && !stutter;
-    const written = constrain(u / 0.25, 0, 1);
-    const lit = color(...c), dim = color(c[0] * 0.28, c[1] * 0.28, c[2] * 0.28);
-    if (s.inv && on && written >= 1) {
-      noStroke(); fill(lit); rect(s.x, s.y, s.w, s.h, 4);
-      drawWord(s, s.words[k], 1, color(...BG));
+  const k = Math.min(cycle.length - 1, Math.floor(t * cycle.length));
+  const state = cycle[k];
+  for (let i = 0; i < signs.length; i++) {
+    const s = signs[i], v = state[i], c = s.col;
+    const lines = s.words[s.wordAt[k]];
+    const dim = color(c[0] * 0.28, c[1] * 0.28, c[2] * 0.28);
+    // firing = full light; afterglow fades step by step back to dark tubes
+    const glow = v === 1 ? 1 : v > 1 ? 1 - (v - 1) / (s.rest + 1) : 0;
+    const ink = lerpColor(dim, color(...c), glow);
+    if (s.inv && v === 1) {
+      noStroke(); fill(ink); rect(s.x, s.y, s.w, s.h, 4);
+      drawWord(s, lines, color(...BG));
     } else {
-      noFill(); stroke(on ? lit : dim); strokeWeight(3); rect(s.x, s.y, s.w, s.h, 6);
-      drawWord(s, s.words[k], 1, dim);                   // unlit tubes stay faintly visible
-      if (on) drawWord(s, s.words[k], written, lit);
+      noFill(); stroke(ink); strokeWeight(3); rect(s.x, s.y, s.w, s.h, 6);
+      drawWord(s, lines, ink);
     }
   }
 }
 
 // ---------- timeline (frame-driven; deterministic for capture) ----------
 const FPS = 30;
-const LOOP_FRAMES = LOOP_SECONDS * FPS;
+const STEP_FRAMES = 9;           // frames per step of the rule
+let LOOP_FRAMES;                 // the cycle length decides the loop
 let frame = 0;
 
 function setup() {
@@ -152,6 +195,10 @@ function setup() {
   buildGround();
   buildAlphabet();
   buildFacade();
+  linkSigns();
+  simulate();
+  assignWords();
+  LOOP_FRAMES = cycle.length * STEP_FRAMES;
 
   // Inert during normal viewing; the capture driver calls this per frame.
   window.__captureFrame = async (i, n) => {
