@@ -1,7 +1,7 @@
 /**
  * Routing
  *
- * Neon #1: wires that have to get out of each other's way.
+ * Dead Channel #1: wires that have to get out of each other's way.
  *
  * A board with 190 pairs of pads. A maze router (Lee's algorithm: a
  * breadth-first wave that floods out from one pad until it touches the

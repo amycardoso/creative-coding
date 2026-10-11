@@ -1,7 +1,7 @@
 /**
  * Chiba Sky
  *
- * Neon #6: after the first line of William Gibson's Neuromancer, "The sky
+ * Dead Channel #5: after the first line of William Gibson's Neuromancer, "The sky
  * above the port was the color of television, tuned to a dead channel."
  *
  * Each colour channel of the screen is an Ising model: every pixel is on

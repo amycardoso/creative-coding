@@ -26,9 +26,9 @@
       "description": "After João Guimarães Rosa's novel. Three systems from the sertão: rivers that a terrain carves by itself, a crossing that never shows its start or end, and a whirlwind that is only where the field turns."
     },
     {
-      "slug": "neon",
-      "title": "Neon",
-      "description": "Strong colours, cyberpunk city signs and Gibson's Neuromancer. Each piece is a system that organises itself: wires that route around each other, pixels sorted by a threshold, an invented script, a reaction whose colour is its own history, a virus flooding a maze of ICE, static that freezes into colour."
+      "slug": "dead-channel",
+      "title": "Dead Channel",
+      "description": "After William Gibson's Neuromancer: \"The sky above the port was the color of television, tuned to a dead channel.\" Strong neon colours and systems that organise themselves out of noise and signal: wires that route around each other, pixels sorted by a threshold, an excitable facade of signs in an invented script, a virus flooding a maze of ICE, static that freezes into colour."
     }
   ],
   "sketches": [
@@ -673,67 +673,56 @@
     {
       "slug": "routing",
       "title": "Routing",
-      "description": "Neon #1. 190 pairs of pads routed one at a time by Lee's maze router: a breadth-first wave floods out from one pad until it touches the other. Each wire is the shortest path around every wire laid before it, so the first run almost straight and the last snake around the city the others built. Colour is the detour, from cyan (straight) to pink (more than twice as long).",
+      "description": "Dead Channel #1. 190 pairs of pads routed one at a time by Lee's maze router: a breadth-first wave floods out from one pad until it touches the other. Each wire is the shortest path around every wire laid before it, so the first run almost straight and the last snake around the city the others built. Colour is the detour, from cyan (straight) to pink (more than twice as long).",
       "date": "2026-10-11",
       "category": "abstract",
-      "series": "neon",
-      "media": "sketches/series/neon/routing/routing.gif",
-      "tags": ["generative", "algorithm", "pathfinding", "circuit", "neon"],
+      "series": "dead-channel",
+      "media": "sketches/series/dead-channel/routing/routing.gif",
+      "tags": ["generative", "algorithm", "pathfinding", "circuit", "dead-channel"],
       "tech": ["p5.js"]
     },
     {
       "slug": "pixel-sort",
       "title": "Pixel Sort",
-      "description": "Neon #2. A warped noise field posterised into seven neon inks, then pixel-sorted column by column: only runs brighter than a threshold get reordered from dark to light. The threshold breathes over the loop, so the rule takes over and lets go, and the light drains down the screen in streaks.",
+      "description": "Dead Channel #2. A warped noise field posterised into seven neon inks, then pixel-sorted column by column: only runs brighter than a threshold get reordered from dark to light. The threshold breathes over the loop, so the rule takes over and lets go, and the light drains down the screen in streaks.",
       "date": "2026-10-11",
       "category": "abstract",
-      "series": "neon",
-      "media": "sketches/series/neon/pixel-sort/pixel-sort.gif",
-      "tags": ["generative", "glitch", "sorting", "noise", "neon"],
+      "series": "dead-channel",
+      "media": "sketches/series/dead-channel/pixel-sort/pixel-sort.gif",
+      "tags": ["generative", "glitch", "sorting", "noise", "dead-channel"],
       "tech": ["p5.js"]
     },
     {
       "slug": "neon-signs",
       "title": "Neon Signs",
-      "description": "Neon #3. A facade cut into sign panels by recursive subdivision, every sign written in an invented script: 28 glyphs, each a short walk on a 3x4 grid, chained into words by a tiny Markov model. Nobody switches the signs: they form an excitable medium (Greenberg–Hastings), where a dark sign lights when a sign it touches is lit and then glows down before it can fire again. Waves of light cross the facade; the rule is deterministic, so the loop is the cycle the facade falls into. Each firing shows a new word.",
+      "description": "Dead Channel #3. A facade cut into sign panels by recursive subdivision, every sign written in an invented script: 28 glyphs, each a short walk on a 3x4 grid, chained into words by a tiny Markov model. Nobody switches the signs: they form an excitable medium (Greenberg–Hastings), where a dark sign lights when a sign it touches is lit and then glows down before it can fire again. Waves of light cross the facade; the rule is deterministic, so the loop is the cycle the facade falls into. Each firing shows a new word.",
       "date": "2026-10-11",
       "category": "abstract",
-      "series": "neon",
-      "media": "sketches/series/neon/neon-signs/neon-signs.gif",
-      "tags": ["generative", "typography", "procedural", "markov", "neon"],
-      "tech": ["p5.js"]
-    },
-    {
-      "slug": "spheres",
-      "title": "Spheres",
-      "description": "Neon #4. Gray–Scott reaction–diffusion seeded with seven drops. Every cell is coloured by the moment the reaction first reached it, so the rainbow bands are growth fronts frozen in place: the colour is the pattern's own history. At the end the lights go out in the order they came on.",
-      "date": "2026-10-11",
-      "category": "abstract",
-      "series": "neon",
-      "media": "sketches/series/neon/spheres/spheres.gif",
-      "tags": ["generative", "simulation", "reaction-diffusion", "neon"],
+      "series": "dead-channel",
+      "media": "sketches/series/dead-channel/neon-signs/neon-signs.gif",
+      "tags": ["generative", "typography", "procedural", "markov", "dead-channel"],
       "tech": ["p5.js"]
     },
     {
       "slug": "ice",
       "title": "ICE",
-      "description": "Neon #5, after Gibson's Neuromancer. The ICE is a perfect maze carved by a recursive backtracker around a sealed core. A virus cracks a few random walls and floods the corridors breadth-first from three entry points; colour is how many steps it needed, from yellow at the breach to violet at the end of its run. Time runs out before it reaches the core, and the ICE closes again.",
+      "description": "Dead Channel #4, after Gibson's Neuromancer. The ICE is a perfect maze carved by a recursive backtracker around a sealed core. A virus cracks a few random walls and floods the corridors breadth-first from three entry points; colour is how many steps it needed, from yellow at the breach to violet at the end of its run. Time runs out before it reaches the core, and the ICE closes again.",
       "date": "2026-10-11",
       "category": "abstract",
-      "series": "neon",
-      "media": "sketches/series/neon/ice/ice.gif",
-      "tags": ["generative", "maze", "algorithm", "pathfinding", "neuromancer", "neon"],
+      "series": "dead-channel",
+      "media": "sketches/series/dead-channel/ice/ice.gif",
+      "tags": ["generative", "maze", "algorithm", "pathfinding", "neuromancer", "dead-channel"],
       "tech": ["p5.js"]
     },
     {
       "slug": "chiba-sky",
       "title": "Chiba Sky",
-      "description": "Neon #6, after the first line of Neuromancer: \"the sky above the port was the color of television, tuned to a dead channel.\" Each colour channel is an Ising model: pixels prefer to agree with their neighbours while temperature shakes them. Hot, it is dead-channel static; a cold front climbs the screen and the channels freeze into flat neon territories, until the heat returns and melts them back into static.",
+      "description": "Dead Channel #5, after the first line of Neuromancer: \"the sky above the port was the color of television, tuned to a dead channel.\" Each colour channel is an Ising model: pixels prefer to agree with their neighbours while temperature shakes them. Hot, it is dead-channel static; a cold front climbs the screen and the channels freeze into flat neon territories, until the heat returns and melts them back into static.",
       "date": "2026-10-11",
       "category": "abstract",
-      "series": "neon",
-      "media": "sketches/series/neon/chiba-sky/chiba-sky.gif",
-      "tags": ["generative", "simulation", "ising", "noise", "neuromancer", "neon"],
+      "series": "dead-channel",
+      "media": "sketches/series/dead-channel/chiba-sky/chiba-sky.gif",
+      "tags": ["generative", "simulation", "ising", "noise", "neuromancer", "dead-channel"],
       "tech": ["p5.js"]
     }
   ]

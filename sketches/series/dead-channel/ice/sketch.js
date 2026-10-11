@@ -1,7 +1,7 @@
 /**
  * ICE
  *
- * Neon #5: after William Gibson's Neuromancer, where data is guarded by ICE,
+ * Dead Channel #4: after William Gibson's Neuromancer, where data is guarded by ICE,
  * intrusion countermeasures electronics.
  *
  * The ICE is a perfect maze carved by a recursive backtracker around a
