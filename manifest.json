@@ -509,6 +509,16 @@
       "media": "sketches/contida/contida.gif",
       "tags": ["generative", "reaction-diffusion", "simulation", "handmaids-tale"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "nomes",
+      "title": "Nomes",
+      "description": "After Margaret Atwood's The Handmaid's Tale, where women lose their names. A typed page of women's names is swept by a noise-shaped erasure front that turns every letter into the same mark, a red cloak with a white wedge where a face would be. A handful of names never give way, and once the page is uniform the names come back, spreading outward from the ones that held.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "media": "sketches/nomes/nomes.gif",
+      "tags": ["generative", "typography", "noise", "handmaids-tale"],
+      "tech": ["p5.js"]
     }
   ]
 }
