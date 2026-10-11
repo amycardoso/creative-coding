@@ -673,7 +673,7 @@
     {
       "slug": "wristbands",
       "title": "Wristbands",
-      "description": "Neon #1. A stadium full of LED wristbands, each one a Kuramoto oscillator that only watches its nearest neighbours. Nobody sends a cue: the show opens as scattered confetti, neighbours lock into patches, and the patches become waves and spirals sweeping the bowl. Then the lights go out row by row.",
+      "description": "Neon #1. The crowd seen from the stage, every person wearing an LED wristband that is a Kuramoto oscillator: it only watches the people within arm's reach. Nobody sends a cue: the show opens as scattered confetti, neighbours lock into patches, and the patches become waves rolling across the field. Then the lights go out from the back to the front.",
       "date": "2026-10-11",
       "category": "abstract",
       "series": "neon",

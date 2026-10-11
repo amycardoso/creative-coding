@@ -3,14 +3,14 @@
  *
  * Neon #1: a crowd with LED wristbands.
  *
- * Every seat in a stadium bowl holds a wristband that cycles through the
- * colours at its own natural speed. Each one only watches its nearest
- * neighbours and nudges its phase towards theirs (Kuramoto oscillators with
- * local coupling). Nobody sends a cue: the show opens as scattered confetti,
- * neighbours lock together into patches, and the patches organise into
- * waves and spirals that sweep around the bowl.
+ * The crowd seen from the stage, in perspective. Every person wears a
+ * wristband that cycles through the colours at its own natural speed. Each
+ * one only watches the people within arm's reach and nudges its phase
+ * towards theirs (Kuramoto oscillators with local coupling). Nobody sends a
+ * cue: the show opens as scattered confetti, neighbours lock together into
+ * patches, and the patches organise into waves that roll across the field.
  *
- * At the end of the loop the lights go out row by row, and the next song
+ * At the end of the loop the lights go out from the back to the front, and the next song
  * starts again from scattered phases.
  *
  * The simulation runs once in setup and stores one snapshot per frame, so
@@ -21,7 +21,8 @@
  */
 
 const W = 800, H = 800;
-const CX = 400, CY = 400, R0 = 118, R1 = 368, RINGS = 46, SQ = 0.82;
+const HZ = 10, FOCAL = 400, CAM_H = 6;     // camera on the stage, looking down over the crowd
+const Z_NEAR = 3.2, Z_FAR = 44, GAP = 0.45, REACH = 0.75;
 const K = 1.6, DT = 0.08, SUBSTEPS = 3;
 const LOOP_SECONDS = 14;
 const SHOW = 0.88;               // share of the loop the crowd is lit
@@ -33,29 +34,41 @@ const PALETTE = [
 
 let seats = [], snaps = [], ground;
 
+const project = (x, z) => [W / 2 + FOCAL * x / z, HZ + FOCAL * CAM_H / z];
+
 function buildSeats() {
-  const rings = [];
-  for (let r = 0; r < RINGS; r++) {
-    const rad = lerp(R0, R1, r / (RINGS - 1)), n = Math.floor(TWO_PI * rad / 7.2);
-    const ring = [];
-    for (let k = 0; k < n; k++) {
-      ring.push(seats.length);
-      seats.push({ r, k, n, rad, a: k / n * TWO_PI, w: 1 + randomGaussian() * 0.04, off: 0 });
+  // people stand on a ground plane in loose rows; only those inside the camera's view are kept
+  for (let z = Z_NEAR; z < Z_FAR; z += GAP) {
+    const half = (W / 2 + 20) * z / FOCAL;
+    for (let x = -half; x < half; x += GAP) {
+      const px = x + random(-0.15, 0.15), pz = z + random(-0.15, 0.15);
+      seats.push({ x: px, z: pz, w: 1 + randomGaussian() * 0.04, off: 0 });
     }
-    rings.push(ring);
   }
-  // neighbours: same row ±1, ±2 and the closest seats in the rows in front and behind
+  // neighbours: everyone within arm's reach on the ground plane (spatial hash)
+  const cell = new Map(), key = (i, j) => i * 100003 + j;
+  seats.forEach((s, n) => {
+    const k = key(Math.floor(s.x / REACH), Math.floor(s.z / REACH));
+    if (!cell.has(k)) cell.set(k, []);
+    cell.get(k).push(n);
+  });
   for (const s of seats) {
     s.nb = [];
-    for (const d of [-2, -1, 1, 2]) s.nb.push(rings[s.r][(s.k + d + s.n) % s.n]);
-    for (const dr of [-1, 1]) {
-      const rr = rings[s.r + dr]; if (!rr) continue;
-      const kk = Math.round(s.k / s.n * rr.length);
-      for (const d of [-1, 0, 1]) s.nb.push(rr[(kk + d + rr.length) % rr.length]);
+    const ci = Math.floor(s.x / REACH), cj = Math.floor(s.z / REACH);
+    for (let di = -1; di <= 1; di++) for (let dj = -1; dj <= 1; dj++) {
+      for (const n of cell.get(key(ci + di, cj + dj)) || []) {
+        const o = seats[n];
+        if (o !== s && (o.x - s.x) ** 2 + (o.z - s.z) ** 2 < REACH * REACH) s.nb.push(n);
+      }
     }
-    // lights-out order: back rows first, a little ragged
-    s.off = SHOW + (1 - SHOW - 0.02) * constrain((RINGS - 1 - s.r) / RINGS * 0.85 + random(0.15), 0, 1);
+    // lights-out order: from the back of the crowd to the front, a little ragged
+    s.off = SHOW + (1 - SHOW - 0.02) * constrain((Z_FAR - s.z) / Z_FAR * 0.85 + random(0.15), 0, 1);
   }
+  // draw far to near: sort, then remap neighbour indices to the new order
+  const order = seats.map((s, i) => i).sort((a, b) => seats[b].z - seats[a].z);
+  const where = new Int32Array(seats.length); order.forEach((o, i) => where[o] = i);
+  seats = order.map(o => seats[o]);
+  for (const s of seats) s.nb = s.nb.map(n => where[n]);
 }
 
 function simulate() {
@@ -97,14 +110,11 @@ function renderPhase(t) {
   const snap = snaps[Math.min(last, Math.floor(t / SHOW * last))];
   noStroke();
   for (let i = 0; i < seats.length; i++) {
-    const s = seats[i];
-    const x = CX + Math.cos(s.a) * s.rad, y = CY + Math.sin(s.a) * s.rad * SQ;
-    const sz = 3.4 + s.r * 0.04;
+    const s = seats[i], [x, y] = project(s.x, s.z), sz = FOCAL * 0.2 / s.z;
     if (t > s.off) fill(34, 30, 44);        // band switched off
     else { const c = PALETTE[snap[i]]; fill(c[0], c[1], c[2]); }
-    push(); translate(x, y); rotate(s.a + HALF_PI); rect(-sz * 0.7, -sz * 0.45, sz * 1.4, sz * 0.9, 1); pop();
+    rect(x - sz * 0.8, y - sz * 0.35, sz * 1.6, sz * 0.7, sz * 0.2);
   }
-  fill(30, 28, 38); rect(CX - 50, CY - 18, 100, 36, 2);   // stage
 }
 
 // ---------- timeline (frame-driven; deterministic for capture) ----------
