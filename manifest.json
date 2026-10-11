@@ -24,6 +24,11 @@
       "slug": "grande-sertao",
       "title": "Grande Sertão: Veredas",
       "description": "After João Guimarães Rosa's novel. Three systems from the sertão: rivers that a terrain carves by itself, a crossing that never shows its start or end, and a whirlwind that is only where the field turns."
+    },
+    {
+      "slug": "dead-channel",
+      "title": "Dead Channel",
+      "description": "Strong neon colours and the grain of a TV tuned to a dead channel. Five systems that organise themselves out of noise and signal: wires that route around each other, pixels sorted by a threshold, a facade of signs that light each other up, a virus flooding a maze, static that freezes into colour."
     }
   ],
   "sketches": [
@@ -663,6 +668,61 @@
       "series": "grande-sertao",
       "media": "sketches/series/grande-sertao/redemoinho/redemoinho.gif",
       "tags": ["generative", "flow-field", "vector-field", "grande-sertao"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "routing",
+      "title": "Routing",
+      "description": "Dead Channel #1. 190 pairs of pads routed one at a time by Lee's maze router: a breadth-first wave floods out from one pad until it touches the other. Each wire is the shortest path around every wire laid before it, so the first run almost straight and the last snake around the city the others built. Colour is the detour, from cyan (straight) to pink (more than twice as long).",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "series": "dead-channel",
+      "media": "sketches/series/dead-channel/routing/routing.gif",
+      "tags": ["generative", "algorithm", "pathfinding", "circuit", "dead-channel"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "pixel-sort",
+      "title": "Pixel Sort",
+      "description": "Dead Channel #2. A warped noise field posterised into seven neon inks, then pixel-sorted column by column: only runs brighter than a threshold get reordered from dark to light. The threshold breathes over the loop, so the rule takes over and lets go, and the light drains down the screen in streaks.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "series": "dead-channel",
+      "media": "sketches/series/dead-channel/pixel-sort/pixel-sort.gif",
+      "tags": ["generative", "glitch", "sorting", "noise", "dead-channel"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "neon-signs",
+      "title": "Neon Signs",
+      "description": "Dead Channel #3. A facade cut into sign panels by recursive subdivision, every sign written in an invented script: 28 glyphs, each a short walk on a 3x4 grid, chained into words by a tiny Markov model. Nobody switches the signs: they form an excitable medium (Greenberg–Hastings), where a dark sign lights when a sign it touches is lit and then glows down before it can fire again. Waves of light cross the facade; the rule is deterministic, so the loop is the cycle the facade falls into. Each firing shows a new word.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "series": "dead-channel",
+      "media": "sketches/series/dead-channel/neon-signs/neon-signs.gif",
+      "tags": ["generative", "typography", "procedural", "markov", "dead-channel"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "ice",
+      "title": "ICE",
+      "description": "Dead Channel #4. ICE, intrusion countermeasures: the firewall as a perfect maze carved by a recursive backtracker around a sealed core. A virus cracks a few random walls and floods the corridors breadth-first from three entry points; colour is how many steps it needed, from yellow at the breach to violet at the end of its run. Time runs out before it reaches the core, and the ICE closes again.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "series": "dead-channel",
+      "media": "sketches/series/dead-channel/ice/ice.gif",
+      "tags": ["generative", "maze", "algorithm", "pathfinding", "dead-channel"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "chiba-sky",
+      "title": "Chiba Sky",
+      "description": "Dead Channel #5. A sky the colour of a television tuned to a dead channel. Each colour channel is an Ising model: pixels prefer to agree with their neighbours while temperature shakes them. Hot, it is static; a cold front climbs the screen and the channels freeze into flat neon territories, until the heat returns and melts them back into static.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "series": "dead-channel",
+      "media": "sketches/series/dead-channel/chiba-sky/chiba-sky.gif",
+      "tags": ["generative", "simulation", "ising", "noise", "dead-channel"],
       "tech": ["p5.js"]
     }
   ]
