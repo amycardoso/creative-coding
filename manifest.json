@@ -19,6 +19,11 @@
       "slug": "arrival",
       "title": "Arrival",
       "description": "After Denis Villeneuve's Arrival. The heptapods' circular writing and their way of seeing every moment at once."
+    },
+    {
+      "slug": "neon",
+      "title": "Neon",
+      "description": "Strong colours, stadium lights and cyberpunk city signs. Each piece is a system that organises itself: crowds that synchronise, wires that route around each other, pixels sorted by a threshold, an invented script, a reaction whose colour is its own history."
     }
   ],
   "sketches": [
@@ -625,6 +630,61 @@
       "series": "reflexoes",
       "media": "sketches/series/reflexoes/feira/feira.gif",
       "tags": ["generative", "simulation", "agents", "inequality", "reflexoes"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "wristbands",
+      "title": "Wristbands",
+      "description": "Neon #1. A stadium full of LED wristbands, each one a Kuramoto oscillator that only watches its nearest neighbours. Nobody sends a cue: the show opens as scattered confetti, neighbours lock into patches, and the patches become waves and spirals sweeping the bowl. Then the lights go out row by row.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "series": "neon",
+      "media": "sketches/series/neon/wristbands/wristbands.gif",
+      "tags": ["generative", "simulation", "oscillators", "emergence", "neon"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "routing",
+      "title": "Routing",
+      "description": "Neon #2. 190 pairs of pads routed one at a time by Lee's maze router: a breadth-first wave floods out from one pad until it touches the other. Each wire is the shortest path around every wire laid before it, so the first run almost straight and the last snake around the city the others built. Colour is the detour, from cyan (straight) to pink (more than twice as long).",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "series": "neon",
+      "media": "sketches/series/neon/routing/routing.gif",
+      "tags": ["generative", "algorithm", "pathfinding", "circuit", "neon"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "pixel-sort",
+      "title": "Pixel Sort",
+      "description": "Neon #3. A warped noise field posterised into seven neon inks, then pixel-sorted column by column: only runs brighter than a threshold get reordered from dark to light. The threshold breathes over the loop, so the rule takes over and lets go, and the light drains down the screen in streaks.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "series": "neon",
+      "media": "sketches/series/neon/pixel-sort/pixel-sort.gif",
+      "tags": ["generative", "glitch", "sorting", "noise", "neon"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "neon-signs",
+      "title": "Neon Signs",
+      "description": "Neon #4. A facade cut into sign panels by recursive subdivision, every sign written in an invented script: 28 glyphs, each a short walk on a 3x4 grid, chained into words by a tiny Markov model. Each sign lights stroke by stroke, stutters, goes dark and returns with a new word on its own clock.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "series": "neon",
+      "media": "sketches/series/neon/neon-signs/neon-signs.gif",
+      "tags": ["generative", "typography", "procedural", "markov", "neon"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "spheres",
+      "title": "Spheres",
+      "description": "Neon #5. Gray–Scott reaction–diffusion seeded with seven drops. Every cell is coloured by the moment the reaction first reached it, so the rainbow bands are growth fronts frozen in place: the colour is the pattern's own history. At the end the lights go out in the order they came on.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "series": "neon",
+      "media": "sketches/series/neon/spheres/spheres.gif",
+      "tags": ["generative", "simulation", "reaction-diffusion", "neon"],
       "tech": ["p5.js"]
     }
   ]

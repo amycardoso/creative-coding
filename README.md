@@ -17,6 +17,7 @@ sketches/
     ├── arrival/          # Logograma, Paralaxe Temporal
     ├── handmaids-tale/   # Fluxo, Contida, Nomes, Maioria
     ├── interstellar/     # Time Dilation, Endurance, Gargantua
+    ├── neon/             # Wristbands, Routing, Pixel Sort, Neon Signs, Spheres
     └── reflexoes/        # Pilha de Areia, Mitose, Cópia da Cópia, Queimada, Bolhas, Feira
 ```
 
