@@ -489,6 +489,16 @@
       "media": "sketches/azulejaria/azulejaria.gif",
       "tags": ["generative", "tiles", "pattern", "brasilidade"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "fluxo",
+      "title": "Fluxo",
+      "description": "After Margaret Atwood's The Handmaid's Tale. Thousands of red ink lines are traced through one flow field that carries almost everything to the right. A single dark line walks the other way, and the field bends around it: the lines it passes are pushed apart and open a wake that closes again once it has gone.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "media": "sketches/fluxo/fluxo.gif",
+      "tags": ["generative", "flow-field", "plotter", "handmaids-tale"],
+      "tech": ["p5.js"]
     }
   ]
 }
