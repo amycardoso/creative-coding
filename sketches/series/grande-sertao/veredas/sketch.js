@@ -12,9 +12,11 @@
  * veredas of the Urucuia. Where the flood had to fill a hollow before
  * spilling, the water stands still and is cut as horizontal lines: a lagoa.
  *
- * The ground breathes slowly through the loop, and the rivers redraw
+ * A thin layer of the ground breathes slowly through the loop, and the rivers redraw
  * themselves: tributaries are captured, a branch dries up, another takes its
- * place. The sertão is everywhere, and it is never the same twice.
+ * place. Each frame averages the water of a few neighbouring moments, so a
+ * river that moves to the next valley fades across instead of snapping.
+ * The sertão is everywhere, and it is never the same twice.
  *
  * Controls:
  * - Press S to save a PNG
@@ -24,9 +26,10 @@
 const W = 800, H = 800;
 const N = 200;                   // grid cells per side
 const M = 50, CS = (W - 2 * M) / N;
-const LOOP_SECONDS = 16;
-const DRIFT = 0.55;              // how far the terrain wanders in noise space
-const RIVER = 28;                // cells of rain before a line is drawn
+const LOOP_SECONDS = 20;
+const DRIFT = 0.5;               // how far the breathing layer wanders in noise space
+const BREATH = 0.35;             // share of the ground that breathes
+const RIVER = 40;                // cells of rain before a line is drawn
 const LAKE = 0.003;              // flood depth that reads as standing water
 
 const PAPER = [238, 228, 205];
@@ -54,9 +57,22 @@ function makePaper() {
   paperImg.updatePixels();
 }
 
+// Faint gouge hatching where the resting ground crosses a contour. It is cut
+// once into the paper so the moving water is the only thing that changes.
+function hatchPaper() {
+  terrainAt(7, 11, 0);
+  paperImg.stroke(INK[0], INK[1], INK[2], 30);
+  paperImg.strokeWeight(0.8);
+  for (let y = 1; y < N; y += 3) for (let x = 0; x < N - 2; x += 2) {
+    const c = (h[y * N + x] * 34) % 1;
+    if (c < 0.2) paperImg.line(M + x * CS, M + y * CS, M + (x + 2) * CS, M + y * CS + 0.6);
+  }
+}
+
 // ---------- hydrology (pure, per phase) ----------
 const h = new Float64Array(N * N);
-const h0 = new Float64Array(N * N);   // ground before flooding
+const h0 = new Float64Array(N * N);
+const ground = new Float64Array(N * N);   // ground before flooding
 const acc = new Float32Array(N * N);
 const down = new Int32Array(N * N);
 const done = new Uint8Array(N * N);
@@ -64,10 +80,15 @@ const order = new Int32Array(N * N);
 
 function terrain(t) {
   const a = TWO_PI * t;
-  const z1 = 3 + DRIFT * Math.cos(a), z2 = 7 + DRIFT * Math.sin(a);
+  terrainAt(7 + DRIFT * Math.cos(a), 11 + DRIFT * Math.sin(a), BREATH);
+}
+
+// A fixed ground plus a thin layer that breathes on a circle in noise space,
+// so most valleys stay put and only the undecided ones change their minds.
+function terrainAt(z1, z2, k) {
   for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
-    const u = x * 0.012, v = y * 0.012;
-    h[y * N + x] = 0.65 * fbm(u, v, z1) + 0.35 * fbm(u + 40, v + 40, z2) + y * 0.0028;
+    const u = x * 0.012, v = y * 0.012, i = y * N + x;
+    h[i] = (1 - k) * ground[i] + k * (0.5 * fbm(u + 40, v + 40, z1) + 0.5 * fbm(u + 80, v, z2)) + y * 0.0028;
   }
   h0.set(h);
 }
@@ -141,42 +162,65 @@ function flow() {
 }
 
 // ---------- drawing ----------
-function renderPhase(t) {
-  terrain(t);
+// Each frame is the average of the water at a few neighbouring moments, so a
+// river that jumps to the next valley fades across instead of snapping.
+// Hydrology per moment is cached; stepping one frame computes one new moment.
+const BLEND = 7;
+const cache = new Map();
+let layer, avg;
+
+function moment(slot) {
+  slot = ((slot % LOOP_FRAMES) + LOOP_FRAMES) % LOOP_FRAMES;
+  if (cache.has(slot)) return cache.get(slot);
+  terrain(slot / LOOP_FRAMES);
   fillPits();
   flow();
-  image(paperImg, 0, 0);
+  const lake = new Uint8Array(N * N);
+  for (let i = 0; i < N * N; i++) lake[i] = h[i] - h0[i] > LAKE ? 1 : 0;
+  const m = { down: down.slice(), acc: acc.slice(), lake };
+  cache.set(slot, m);
+  if (cache.size > BLEND * 3) cache.delete(cache.keys().next().value);
+  return m;
+}
 
-  // faint gouge hatching where the ground crosses a contour
-  stroke(INK[0], INK[1], INK[2], 34);
-  strokeWeight(0.8);
-  for (let y = 1; y < N; y += 3) for (let x = 0; x < N - 2; x += 2) {
-    const c = (h[y * N + x] * 34) % 1;
-    if (c < 0.2) line(M + x * CS, M + y * CS, M + (x + 2) * CS, M + y * CS + 0.6);
-  }
-
+function drawWater(g, { down, acc, lake }) {
   // where the flood filled a hollow the water stands still: a lagoa,
   // cut as horizontal lines the way woodcuts draw water
-  stroke(INK[0], INK[1], INK[2], 225);
-  strokeWeight(1.4);
+  g.stroke(INK[0], INK[1], INK[2]);
+  g.strokeWeight(1.4);
   for (let y = 0; y < N; y += 2) {
     let run = -1;
     for (let x = 0; x <= N; x++) {
-      const wet = x < N && h[y * N + x] - h0[y * N + x] > LAKE;
+      const wet = x < N && lake[y * N + x];
       if (wet && run < 0) run = x;
-      if (!wet && run >= 0) { if (x - run > 1) line(M + run * CS, M + y * CS, M + x * CS, M + y * CS); run = -1; }
+      if (!wet && run >= 0) { if (x - run > 1) g.line(M + run * CS, M + y * CS, M + x * CS, M + y * CS); run = -1; }
     }
   }
-
-  strokeCap(ROUND);
-  stroke(INK[0], INK[1], INK[2], 240);
+  g.strokeCap(ROUND);
   for (let i = 0; i < N * N; i++) {
     const j = down[i];
     if (j < 0 || acc[i] < RIVER) continue;
-    if (h[i] - h0[i] > LAKE && h[j] - h0[j] > LAKE) continue;
-    strokeWeight(Math.min(6.5, 0.6 + 0.1 * Math.sqrt(acc[i] - RIVER)));
-    line(M + (i % N) * CS, M + ((i / N) | 0) * CS, M + (j % N) * CS, M + ((j / N) | 0) * CS);
+    if (lake[i] && lake[j]) continue;
+    g.strokeWeight(Math.min(6.5, 0.6 + 0.1 * Math.sqrt(acc[i] - RIVER)));
+    g.line(M + (i % N) * CS, M + ((i / N) | 0) * CS, M + (j % N) * CS, M + ((j / N) | 0) * CS);
   }
+}
+
+function renderPhase(t) {
+  const f = Math.round(t * LOOP_FRAMES);
+  avg.clear();
+  for (let k = 0; k < BLEND; k++) {
+    layer.clear();
+    drawWater(layer, moment(f + k - (BLEND >> 1)));
+    // running average: the k-th layer over the mean of the first k
+    avg.drawingContext.globalAlpha = 1 / (k + 1);
+    avg.image(layer, 0, 0);
+    avg.drawingContext.globalAlpha = 1;
+  }
+  image(paperImg, 0, 0);
+  drawingContext.globalAlpha = 0.94;
+  image(avg, 0, 0);
+  drawingContext.globalAlpha = 1;
 
   noFill();
   stroke(INK[0], INK[1], INK[2]);
@@ -192,6 +236,12 @@ let frame = 0;
 function build() {
   randomSeed(seed); noiseSeed(seed);
   makePaper();
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) ground[y * N + x] = fbm(x * 0.012, y * 0.012, 3);
+  hatchPaper();
+  cache.clear();
+  layer = layer || createGraphics(W, H);
+  avg = avg || createGraphics(W, H);
+  layer.pixelDensity(1); avg.pixelDensity(1);
 }
 
 function setup() {
