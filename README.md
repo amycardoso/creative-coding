@@ -15,6 +15,7 @@ sketches/
 ├── data-viz/        # real-data visualizations
 └── series/
     ├── arrival/          # Logograma, Paralaxe Temporal
+    ├── dead-channel/     # Routing, Pixel Sort, Neon Signs, ICE, Chiba Sky
     ├── handmaids-tale/   # Fluxo, Contida, Nomes, Maioria
     ├── interstellar/     # Time Dilation, Endurance, Gargantua
     └── reflexoes/        # Pilha de Areia, Mitose, Cópia da Cópia, Queimada, Bolhas, Feira
