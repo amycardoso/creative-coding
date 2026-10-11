@@ -2,7 +2,7 @@
 // headless Chrome over the DevTools Protocol. No npm dependencies — relies on
 // Node's built-in global `fetch` and `WebSocket` (Node >= 22).
 //
-// The sketch must expose a capture hook (see sketches/calcadao/sketch.js):
+// The sketch must expose a capture hook (see sketches/brasilidade/calcadao/sketch.js):
 //   window.__captureFrame(i, N)  -> render loop phase i of N, then redraw()
 // Frames evenly tile [0,1) so the resulting GIF loops without a seam.
 //
