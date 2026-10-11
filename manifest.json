@@ -469,6 +469,16 @@
       "media": "sketches/ipe-no-cerrado/ipe-no-cerrado.png",
       "tags": ["generative", "landscape", "brasilidade"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "xilogravura",
+      "title": "Xilogravura",
+      "description": "Resistance, Brazil, October 2026. A cordel woodcut that carves itself: a red sun is printed, the black block lands, and an invisible gouge cuts the rays, the sky line by line, and a crowd out of the solid black, one figure at a time. Then the fists go up in a wave under AINDA ESTAMOS AQUI, and the sheet is lifted for a new print. After J. Borges, Käthe Kollwitz and the Atelier Populaire.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "media": "sketches/xilogravura/xilogravura.gif",
+      "tags": ["generative", "woodcut", "typography", "brasilidade"],
+      "tech": ["p5.js"]
     }
   ]
 }
