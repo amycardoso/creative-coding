@@ -20,10 +20,34 @@ const PAPER = [238, 230, 212];
 const INK = [172, 26, 32];
 const TYPE = [40, 36, 44];
 
-const NAMES = ['MARIA', 'ANA', 'CLARA', 'JOANA', 'LUIZA', 'HELENA', 'BEATRIZ', 'JULIA', 'LAURA',
-  'CECILIA', 'SOFIA', 'ROSA', 'TEREZA', 'IRENE', 'MARTA', 'LUCIA', 'DORA', 'NAIR', 'VERA', 'BRUNA',
-  'CARLA', 'ELISA', 'FLORA', 'GLORIA', 'IRIS', 'LIA', 'MIRIAM', 'NINA', 'OLGA', 'MARIELLE', 'DANDARA',
-  'ZILDA', 'ANTONIA', 'BENEDITA', 'CONCEICAO', 'ESPERANCA', 'RITA', 'YARA', 'JUREMA', 'IARA'];
+const NAMES = [
+  'MARIA', 'ANA', 'CLARA', 'JOANA', 'LUIZA', 'HELENA', 'BEATRIZ', 'JÚLIA', 'LAURA', 'CECÍLIA',
+  'SOFIA', 'ROSA', 'TEREZA', 'IRENE', 'MARTA', 'LÚCIA', 'DORA', 'NAIR', 'VERA', 'BRUNA',
+  'CARLA', 'ELISA', 'FLORA', 'GLÓRIA', 'ÍRIS', 'LIA', 'MIRIAM', 'NINA', 'OLGA', 'MARIELLE',
+  'DANDARA', 'ZILDA', 'ANTÔNIA', 'BENEDITA', 'CONCEIÇÃO', 'ESPERANÇA', 'RITA', 'YARA', 'JUREMA', 'IARA',
+  'ALICE', 'AMÉLIA', 'ADRIANA', 'ALINE', 'AMANDA', 'ANDREIA', 'ÂNGELA', 'APARECIDA', 'AURORA', 'BÁRBARA',
+  'BIANCA', 'CAMILA', 'CAROLINA', 'CÁSSIA', 'CÉLIA', 'CINTIA', 'CLÁUDIA', 'CRISTINA', 'DÉBORA', 'DENISE',
+  'DIANA', 'EDNA', 'ELAINE', 'ELIANA', 'ELZA', 'EMÍLIA', 'ÉRICA', 'ESTER', 'EUNICE', 'FABIANA',
+  'FÁTIMA', 'FERNANDA', 'FRANCISCA', 'GABRIELA', 'GERALDA', 'GISELE', 'GRAÇA', 'HELOÍSA', 'HILDA', 'INÊS',
+  'ISABEL', 'ISADORA', 'IVONE', 'JAQUELINE', 'JANAÍNA', 'JOSEFA', 'JOSIANE', 'JUSSARA', 'KÁTIA', 'LARA',
+  'LEILA', 'LETÍCIA', 'LÍDIA', 'LÍLIAN', 'LORENA', 'LOURDES', 'LUANA', 'LUCIANA', 'MADALENA', 'MAÍRA',
+  'MANUELA', 'MARCELA', 'MARGARIDA', 'MARIANA', 'MARINA', 'MARISA', 'MAYARA', 'MÉRCIA', 'MICHELE', 'MÔNICA',
+  'NATÁLIA', 'NEIDE', 'NOEMI', 'ODETE', 'PALOMA', 'PATRÍCIA', 'PAULA', 'PENHA', 'PRISCILA', 'RAQUEL',
+  'REBECA', 'REGINA', 'RENATA', 'ROBERTA', 'ROSÂNGELA', 'ROSELI', 'RUTE', 'SABRINA', 'SANDRA', 'SARA',
+  'SELMA', 'SÔNIA', 'SUELI', 'SUSANA', 'TAÍS', 'TÂNIA', 'TATIANA', 'TELMA', 'VALÉRIA', 'VANESSA',
+  'VIRGÍNIA', 'VITÓRIA', 'VIVIANE', 'ZÉLIA', 'ZORAIDE', 'ABIGAIL', 'ADÉLIA', 'AGNES', 'ALZIRA', 'AMÁLIA',
+  'ANITA', 'ARACI', 'BELA', 'BERENICE', 'CACILDA', 'CANDIDA', 'CARMEM', 'CATARINA', 'CIDA', 'CORA',
+  'CREUSA', 'DALVA', 'DIRCE', 'DOLORES', 'DULCE', 'EDITE', 'ELENA', 'ELVIRA', 'EMA', 'ENEIDA',
+  'ESTELA', 'EVA', 'FELÍCIA', 'FILOMENA', 'GENI', 'GUIOMAR', 'HORTÊNSIA', 'IDALINA', 'INÁCIA', 'IOLANDA',
+  'ISAURA', 'IVETE', 'JACI', 'JANETE', 'JOVITA', 'JUDITE', 'JULIETA', 'LAÍS', 'LEONOR', 'LINDALVA',
+  'LUZIA', 'MAFALDA', 'MARGÔ', 'MATILDE', 'MERCEDES', 'NAZARÉ', 'NOÊMIA', 'OTÍLIA', 'PIEDADE', 'QUITÉRIA',
+  'ROSÁLIA', 'SEBASTIANA', 'SILVANA', 'SOLANGE', 'TERESINHA', 'ÚRSULA', 'VALDETE', 'VIOLETA', 'ZENAIDE', 'ZULMIRA',
+  'ACÁCIA', 'ANAÍS', 'BETÂNIA', 'CELESTE', 'CIRA', 'DAMIANA', 'DINORÁ', 'EULÁLIA', 'FRIDA', 'GILDA',
+  'IRACEMA', 'JUCIARA', 'LEONILDA', 'LUÍSA', 'MAIARA', 'MOEMA', 'NAIARA', 'POTIRA', 'TAINÁ', 'UIARA',
+  'YASMIN', 'ZAÍRA', 'ARLETE', 'BRÍGIDA', 'CONSUELO', 'DOROTÉIA', 'ERNESTINA', 'FLORIPES', 'GENOVEVA', 'HERMÍNIA',
+  'JANDIRA', 'LAVÍNIA', 'MIRTES', 'NAYARA', 'OFÉLIA', 'PERPÉTUA', 'ROSINHA', 'SALETE', 'TIANA', 'URBANA',
+  'VALENTINA', 'WANDA', 'XÊNIA', 'ZAQUIA'
+];
 const FONT = "'Courier 10 Pitch', 'Courier New', Courier, monospace";
 const CW = 13, LH = 26, MARGIN = 30;
 const HELD = 6;              // names that never give way
@@ -42,10 +66,13 @@ function buildPage() {
   randomSeed(seed); noiseSeed(seed);
   letters = [];
   const words = [];
+  // every name appears once: shuffle the list and fill each line with the next names that fit
+  const pool = shuffle(NAMES.slice());
   let x = MARGIN, y = 50;
-  while (y < H - 20) {
-    const name = random(NAMES);
-    if (x + name.length * CW > W - MARGIN) { x = MARGIN; y += LH; continue; }
+  while (y < H - 20 && pool.length) {
+    const k = pool.findIndex((n) => x + n.length * CW <= W - MARGIN);
+    if (k < 0) { x = MARGIN; y += LH; continue; }
+    const name = pool.splice(k, 1)[0];
     words.push({ name, x, y });
     x += (name.length + 1) * CW;
   }
