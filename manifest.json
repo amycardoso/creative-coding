@@ -489,6 +489,46 @@
       "media": "sketches/azulejaria/azulejaria.gif",
       "tags": ["generative", "tiles", "pattern", "brasilidade"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "fluxo",
+      "title": "Fluxo",
+      "description": "After Margaret Atwood's The Handmaid's Tale. Thousands of red ink lines are traced through one flow field that carries almost everything to the right. A single dark line walks the other way, and the field bends around it: the lines it passes are pushed apart and open a wake that closes again once it has gone.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "media": "sketches/fluxo/fluxo.gif",
+      "tags": ["generative", "flow-field", "plotter", "handmaids-tale"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "contida",
+      "title": "Contida",
+      "description": "After Margaret Atwood's The Handmaid's Tale. A Gray-Scott reaction-diffusion system, the chemistry of coral and fingerprints, grows from a few seeds inside a rigid grid of walls. Each colony fills its own cell, but wherever the grid is cracked the pattern finds the gap and gets through. Then the ink drains back into the paper and the seeds start over.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "media": "sketches/contida/contida.gif",
+      "tags": ["generative", "reaction-diffusion", "simulation", "handmaids-tale"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "nomes",
+      "title": "Nomes",
+      "description": "After Margaret Atwood's The Handmaid's Tale, where women lose their names. A typed page of women's names is swept by a noise-shaped erasure front that turns every letter into the same mark, a red cloak with a white wedge where a face would be. A handful of names never give way, and once the page is uniform the names come back, spreading outward from the ones that held.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "media": "sketches/nomes/nomes.gif",
+      "tags": ["generative", "typography", "noise", "handmaids-tale"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "maioria",
+      "title": "Maioria",
+      "description": "After Margaret Atwood's The Handmaid's Tale: conformity that spreads with no one giving the order. In a majority-rule cellular automaton every cell becomes whatever most of its neighbours are, so red takes over on its own. A few cells never convert and weigh on the cells around them, keeping small white islands open. Then the pressure lifts in a wave from those cells and the vote runs again.",
+      "date": "2026-10-11",
+      "category": "abstract",
+      "media": "sketches/maioria/maioria.gif",
+      "tags": ["generative", "cellular-automata", "emergence", "handmaids-tale"],
+      "tech": ["p5.js"]
     }
   ]
 }
