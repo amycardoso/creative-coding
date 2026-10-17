@@ -724,6 +724,26 @@
       "media": "sketches/series/dead-channel/chiba-sky/chiba-sky.gif",
       "tags": ["generative", "simulation", "ising", "noise", "dead-channel"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "metronomes",
+      "title": "Metronomes",
+      "description": "Seventy metronomes on one loose board, each at its own tempo, nudging each other through the wood (the Kuramoto model). Each is a thread of ink written by a pen sweeping down the page. As the coupling tightens the tangle combs itself into one shared pulse, then loosens and drifts apart again.",
+      "date": "2026-10-17",
+      "category": "abstract",
+      "media": "sketches/abstract/metronomes/metronomes.gif",
+      "tags": ["generative", "simulation", "synchronization", "music", "kuramoto"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "groove",
+      "title": "Groove",
+      "description": "A whole album side composed by rules (a random walk over a minor scale, FM voices, five tracks with silent gaps) and cut into one spiral groove. Every pixel asks where it sits in the album and how the music bends the groove there; a fixed raking light sweeps it as the record turns. Loud passages go matte, silences stay mirror-black.",
+      "date": "2026-10-17",
+      "category": "abstract",
+      "media": "sketches/abstract/groove/groove.gif",
+      "tags": ["generative", "music", "vinyl", "fm-synthesis", "light"],
+      "tech": ["p5.js"]
     }
   ]
 }
