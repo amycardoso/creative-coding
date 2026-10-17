@@ -744,6 +744,16 @@
       "media": "sketches/abstract/groove/groove.gif",
       "tags": ["generative", "music", "vinyl", "fm-synthesis", "line"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "escrita",
+      "title": "Escrita",
+      "description": "After Mira Schendel's monotypes: a page written in a language that does not exist. Each page invents its own alphabet and vocabulary (letters and words follow Zipf's law), and a pen with mass and spring writes it in a cursive hand, paling as the nib runs dry. The page rests, fades, and the next one arrives in a new language.",
+      "date": "2026-10-17",
+      "category": "abstract",
+      "media": "sketches/abstract/escrita/escrita.gif",
+      "tags": ["generative", "asemic-writing", "language", "zipf", "line"],
+      "tech": ["p5.js"]
     }
   ]
 }
