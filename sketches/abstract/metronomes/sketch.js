@@ -13,6 +13,9 @@
  * falls into one shared pulse and the threads comb themselves parallel,
  * then the board loosens and they drift apart again.
  *
+ * ?seed=N fixes the crowd of tempos (the GIF uses seed 5); otherwise every
+ * visit sets up a new board.
+ *
  * Controls:
  * - Press S to save a PNG
  */
@@ -114,7 +117,9 @@ function setup() {
   c.parent('canvas-container');
   pixelDensity(1);
   frameRate(FPS);
-  randomSeed(5); noiseSeed(5);
+  const p = new URLSearchParams(window.location.search);
+  const seed = p.has('seed') ? parseInt(p.get('seed'), 10) : Math.floor(Math.random() * 1e6);
+  randomSeed(seed); noiseSeed(seed);
   buildGround();
   simulate();
 
@@ -125,7 +130,6 @@ function setup() {
     redraw();
   };
 
-  const p = new URLSearchParams(window.location.search);
   if (p.has('f') && p.has('n')) {
     window.__captureFrame(parseInt(p.get('f'), 10), Math.max(1, parseInt(p.get('n'), 10)));
   }

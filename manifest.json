@@ -728,7 +728,7 @@
     {
       "slug": "metronomes",
       "title": "Metronomes",
-      "description": "Seventy metronomes on one loose board, each at its own tempo, nudging each other through the wood (the Kuramoto model). Each is a thread of ink written by a pen sweeping down the page. As the coupling tightens the tangle combs itself into one shared pulse, then loosens and drifts apart again.",
+      "description": "Seventy metronomes on one loose board, each at its own tempo, nudging each other through the wood (the Kuramoto model). Each is a thread of ink written by a pen sweeping down the page; every visit sets up a new board. As the coupling tightens the tangle combs itself into one shared pulse, then loosens and drifts apart again.",
       "date": "2026-10-17",
       "category": "abstract",
       "media": "sketches/abstract/metronomes/metronomes.gif",
@@ -738,11 +738,11 @@
     {
       "slug": "groove",
       "title": "Groove",
-      "description": "A whole album side composed by rules (a random walk over a minor scale, FM voices, five tracks with silent gaps) and cut into one spiral groove. Every pixel asks where it sits in the album and how the music bends the groove there; a fixed raking light sweeps it as the record turns. Loud passages go matte, silences stay mirror-black.",
+      "description": "A record cut by a composer that never repeats. Each cycle a generative composer writes a new album side (a random walk over a minor scale, FM voices, five tracks with silent gaps) and a stylus cuts it into one spiral, outside in. The only mark is the stylus path: loud passages swell into wide bands, quiet ones thin to a hairline, the gaps between tracks are clean rings. Then the side is wiped and the next album begins.",
       "date": "2026-10-17",
       "category": "abstract",
       "media": "sketches/abstract/groove/groove.gif",
-      "tags": ["generative", "music", "vinyl", "fm-synthesis", "light"],
+      "tags": ["generative", "music", "vinyl", "fm-synthesis", "line"],
       "tech": ["p5.js"]
     }
   ]
