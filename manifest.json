@@ -29,6 +29,11 @@
       "slug": "dead-channel",
       "title": "Dead Channel",
       "description": "Strong neon colours and the grain of a TV tuned to a dead channel. Five systems that organise themselves out of noise and signal: wires that route around each other, pixels sorted by a threshold, a facade of signs that light each other up, a virus flooding a maze, static that freezes into colour."
+    },
+    {
+      "slug": "teorema-do-declinio",
+      "title": "O Teorema do Declínio",
+      "description": "From resonance to noise, in four movements. Each one is a system rather than a picture: two coupled oscillators that fall into phase, a mirror that breaks into roots and drift, a signal whose gain shrinks as noise rises, and a mixture that separates until the gold holds its own edge."
     }
   ],
   "sketches": [
@@ -753,6 +758,50 @@
       "category": "abstract",
       "media": "sketches/abstract/escrita/escrita.gif",
       "tags": ["generative", "asemic-writing", "language", "zipf", "line"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "sinal-puro",
+      "title": "Sinal Puro",
+      "description": "O Teorema do Declínio #1. Two oscillators, one running at 97% of the other's frequency, coupled as in the Kuramoto model: each phase pulls on the other, and the closer they are in phase the faster the two lines close in. Each line is a ribbon of fine threads that jitter apart while out of step and settle into one stroke once the phases lock; faint rungs appear where both are in phase. A new pair every run.",
+      "date": "2026-11-02",
+      "category": "abstract",
+      "series": "teorema-do-declinio",
+      "media": "sketches/series/teorema-do-declinio/sinal-puro/sinal-puro.gif",
+      "tags": ["generative", "oscillators", "kuramoto", "synchronization", "line", "teorema-do-declinio"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "inversao-vetorial",
+      "title": "Inversão Vetorial",
+      "description": "O Teorema do Declínio #2. Two walkers start as mirror images and lean toward each other until a dashed line marks where the mirror stops holding. From there one vector puts down roots (tips split at random, every branch pulled toward gravity, thinning as it goes), while the other keeps the same step but the noise in its heading grows every step, so it loses its rudder and fades from gold to ash.",
+      "date": "2026-11-02",
+      "category": "abstract",
+      "series": "teorema-do-declinio",
+      "media": "sketches/series/teorema-do-declinio/inversao-vetorial/inversao-vetorial.gif",
+      "tags": ["generative", "symmetry-breaking", "branching", "random-walk", "teorema-do-declinio"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "corrupcao-por-ruido",
+      "title": "Corrupção por Ruído",
+      "description": "O Teorema do Declínio #3. A steady signal recorded line by line, top to bottom. A Poisson process injects sharp spikes at a rising rate, and an automatic gain control answers the noise by turning the gain down, so the louder the noise gets, the smaller the signal itself is drawn. Gold turns to ash in proportion to the noise, static settles between the lines, and each new trace hides what lies behind it.",
+      "date": "2026-11-02",
+      "category": "abstract",
+      "series": "teorema-do-declinio",
+      "media": "sketches/series/teorema-do-declinio/corrupcao-por-ruido/corrupcao-por-ruido.gif",
+      "tags": ["generative", "signal", "noise", "gain-control", "teorema-do-declinio"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "ponto-de-ruptura",
+      "title": "Ponto de Ruptura",
+      "description": "O Teorema do Declínio #4. Gold and ash particles start mixed in one disc under three rules: gold draws gold, gold pushes ash away, ash only jitters. Nothing breaks or explodes; the mixture separates, the gold gathers into one body and the ash ends as a ring of static at a distance. The gold's density is then traced level by level with marching squares, and its outermost level is cut as a hard, bright edge.",
+      "date": "2026-11-02",
+      "category": "abstract",
+      "series": "teorema-do-declinio",
+      "media": "sketches/series/teorema-do-declinio/ponto-de-ruptura/ponto-de-ruptura.gif",
+      "tags": ["generative", "particles", "phase-separation", "marching-squares", "teorema-do-declinio"],
       "tech": ["p5.js"]
     }
   ]
