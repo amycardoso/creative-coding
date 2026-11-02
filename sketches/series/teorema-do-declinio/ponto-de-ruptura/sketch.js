@@ -3,122 +3,165 @@
  *
  * O Teorema do Declínio #4 — the end of the spell, and the form taken back.
  *
- * Gold and ash particles start mixed in one disc. Three rules: gold is drawn
- * to gold (cohesion with a short-range push so it keeps volume), gold pushes
- * ash away, and ash only jitters. Nothing breaks and nothing explodes; the
- * mixture simply separates. The gold gathers into one body and the ash ends
- * up as a ring of static at a distance.
+ * The gold line of the series starts crumpled and frayed, tangled in a field
+ * of static. Gray threads tie it to the static at hundreds of points, and
+ * specks of its own gold lie scattered out in the noise.
  *
- * When the separation settles, the density of the gold is read as a field
- * and traced level by level (marching squares), from the core outward, and
- * the outermost level is cut as a hard, bright edge.
+ * The line is a chain of nodes held by springs, and its stiffness rises over
+ * time: it keeps trying to return to its own slow rhythm. Each tie to the
+ * static has its own strength and snaps quietly once the line pulls past it.
+ * Nothing explodes; contacts just end, one by one. A node with no ties left
+ * calls its scattered specks back, and each speck that arrives makes that
+ * stretch brighter. As ties break and specks return, the fraying threads
+ * close into one band, and its edges are cut sharp and solid.
  *
- * Every run separates differently and leaves a different shape.
+ * The static stays where it was, still noisy, no longer attached.
+ * Every run tangles and frees the line differently.
  *
  * Each visit starts from a random seed; ?seed=1 reproduces the GIF.
  *
  * Controls:
  * - Press S to save a PNG
- * - Press SPACE for a new separation
+ * - Press SPACE for a new line
  */
 
 const SLUG = 'ponto-de-ruptura';
 const W = 800, H = 800;
 const LOOP_SECONDS = 24;
-const SIM_END = 330;                       // frames (one simulation step per frame)
-const LEVELS = 14, LEVEL_FRAMES = 9;
+const HOLD_START = 60;                      // tangled, before anything gives
 const FADE_START = 0.88 * LOOP_SECONDS * 30;
 const BG = [22, 21, 26];
-const GOLD = [232, 178, 52], EDGE = [255, 210, 110], ASH = [150, 148, 142];
-const NP = 1900, NG = 600, C = 5, GW = 160;
+const GOLD = [232, 178, 52], BRIGHT = [255, 214, 120], ASH = [150, 148, 142];
+const NN = 170, THREADS = 10, X0 = 70, X1 = 730;
 
-let ground, trail, lines, P = [], G = [], F = null, mx = 0, simFrame = 0, cx = 400, cy = 390;
+let ground, simFrame = 0;
+let nodes = [], links = [], specks = [], dust = [], wave, fray = 1, nLinks = 0;
 
 function init() {
-  trail = trail || createGraphics(W, H); trail.pixelDensity(1); trail.clear();
-  lines = lines || createGraphics(W, H); lines.pixelDensity(1); lines.clear();
-  simFrame = 0; F = null;
-  P = [];
-  const R = random(300, 340);
-  for (let i = 0; i < NP; i++) {
-    const a = random(TWO_PI), r = R * sqrt(random());
-    P.push({ x: 400 + r * cos(a), y: 390 + r * sin(a), g: i < NG, vx: 0, vy: 0, j: random(0.7, 1.8) });
+  simFrame = 0; fray = 1;
+  const ph = random(TWO_PI), cyc = random(1.2, 2.2), amp = random(25, 50), cy = random(370, 420);
+  wave = x => cy + amp * sin(((x - X0) / (X1 - X0)) * TWO_PI * cyc + ph);
+  // the crumpled line: its own wave buried under folds of noise
+  nodes = [];
+  for (let i = 0; i < NN; i++) {
+    const u = i / (NN - 1), bx = X0 + u * (X1 - X0);
+    const ends = sin(u * PI);                  // the ends stay closer to home
+    nodes.push({
+      bx, x: bx + (noise(u * 9, 3) - 0.5) * 160 * ends,
+      y: wave(bx) + (noise(u * 7, 7) - 0.5) * 650 * ends + (noise(u * 30, 1) - 0.5) * 110 * ends,
+      vx: 0, vy: 0, glow: 0, free: false,
+    });
   }
-  G = P.filter(p => p.g);
-}
-
-function simulate(it) {
-  cx = 0; cy = 0; let mvx = 0, mvy = 0;
-  for (const p of G) { cx += p.x; cy += p.y; mvx += p.vx; mvy += p.vy; }
-  cx /= G.length; cy /= G.length; mvx /= G.length; mvy /= G.length;
-  for (const p of G) { p.vx -= mvx; p.vy -= mvy; }  // no drift of the whole body
-  for (const p of P) {
-    if (p.g) {
-      p.vx += (cx - p.x) * 0.00042; p.vy += (cy - p.y) * 0.00042;
-      for (const q of G) {
-        if (q === p) continue;
-        const dx = q.x - p.x, dy = q.y - p.y, d2 = dx * dx + dy * dy + 1;
-        if (d2 < 3600) { const d = Math.sqrt(d2), f = d < 13 ? -0.35 : 0.012 * (1 - d / 60); p.vx += dx / d * f; p.vy += dy / d * f; }
-      }
-    } else {
-      p.vx += randomGaussian() * 0.35; p.vy += randomGaussian() * 0.35;
-      const dx = p.x - cx, dy = p.y - cy, d = Math.sqrt(dx * dx + dy * dy) + 1;
-      if (d < 230) { p.vx += dx / d * 0.5; p.vy += dy / d * 0.5; }
+  // static around the line, much of it tied to it
+  dust = []; links = [];
+  for (let k = 0; k < 2200; k++) {
+    const n = nodes[floor(random(NN))];
+    const p = { x: n.x + randomGaussian() * 70, y: n.y + randomGaussian() * 60, s: random(0.7, 2), a: random(90, 220) };
+    dust.push(p);
+    if (k < 460) {
+      let best = 0, bd = 1e9;
+      for (let i = 0; i < NN; i++) { const d = (nodes[i].x - p.x) ** 2 + (nodes[i].y - p.y) ** 2; if (d < bd) { bd = d; best = i; } }
+      links.push({ i: best, p, rest: Math.sqrt(bd), str: random(4, 50), alive: true, cut: -1 });
     }
-    p.vx *= 0.8; p.vy *= 0.8;
-    const ox = p.x, oy = p.y;
-    p.x = constrain(p.x + p.vx, 20, 780); p.y = constrain(p.y + p.vy, 20, 780);
-    if (it % 3 === 0) { trail.stroke(...(p.g ? GOLD : ASH), p.g ? 18 : 22); trail.strokeWeight(0.6); trail.line(ox, oy, p.x, p.y); }
   }
-}
-
-function buildField() {
-  F = new Float32Array((GW + 1) * (GW + 1)); mx = 0;
-  for (const p of G) for (let j = -12; j <= 12; j++) for (let i = -12; i <= 12; i++) {
-    const gx = Math.floor(p.x / C) + i, gy = Math.floor(p.y / C) + j;
-    if (gx < 0 || gy < 0 || gx > GW || gy > GW) continue;
-    const dx = gx * C - p.x, dy = gy * C - p.y;
-    F[gy * (GW + 1) + gx] += Math.exp(-(dx * dx + dy * dy) / 260);
-  }
-  for (const v of F) mx = max(mx, v);
-}
-
-function iso(lv, col, w) {
-  lines.stroke(col); lines.strokeWeight(w);
-  const at = (x, y) => F[y * (GW + 1) + x];
-  for (let gy = 0; gy < GW; gy++) for (let gx = 0; gx < GW; gx++) {
-    const v = [at(gx, gy), at(gx + 1, gy), at(gx + 1, gy + 1), at(gx, gy + 1)];
-    const cr = [[0, 1, gx, gy, gx + 1, gy], [1, 2, gx + 1, gy, gx + 1, gy + 1], [2, 3, gx + 1, gy + 1, gx, gy + 1], [3, 0, gx, gy + 1, gx, gy]];
-    const e = [];
-    for (const [a, b, ax, ay, bx, by] of cr) if ((v[a] > lv) !== (v[b] > lv)) {
-      const t = (lv - v[a]) / (v[b] - v[a]); e.push([(ax + (bx - ax) * t) * C, (ay + (by - ay) * t) * C]);
-    }
-    if (e.length >= 2) lines.line(e[0][0], e[0][1], e[1][0], e[1][1]);
-    if (e.length === 4) lines.line(e[2][0], e[2][1], e[3][0], e[3][1]);
+  nLinks = links.length;
+  // the line's own light, scattered out in the noise
+  specks = [];
+  for (let k = 0; k < 180; k++) {
+    const i = floor(random(2, NN - 2)), n = nodes[i];
+    specks.push({ i, x: n.x + randomGaussian() * 90, y: n.y + randomGaussian() * 80, home: false });
   }
 }
 
 function step(f) {
-  if (f <= SIM_END) { simulate(f); return; }
-  if (!F) buildField();
-  const k = (f - SIM_END) / LEVEL_FRAMES;       // levels from the core outward, then the edge
-  if (Number.isInteger(k) && k >= 1 && k <= LEVELS) {
-    const lvl = LEVELS + 1 - k;
-    iso(mx * (0.04 + lvl * 0.06), color(...GOLD, 70 + lvl * 10), 0.9);
-  } else if (Number.isInteger(k) && k === LEVELS + 2) {
-    iso(mx * 0.04, color(...EDGE), 3.2);
+  if (f < HOLD_START) return;
+  const t = min(1, (f - HOLD_START) / 480);
+  const stiff = 0.002 + 0.045 * t * t;              // the will to return to its own form
+  const rest = (X1 - X0) / (NN - 1);
+  for (let i = 1; i < NN - 1; i++) {
+    const n = nodes[i], a = nodes[i - 1], b = nodes[i + 1];
+    let fx = (a.x + b.x) / 2 - n.x, fy = (a.y + b.y) / 2 - n.y;      // bending: smooth out
+    fx *= 0.25; fy *= 0.25;
+    for (const m of [a, b]) {                                        // stretching: keep spacing
+      const dx = m.x - n.x, dy = m.y - n.y, d = Math.sqrt(dx * dx + dy * dy) + 1e-6, e = (d - rest) / d;
+      fx += dx * e * 0.08; fy += dy * e * 0.08;
+    }
+    fx += (n.bx - n.x) * stiff; fy += (wave(n.bx) - n.y) * stiff;   // its own rhythm
+    n.vx = (n.vx + fx) * 0.82; n.vy = (n.vy + fy) * 0.82;
   }
+  // ties to the static drag the line; past its strength, a tie just ends
+  for (const L of links) {
+    if (!L.alive) continue;
+    const n = nodes[L.i], dx = L.p.x - n.x, dy = L.p.y - n.y, d = Math.sqrt(dx * dx + dy * dy);
+    n.vx += dx * 0.005; n.vy += dy * 0.005;
+    L.str -= 0.03 + 0.16 * t;
+    if (d > L.rest + L.str || L.str < 0) { L.alive = false; L.cut = f; }
+  }
+  for (let i = 1; i < NN - 1; i++) { nodes[i].x += nodes[i].vx; nodes[i].y += nodes[i].vy; }
+  const tied = new Uint16Array(NN); let alive = 0;
+  for (const L of links) if (L.alive) { tied[L.i]++; alive++; }
+  for (let i = 0; i < NN; i++) nodes[i].free = tied[i] === 0;
+  // a free node calls its light back
+  let away = 0;
+  for (const s of specks) {
+    if (s.home) continue;
+    away++;
+    const n = nodes[s.i];
+    if (!n.free) continue;
+    s.x += (n.x - s.x) * 0.05; s.y += (n.y - s.y) * 0.05;
+    if (Math.abs(n.x - s.x) + Math.abs(n.y - s.y) < 3) { s.home = true; for (let k = -3; k <= 3; k++) { const m = nodes[s.i + k]; if (m) m.glow += 1 - Math.abs(k) / 4; } }
+  }
+  fray = 0.65 * (alive / nLinks) + 0.35 * (away / specks.length);
+}
+
+function normalAt(i) {
+  const a = nodes[max(0, i - 1)], b = nodes[min(NN - 1, i + 1)];
+  const dx = b.x - a.x, dy = b.y - a.y, d = Math.sqrt(dx * dx + dy * dy) + 1e-6;
+  return [-dy / d, dx / d];
 }
 
 function render(f) {
-  image(trail, 0, 0);
+  // static: always noisy
   noStroke();
-  const after = max(0, (f - SIM_END) / (LEVELS * LEVEL_FRAMES));
-  for (const p of P) {
-    if (p.g) { if (after >= 1) continue; fill(...GOLD, 200 * (1 - after)); circle(p.x, p.y, 2.2); }
-    else { fill(...ASH, 120); circle(p.x, p.y, p.j); }
+  for (const p of dust) { fill(...ASH, p.a); circle(p.x + (Math.random() - 0.5) * 1.5, p.y + (Math.random() - 0.5) * 1.5, p.s); }
+  // ties, and the stubs of the ones just cut
+  strokeWeight(0.6);
+  for (const L of links) {
+    const n = nodes[L.i];
+    if (L.alive) { stroke(...ASH, 110); line(n.x, n.y, L.p.x, L.p.y); }
+    else if (f - L.cut < 30) { const k = (f - L.cut) / 30, mx = lerp(L.p.x, n.x, 0.5 * (1 - k)), my = lerp(L.p.y, n.y, 0.5 * (1 - k)); stroke(...ASH, 110 * (1 - k)); line(L.p.x, L.p.y, mx, my); }
   }
-  image(lines, 0, 0);
+  // its own specks
+  noStroke();
+  for (const s of specks) if (!s.home) { fill(...GOLD, 200); circle(s.x, s.y, 2.2); }
+  // the line: frayed threads that close into one band as it frees itself
+  const calm = 1 - fray, gold = color(...GOLD), ash = color(...ASH);
+  noFill();
+  for (let k = 0; k < THREADS; k++) {
+    const c = lerpColor(ash, gold, 0.35 + 0.65 * calm);
+    stroke(red(c), green(c), blue(c), 90 + 60 * calm); strokeWeight(0.8);
+    beginShape();
+    for (let i = 0; i < NN; i++) {
+      const n = nodes[i], [nx, ny] = normalAt(i);
+      const o = (k - (THREADS - 1) / 2) * (0.7 + 0.5 * calm) + (noise(i * 0.12, k * 3.1, f * 0.01) - 0.5) * 26 * fray;
+      vertex(n.x + nx * o, n.y + ny * o);
+    }
+    endShape();
+  }
+  // edges: sharp, solid, brighter where its light came back
+  if (calm > 0.35) {
+    const e = constrain((calm - 0.35) / 0.55, 0, 1), half = 4 + 1.5 * e;
+    for (const side of [-1, 1]) {
+      beginShape();
+      for (let i = 0; i < NN; i++) { const n = nodes[i], [nx, ny] = normalAt(i); vertex(n.x + nx * half * side, n.y + ny * half * side); }
+      stroke(...BRIGHT, 255 * e); strokeWeight(1 + 1.6 * e); endShape();
+    }
+    for (let i = 0; i < NN - 1; i++) {
+      const g = min(1, (nodes[i].glow + nodes[i + 1].glow) / 6);
+      if (g <= 0) continue;
+      stroke(...BRIGHT, 120 * g * e); strokeWeight(2.5); line(nodes[i].x, nodes[i].y, nodes[i + 1].x, nodes[i + 1].y);
+    }
+  }
 }
 
 // ---------- ground: charcoal paper ----------

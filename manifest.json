@@ -33,7 +33,7 @@
     {
       "slug": "teorema-do-declinio",
       "title": "O Teorema do Declínio",
-      "description": "From resonance to noise, in four movements. Each one is a system rather than a picture: two coupled oscillators that fall into phase, a mirror that breaks into roots and drift, a signal whose gain shrinks as noise rises, and a mixture that separates until the gold holds its own edge."
+      "description": "From resonance to noise, in four movements. Each one is a system rather than a picture: two coupled oscillators that fall into phase, a mirror that breaks into roots and drift, a signal whose gain shrinks as noise rises, and a line that cuts its ties to the static and takes back its own form."
     }
   ],
   "sketches": [
@@ -796,12 +796,12 @@
     {
       "slug": "ponto-de-ruptura",
       "title": "Ponto de Ruptura",
-      "description": "O Teorema do Declínio #4. Gold and ash particles start mixed in one disc under three rules: gold draws gold, gold pushes ash away, ash only jitters. Nothing breaks or explodes; the mixture separates, the gold gathers into one body and the ash ends as a ring of static at a distance. The gold's density is then traced level by level with marching squares, and its outermost level is cut as a hard, bright edge.",
+      "description": "O Teorema do Declínio #4. The gold line of the series starts crumpled and frayed, tied to a field of static by hundreds of gray threads, with specks of its own gold scattered in the noise. The line is a spring chain whose stiffness keeps rising as it tries to return to its own slow rhythm; each tie has its own strength and snaps quietly once the line pulls past it. A node with no ties left calls its specks back, and as ties break and light returns, the fraying threads close into one band with sharp, solid edges. The static stays where it was, still noisy, no longer attached.",
       "date": "2026-11-02",
       "category": "abstract",
       "series": "teorema-do-declinio",
       "media": "sketches/series/teorema-do-declinio/ponto-de-ruptura/ponto-de-ruptura.gif",
-      "tags": ["generative", "particles", "phase-separation", "marching-squares", "teorema-do-declinio"],
+      "tags": ["generative", "spring-chain", "simulation", "line", "teorema-do-declinio"],
       "tech": ["p5.js"]
     }
   ]
