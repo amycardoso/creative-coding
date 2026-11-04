@@ -29,6 +29,11 @@
       "slug": "dead-channel",
       "title": "Dead Channel",
       "description": "Strong neon colours and the grain of a TV tuned to a dead channel. Five systems that organise themselves out of noise and signal: wires that route around each other, pixels sorted by a threshold, a facade of signs that light each other up, a virus flooding a maze, static that freezes into colour."
+    },
+    {
+      "slug": "jogos-vorazes",
+      "title": "Jogos Vorazes",
+      "description": "After The Hunger Games saga. Five systems about scarcity, competition and contagion, printed in ink and ember on raw paper: a weighted lottery, a shrinking territory, a threshold uprising, a drainage network that feeds a centre, and a melody passed from singer to singer."
     }
   ],
   "sketches": [
@@ -753,6 +758,61 @@
       "category": "abstract",
       "media": "sketches/abstract/escrita/escrita.gif",
       "tags": ["generative", "asemic-writing", "language", "zipf", "line"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "colheita",
+      "title": "Colheita",
+      "description": "Jogos Vorazes #1. A weighted lottery written as tally marks: twelve rows, each group of marks is one person and each mark one more entry of that name in the draw. Hunger rises row by row, and the hungrier a person is, the more entries they carry. The marks arrive one by one until the page is full, then a pointer samples uniformly from every mark on the page, slowing down until it lands; two names are circled in ember and a new season begins.",
+      "date": "2026-11-04",
+      "category": "abstract",
+      "series": "jogos-vorazes",
+      "media": "sketches/series/jogos-vorazes/colheita/colheita.gif",
+      "tags": ["generative", "probability", "tally", "typography", "jogos-vorazes"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "arena",
+      "title": "Arena",
+      "description": "Jogos Vorazes #2. Twenty-four Voronoi seeds share a circular territory that keeps shrinking while the seeds drift inward. At the end of each round the seed with the smallest territory disappears and its neighbours absorb the space. Every round's borders are engraved over the previous ones, darker as the field narrows, so the plate becomes the history of the contest; the survivor is marked in ember.",
+      "date": "2026-11-04",
+      "category": "abstract",
+      "series": "jogos-vorazes",
+      "media": "sketches/series/jogos-vorazes/arena/arena.gif",
+      "tags": ["generative", "voronoi", "simulation", "jogos-vorazes"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "faisca",
+      "title": "Faísca",
+      "description": "Jogos Vorazes #3. A Granovetter threshold model: every stroke is a person who lights up only when enough of their 24 neighbours already have. Twelve sectors around a centre each have their own temperament, and the centre's thresholds are never reached. One spark; the fire races through the easy sectors, stalls at cautious borders, finds seams. Each person who lights up is recut in ember and turned by the moment it happened, so the order of the uprising becomes the grain of the plate.",
+      "date": "2026-11-04",
+      "category": "abstract",
+      "series": "jogos-vorazes",
+      "media": "sketches/series/jogos-vorazes/faisca/faisca.gif",
+      "tags": ["generative", "contagion", "cellular-automata", "simulation", "jogos-vorazes"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "tributo",
+      "title": "Tributo",
+      "description": "Jogos Vorazes #4. Fifteen hundred points over twelve sectors, each producing something. A tree grows out from the centre with Prim's algorithm (cost bent by a noise field), drawn in thin ink. Then everything flows: each point passes what it produced and received to its parent, level by level from the tips inward, and every stretch is redrawn as thick as what passes through it, turning ember near the centre, which produces nothing and receives all of it.",
+      "date": "2026-11-04",
+      "category": "abstract",
+      "series": "jogos-vorazes",
+      "media": "sketches/series/jogos-vorazes/tributo/tributo.gif",
+      "tags": ["generative", "network", "flow", "graph", "jogos-vorazes"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "quatro-notas",
+      "title": "Quatro Notas",
+      "description": "Jogos Vorazes #5. The cultural evolution of a four-note motif, read as a score: 24 singers in a ring, 34 generations. Each singer learns from someone within two seats in the previous generation, usually copying what is most common around them, sometimes a random neighbour, and copies are imperfect: now and then a note slips. The motif is printed in ember, every other phrase in ink, so the score shows lineages spreading, being lost and coming back.",
+      "date": "2026-11-04",
+      "category": "abstract",
+      "series": "jogos-vorazes",
+      "media": "sketches/series/jogos-vorazes/quatro-notas/quatro-notas.gif",
+      "tags": ["generative", "cultural-evolution", "agents", "notation", "jogos-vorazes"],
       "tech": ["p5.js"]
     }
   ]
