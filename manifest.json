@@ -34,6 +34,11 @@
       "slug": "hunger-games",
       "title": "The Hunger Games",
       "description": "After Suzanne Collins' saga. Five systems about scarcity, competition and contagion, printed in ink and ember on raw paper: a weighted lottery, a shrinking territory, a threshold uprising, a drainage network that feeds a centre, and a melody passed from singer to singer."
+    },
+    {
+      "slug": "nebulae",
+      "title": "Nebulae",
+      "description": "Three nebulae, each drawn by the physical process that shaped it, in the same GLSL family as Eye of God: light that carves pillars out of shadow, a shell that tears into filaments, a dying star that marks time in rings. A new seed every visit."
     }
   ],
   "sketches": [
@@ -814,6 +819,39 @@
       "media": "sketches/series/hunger-games/four-notes/four-notes.gif",
       "tags": ["generative", "cultural-evolution", "agents", "notation", "hunger-games"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "pillars",
+      "title": "Pillars",
+      "description": "Nebulae #1. After the Pillars of Creation. A bank of gas and a few dense knots are lit by young stars above the frame; for every pixel the shader marches toward the light and adds up the optical depth. Exposed gas evaporates, gas in the shadow of a knot survives, so the pillars are never drawn: they are shadows. The stars wander on a slow circle and the columns lean with them while wisps stream off the lit rims.",
+      "date": "2026-11-04",
+      "category": "space",
+      "series": "nebulae",
+      "media": "sketches/series/nebulae/pillars/pillars.gif",
+      "tags": ["generative", "shader", "space", "photoevaporation", "raymarching", "nebulae"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "filaments",
+      "title": "Filaments",
+      "description": "Nebulae #2. After the Crab Nebula, the supernova of 1054. An expanding shell pushes light gas against dense gas and the boundary breaks into fingers and a web of filaments (a Rayleigh-Taylor instability), carried outward by the expansion. Inside, the blue haze of the pulsar wind; at the centre, the pulsar sends out wisps.",
+      "date": "2026-11-04",
+      "category": "space",
+      "series": "nebulae",
+      "media": "sketches/series/nebulae/filaments/filaments.gif",
+      "tags": ["generative", "shader", "space", "instability", "noise", "nebulae"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "shells",
+      "title": "Shells",
+      "description": "Nebulae #3. After the Cat's Eye Nebula. A dying star throws off a shell once every period; each one drifts out from a precessing centre, swells unevenly and fades as it thins, so the rings are a record of the rhythm. One loop is one period: a shell is born at the centre as the oldest dissolves at the edge. Inside, two bipolar lobes.",
+      "date": "2026-11-04",
+      "category": "space",
+      "series": "nebulae",
+      "media": "sketches/series/nebulae/shells/shells.gif",
+      "tags": ["generative", "shader", "space", "rhythm", "noise", "nebulae"],
+      "tech": ["p5.js", "GLSL"]
     }
   ]
 }
