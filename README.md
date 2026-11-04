@@ -18,6 +18,7 @@ sketches/
     ├── dead-channel/     # Routing, Pixel Sort, Neon Signs, ICE, Chiba Sky
     ├── handmaids-tale/   # Fluxo, Contida, Nomes, Maioria
     ├── interstellar/     # Time Dilation, Endurance, Gargantua
+    ├── nebulae/          # Eye of God, Pillars, Filaments, Shells
     └── reflexoes/        # Pilha de Areia, Mitose, Cópia da Cópia, Queimada, Bolhas, Feira
 ```
 
