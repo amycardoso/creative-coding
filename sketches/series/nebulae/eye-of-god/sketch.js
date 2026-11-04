@@ -1,6 +1,8 @@
 /**
  * Eye of God
  *
+ * Nebulae #1. After the Helix Nebula (NGC 7293).
+ *
  * A procedural nebula rendered in GLSL — domain-warped FBM noise
  * sculpts gas clouds around a ring nebula core, painted in warm reds
  * through cool cyans against a dense starfield.

@@ -34,6 +34,11 @@
       "slug": "hunger-games",
       "title": "The Hunger Games",
       "description": "After Suzanne Collins' saga. Five systems about scarcity, competition and contagion, printed in ink and ember on raw paper: a weighted lottery, a shrinking territory, a threshold uprising, a drainage network that feeds a centre, and a melody passed from singer to singer."
+    },
+    {
+      "slug": "nebulae",
+      "title": "Nebulae",
+      "description": "Four nebulae in GLSL, each drawn by the process that shaped it: the ring a dying star leaves behind, light that carves pillars out of shadow, a supernova shell that tears into filaments, and shells thrown off in rhythm. Gas made of domain-warped noise throughout; Pillars, Filaments and Shells draw a new seed every visit."
     }
   ],
   "sketches": [
@@ -112,10 +117,11 @@
     {
       "slug": "eye-of-god",
       "title": "Eye of God",
-      "description": "The Helix Nebula reimagined in GLSL — domain-warped noise sculpts gas clouds around an asymmetric ring, from crimson outer halo through amber ring to a blue stellar core, floating in a dense starfield.",
+      "description": "Nebulae #1. The Helix Nebula reimagined in GLSL — domain-warped noise sculpts gas clouds around an asymmetric ring, from crimson outer halo through amber ring to a blue stellar core, floating in a dense starfield.",
       "date": "2026-02-10",
       "category": "space",
-      "media": "sketches/space/eye-of-god/eye-of-god.gif",
+      "series": "nebulae",
+      "media": "sketches/series/nebulae/eye-of-god/eye-of-god.gif",
       "tags": ["generative", "shader", "space"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -814,6 +820,39 @@
       "media": "sketches/series/hunger-games/four-notes/four-notes.gif",
       "tags": ["generative", "cultural-evolution", "agents", "notation", "hunger-games"],
       "tech": ["p5.js"]
+    },
+    {
+      "slug": "pillars",
+      "title": "Pillars",
+      "description": "Nebulae #2. After the Pillars of Creation. Domain-warped gas is lit by young stars above the frame; for every pixel the shader marches toward the light and adds up the optical depth. Where light gets through, the gas is ionised and glows; where a dense knot shades it, the dust stays and swallows what is behind it. The pillars are never drawn: they are what the shadows keep. The stars wander on a slow circle and the columns lean with them.",
+      "date": "2026-11-04",
+      "category": "space",
+      "series": "nebulae",
+      "media": "sketches/series/nebulae/pillars/pillars.gif",
+      "tags": ["generative", "shader", "space", "photoevaporation", "raymarching", "nebulae"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "filaments",
+      "title": "Filaments",
+      "description": "Nebulae #3. After the Crab Nebula, the supernova of 1054. An expanding shell pushes light gas against dense gas and the boundary breaks into fingers (a Rayleigh-Taylor instability): domain-warped noise is sampled in coordinates stretched along the rays, and the veins of the field become filaments, carried outward by the expansion. Inside, the blue haze of the pulsar wind; at the centre, the pulsar sends out wisps.",
+      "date": "2026-11-04",
+      "category": "space",
+      "series": "nebulae",
+      "media": "sketches/series/nebulae/filaments/filaments.gif",
+      "tags": ["generative", "shader", "space", "instability", "noise", "nebulae"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "shells",
+      "title": "Shells",
+      "description": "Nebulae #4. After the Cat's Eye Nebula. A dying star throws off a shell once every period. Each shell is a soft ripple in domain-warped gas that travels out from a precessing centre, swells unevenly and thins as it ages, so the rings are a record of the rhythm. One loop is one period: a shell is born at the centre as the oldest dissolves at the edge. Inside, two bipolar lobes.",
+      "date": "2026-11-04",
+      "category": "space",
+      "series": "nebulae",
+      "media": "sketches/series/nebulae/shells/shells.gif",
+      "tags": ["generative", "shader", "space", "rhythm", "noise", "nebulae"],
+      "tech": ["p5.js", "GLSL"]
     }
   ]
 }
