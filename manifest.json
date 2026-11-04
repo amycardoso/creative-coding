@@ -33,7 +33,7 @@
     {
       "slug": "teorema-do-declinio",
       "title": "O Teorema do Declínio",
-      "description": "From resonance to noise, in four movements. Each one is a system rather than a picture: two coupled oscillators that fall into phase, a mirror that breaks into roots and drift, a signal whose gain shrinks as noise rises, and a line that cuts its ties to the static and takes back its own form."
+      "description": "From resonance to noise, in four movements and a coda. Each one is a system rather than a picture: two coupled oscillators that fall into phase, a mirror that breaks into roots and drift, a signal whose gain shrinks as noise rises, a line that cuts its ties to the static and takes back its own form, and the words themselves walking apart."
     }
   ],
   "sketches": [
@@ -802,6 +802,17 @@
       "series": "teorema-do-declinio",
       "media": "sketches/series/teorema-do-declinio/ponto-de-ruptura/ponto-de-ruptura.gif",
       "tags": ["generative", "spring-chain", "simulation", "line", "teorema-do-declinio"],
+      "tech": ["p5.js"]
+    },
+    {
+      "slug": "entropia",
+      "title": "Entropia",
+      "description": "O Teorema do Declínio #5. Six phrases from the text behind the series are set one per line, and then every letter starts a random walk. The rule is the same for all of them; only the rate changes, line by line, so the first phrase barely trembles while the later ones loosen, turn, fade and fall, piling up on the floor of the page. The last line stays outside the rule: no noise reaches it.",
+      "date": "2026-11-04",
+      "category": "abstract",
+      "series": "teorema-do-declinio",
+      "media": "sketches/series/teorema-do-declinio/entropia/entropia.gif",
+      "tags": ["generative", "typography", "random-walk", "text", "teorema-do-declinio"],
       "tech": ["p5.js"]
     }
   ]
