@@ -1,7 +1,7 @@
 /**
- * Tributo
+ * Tribute
  *
- * Jogos Vorazes #4.
+ * The Hunger Games #4.
  *
  * A drainage network. Fifteen hundred points are scattered over twelve
  * sectors around a centre, and every point produces something; how much

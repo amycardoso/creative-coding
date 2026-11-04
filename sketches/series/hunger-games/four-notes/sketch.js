@@ -1,7 +1,7 @@
 /**
- * Quatro Notas
+ * Four Notes
  *
- * Jogos Vorazes #5.
+ * The Hunger Games #5.
  *
  * The cultural evolution of a four-note motif. A line of 24 singers (it wraps
  * around, like a ring), 34 generations, read top to bottom like a score.

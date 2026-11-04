@@ -1,7 +1,7 @@
 /**
- * Colheita
+ * Reaping
  *
- * Jogos Vorazes #1.
+ * The Hunger Games #1.
  *
  * A weighted lottery written as tally marks. Twelve rows, each one a
  * community; each group of marks is one person, and each mark is one more

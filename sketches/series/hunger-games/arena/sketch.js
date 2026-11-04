@@ -1,7 +1,7 @@
 /**
  * Arena
  *
- * Jogos Vorazes #2.
+ * The Hunger Games #2.
  *
  * Twenty-four Voronoi seeds share a circular territory: every point of the
  * ground belongs to the nearest seed. The circle shrinks and the seeds drift

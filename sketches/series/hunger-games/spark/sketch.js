@@ -1,7 +1,7 @@
 /**
- * Faísca
+ * Spark
  *
- * Jogos Vorazes #3.
+ * The Hunger Games #3.
  *
  * A Granovetter threshold model. Every stroke is a person with a threshold:
  * they only light up once the share of lit neighbours around them passes it.
