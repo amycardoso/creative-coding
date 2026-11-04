@@ -1,12 +1,14 @@
 /**
  * Filaments
  *
- * Nebulae #2. After the Crab Nebula (M1), the supernova of 1054.
+ * Nebulae #3. After the Crab Nebula (M1), the supernova of 1054.
  *
  * A shader built on the Rayleigh-Taylor instability: an expanding shell
- * pushes light gas against dense gas and the boundary breaks into fingers
- * and a web of filaments, carried outward by the expansion. Inside, the blue
- * haze of the pulsar wind; at the centre the pulsar sends out wisps.
+ * pushes light gas against dense gas and the boundary breaks into fingers.
+ * The gas is domain-warped noise sampled in coordinates stretched along the
+ * rays, so its folds become fingers pointing outward, and the veins of the
+ * field are the filaments, carried outward by the expansion. Inside, the
+ * blue haze of the pulsar wind; at the centre the pulsar sends out wisps.
  *
  * Every visit draws a new seed; ?seed=N pins one (the GIF uses seed 3).
  *
@@ -104,22 +106,22 @@ float starfield(vec2 uv) {
 // Tone mapping as in Eye of God
 vec3 tone(vec3 c) { c = c / (c + vec3(0.45)) * 1.35; return pow(c, vec3(0.9)); }
 // --- The rule: Rayleigh-Taylor instability ---
-// An expanding shell pushes light gas against dense gas, and the boundary
-// breaks into fingers and a web of filaments. Here the fingers are ridged
-// noise stretched along the rays, carried outward by the expansion. Inside,
-// the blue haze of the pulsar wind; at the centre, the pulsar itself sends
-// out wisps.
+// An expanding shell pushes light gas against dense gas and the boundary
+// breaks into fingers. Here the gas is domain-warped FBM sampled in
+// coordinates stretched along the rays, so the folds of the noise become
+// fingers pointing outward; the veins of the field (where it crosses its
+// mean) are the filaments. The expansion carries everything outward. Inside,
+// the blue haze of the pulsar wind.
 
-// Outward expansion: two copies of the field half a period apart, cross-faded.
-float fingers(vec2 e, vec2 dir, float r, vec2 wv, float wa) {
-  float a = fract(u_phase), b = fract(u_phase + 0.5);
-  vec2 sa = e * (1.0 - 0.18 * a), sb = e * (1.0 - 0.18 * b);  // homologous expansion
-  float ra = ridge(dir * (9.0 + 3.0 * wa) + vec2(length(sa) * 1.5, 0.0) + wv * 1.5);
-  float rb = ridge(dir * (9.0 + 3.0 * wa) + vec2(length(sb) * 1.5, 3.0) + wv * 1.5);
-  float web_a = ridge(sa * 5.0 + wv * 2.5);
-  float web_b = ridge(sb * 5.0 + wv * 2.5 + 9.0);
-  float k = abs(a - 0.5) * 2.0;
-  return mix(mix(ra, web_a, 0.7), mix(rb, web_b, 0.7), k);
+float veins(vec2 e, vec2 c, float s) {
+  float r = length(e);
+  vec2 dir = e / max(r, 1e-4);
+  // homologous expansion: sample at a shrunken radius as time goes by
+  float rr = r * (1.0 - 0.22 * s);
+  vec2 radial = dir * (1.2 + 2.2 * rr) + vec2(rr * 0.6);   // stretched along rays
+  float w = warp(radial * 2.2 + c, c);
+  float v = 1.0 - abs(w * 2.0 - 1.0);                       // ridge where the field crosses its mean
+  return pow(v, 6.0);
 }
 
 void main() {
@@ -128,48 +130,65 @@ void main() {
   vec2 uv = vUv;
   vec2 st = uv - 0.5;
   st.x *= aspect;
-  st *= 1.3;
-  vec2 drift = 0.1 * vec2(cos(TAU * u_phase), sin(TAU * u_phase));
+  st *= 1.35;
+  vec2 drift = 0.08 * vec2(cos(TAU * u_phase), sin(TAU * u_phase));
 
-  // Random tilt and squash of the remnant
   float th = hash(vec2(5.0)) * 3.14;
   vec2 e = mat2(cos(th), -sin(th), sin(th), cos(th)) * st;
-  e.x *= 0.78;
+  e.x *= 0.8;
   float r = length(e);
-  float a = atan(e.y, e.x);
-  vec2 dir = vec2(cos(a), sin(a));
+  vec2 dir = e / max(r, 1e-4);
 
-  // Ragged outer boundary that breathes a little
-  float R = 0.30 + 0.16 * (fbm(dir * 1.4 + 2.0 + drift) - 0.5) + 0.006 * sin(TAU * u_phase);
-  float inside = 1.0 - smoothstep(R - 0.02, R + 0.05, r);
+  // Ragged, gassy envelope (no hard border)
+  float edgeNoise = warp(dir * 1.5 + 3.0, drift * 0.5);
+  float R = 0.26 + 0.18 * (edgeNoise - 0.4);
+  float env = 1.0 - smoothstep(R * 0.55, R * 1.25, r);
 
-  vec2 wv = vec2(fbm(e * 3.0 + drift), fbm(e * 3.0 + 5.0 - drift)) - 0.5;
-  float wa = fbm(dir * 3.0 + r * 2.0);
-  float f = pow(fingers(e, dir, r, wv, wa), 5.0) * 3.2;
-  float shellBand = smoothstep(0.25 * R, R * 0.85, r);
-  float fil = f * inside * shellBand * (0.4 + fbm(e * 12.0));
+  // Two copies of the veins half a period apart, cross-faded, so the
+  // outward flow loops without a seam
+  float a = fract(u_phase), b = fract(u_phase + 0.5);
+  float va = veins(e, vec2(0.0), a);
+  float vb = veins(e, vec2(3.1, 7.7), b);
+  float fil = mix(va, vb, abs(a - 0.5) * 2.0);
 
-  // Synchrotron haze from the pulsar wind
-  float synch = exp(-r * r / (R * R * 0.35)) * warp(e * 4.0, drift) * inside;
+  float gas = warp(e * 3.0 + 4.0, drift);
+  float filaments = fil * env * (0.35 + 0.9 * gas) * smoothstep(0.03, 0.14, r);
+  float body = gas * env;
 
-  // Pulsar: a point plus wisps that ripple outward once per loop
-  float wave = fract(r * 18.0 - u_phase * 3.0);
-  float wisps = exp(-r * r / 0.004) * smoothstep(0.0, 0.2, wave) * smoothstep(0.5, 0.2, wave)
-              * fbm(dir * 6.0 + drift);
-  float pulsar = exp(-r * r / 0.0002) + 0.35 * wisps;
+  // Synchrotron haze of the pulsar wind
+  float synch = exp(-r * r / (R * R * 0.45)) * (0.35 + 0.65 * warp(e * 4.0, drift));
 
-  vec3 color = vec3(0.25, 0.45, 1.0) * synch * 0.9;
-  color += mix(vec3(0.95, 0.30, 0.08), vec3(0.95, 0.85, 0.35), fbm(e * 6.0 + 3.0)) * fil * 0.9;
-  color += vec3(0.85, 0.9, 1.0) * pulsar * 1.5;
-  color += vec3(starfield(uv * vec2(1.0, 1.5))) * 0.75 * (1.0 - inside * 0.8);
+  // Pulsar: a soft point with wisps that ripple out (integer frequency, loops)
+  float wave = 0.5 + 0.5 * sin(TAU * (r * 14.0 - u_phase * 3.0));
+  float wisps = exp(-r * r / 0.006) * wave * fbm(dir * 4.0 + e * 20.0);
+  float pulsar = exp(-r * r / 0.00025);
 
+  vec3 crimson = vec3(0.60, 0.05, 0.08);
+  vec3 orange = vec3(0.92, 0.36, 0.06);
+  vec3 straw = vec3(0.90, 0.75, 0.35);
+  vec3 blue = vec3(0.18, 0.40, 1.0);
+
+  vec3 filCol = mix(crimson, orange, smoothstep(0.3, 0.7, gas));
+  filCol = mix(filCol, straw, smoothstep(0.6, 0.9, gas) * 0.6);
+
+  vec3 color = blue * synch * 0.55;
+  color += mix(crimson, orange, gas) * smoothstep(0.35, 0.9, body) * 0.18;
+  color += filCol * filaments * 1.3;
+  color += vec3(0.75, 0.85, 1.0) * (pulsar * 1.4 + wisps * 0.25);
+
+  float stars = starfield(uv * vec2(1.0, 1.5));
+  color += vec3(stars * 0.85, stars * 0.88, stars) * (1.0 - smoothstep(0.1, 0.6, body + synch) * 0.9);
+
+  float vignette = clamp(1.0 - length(st) * 0.3, 0.0, 1.0);
+  color *= vignette;
   gl_FragColor = vec4(tone(color), 1.0);
 }
 `;
 
+// ?seed=N pins a seed; anything missing or non-numeric draws a random one
 function pickSeed() {
-  const p = new URLSearchParams(location.search);
-  return p.has('seed') ? parseInt(p.get('seed'), 10) : Math.floor(Math.random() * 1e6);
+  const n = parseInt(new URLSearchParams(location.search).get('seed'), 10);
+  return Number.isFinite(n) ? n : Math.floor(Math.random() * 1e6);
 }
 
 function setup() {

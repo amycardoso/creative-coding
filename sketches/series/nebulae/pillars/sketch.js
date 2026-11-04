@@ -1,14 +1,15 @@
 /**
  * Pillars
  *
- * Nebulae #1. After the Pillars of Creation (Eagle Nebula, M16).
+ * Nebulae #2. After the Pillars of Creation (Eagle Nebula, M16).
  *
  * A shader in the family of Eye of God, built on one rule: photoevaporation.
- * A bank of gas and a few dense knots are lit by young stars above the frame.
- * For every pixel the shader marches toward the light and adds up the optical
- * depth: exposed gas evaporates, gas in the shadow of a knot survives. The
- * pillars are never drawn; they are shadows. The stars wander on a slow
- * circle, so the columns lean and reshape, and wisps stream off the lit rims.
+ * Domain-warped gas fills the frame and is lit by young stars above it. For
+ * every pixel the shader marches toward the light and adds up the optical
+ * depth. Where light gets through, the gas is ionised and glows; where it is
+ * shaded by a dense knot, the dust stays and swallows what is behind it. The
+ * pillars are never drawn: they are what the shadows keep. The stars wander
+ * on a slow circle, so the columns lean and reshape over the loop.
  *
  * Every visit draws a new seed; ?seed=N pins one (the GIF uses seed 3).
  *
@@ -106,26 +107,27 @@ float starfield(vec2 uv) {
 // Tone mapping as in Eye of God
 vec3 tone(vec3 c) { c = c / (c + vec3(0.45)) * 1.35; return pow(c, vec3(0.9)); }
 // --- The rule: photoevaporation ---
-// A bank of gas and a few dense knots, lit by young stars above the frame.
-// For every point we march toward the light and add up the optical depth.
-// Exposed gas evaporates; gas in the shadow of a knot survives.
+// Gas fills the frame and is lit by young stars above it. For every pixel
+// the shader marches toward the light and adds up the optical depth. Where
+// light gets through, the gas is ionised: it glows and thins out. Where it
+// is shaded by denser gas, it stays dark and dusty. Nothing is drawn: the
+// pillars are what the shadows keep.
 
+// Gas density, as in Eye of God: two scales of domain-warped FBM
+float gasField(vec2 p, vec2 c) {
+  float d = warp(p * 1.6, c);
+  d = mix(d, warp(p * 2.4 + vec2(10.0, 20.0), c * 0.8), 0.35);
+  return d;
+}
+
+// Dense knots high up, and a bank of gas below
 float knots(vec2 p) {
-  return smoothstep(0.60, 0.70, fbm(p * vec2(4.0, 3.0) + 11.0))
+  return smoothstep(0.58, 0.72, fbm(p * vec2(4.0, 3.0) + 11.0))
        * smoothstep(0.35, 0.6, p.y) * smoothstep(1.45, 1.1, p.y);
 }
 
-float gas(vec2 p) {
+float bank(vec2 p) {
   return (0.55 + 0.6 * fbm(p * 2.5 + 3.0)) * smoothstep(1.5, 0.2, p.y);
-}
-
-// Evaporation flow: two layers half a period apart, cross-faded, so the
-// wisps stream away from the light forever and the loop has no seam.
-float flowWisps(vec2 p, vec2 dir) {
-  float a = fract(u_phase), b = fract(u_phase + 0.5);
-  float wa = fbm(vec2(p.x * 10.0, p.y * 2.5) - dir * a * 1.2);
-  float wb = fbm(vec2(p.x * 10.0, p.y * 2.5) - dir * b * 1.2 + 7.0);
-  return mix(wa, wb, abs(a - 0.5) * 2.0);
 }
 
 void main() {
@@ -133,50 +135,61 @@ void main() {
   float aspect = u_res.x / u_res.y;
   vec2 uv = vUv;
   vec2 p = vec2(uv.x * aspect * 1.5, uv.y * 1.5);          // y points up
-  vec2 drift = 0.12 * vec2(cos(TAU * u_phase), sin(TAU * u_phase));
+  vec2 drift = 0.08 * vec2(cos(TAU * u_phase), sin(TAU * u_phase));
 
-  // The ionising stars wander on a slow circle above the frame, so the
-  // shadows (and the pillars they carve) lean and reshape over the loop.
-  vec2 L = vec2(aspect * 0.75 + 0.55 * cos(TAU * u_phase), 3.2 + 0.3 * sin(TAU * u_phase));
+  // The ionising stars wander on a slow circle above the frame
+  vec2 L = vec2(aspect * 0.75 + 0.5 * cos(TAU * u_phase), 3.0 + 0.3 * sin(TAU * u_phase));
   vec2 dir = normalize(L - p);
 
   float tau = 0.0;
   float jitter = hash21(vUv * u_res * 2.0);
   for (int i = 1; i < 48; i++) {
     vec2 q = p + dir * 0.022 * (float(i) + jitter);
-    tau += knots(q) * 0.9 + gas(q) * 0.035;
+    tau += knots(q) * 0.9 + bank(q) * 0.035;
   }
   float lit = exp(-tau * 1.2);
 
-  // Erosion: only what is in shadow keeps its density
-  float d = gas(p) * (1.0 - lit) + knots(p);
-  d += 0.12 * (warp(p * 3.0, drift) - 0.5);
+  float gas = gasField(p, drift);
+  // what survives: the shaded bank, plus the knots that cast the shadows,
+  // with a frayed, gassy edge
+  float body = smoothstep(0.15, 0.75, bank(p) * (1.0 - lit) + knots(p) + 0.45 * (gas - 0.5));
 
-  float cloud = smoothstep(0.28, 0.46, d);
-  float edge = cloud * (1.0 - smoothstep(0.42, 0.60, d));
-  float rimLit = exp(-max(tau - 0.2, 0.0) * 0.6);
-  float wisp = smoothstep(0.18, 0.32, d) * (1.0 - cloud) * flowWisps(p, dir);
+  // Shaded gas keeps its dust; lit gas is ionised and thins out
+  float dust = body * (0.6 + 0.8 * gas);
+  float ionised = gas * (0.25 + 0.75 * lit);
+  // the surface where light meets dense gas glows brightest
+  float front = body * (1.0 - body) * 4.0 * exp(-max(tau - 0.2, 0.0) * 0.6) * gas;
 
-  // Ionised gas behind: teal high up, amber lower down
-  float w = warp(p * 1.3 + vec2(7.0), drift);
-  vec3 teal = vec3(0.05, 0.45, 0.55);
-  vec3 amber = vec3(0.85, 0.45, 0.10);
-  vec3 rust = vec3(0.30, 0.09, 0.04);
-  vec3 bg = mix(amber * 0.55, teal, smoothstep(0.1, 1.5, p.y)) * (0.15 + 0.85 * w * w);
+  vec3 teal = vec3(0.05, 0.50, 0.62);
+  vec3 amber = vec3(0.90, 0.48, 0.12);
+  vec3 crimson = vec3(0.55, 0.06, 0.08);
+  vec3 dustCol = vec3(0.30, 0.11, 0.05);
 
-  vec3 color = bg * (1.0 - cloud * 0.96);
-  color += rust * cloud * (0.10 + 0.7 * warp(p * 4.0 + 2.0, drift * 0.5) * fbm(p * 9.0));
-  color += vec3(1.0, 0.72, 0.42) * edge * rimLit * 0.9;
-  color += vec3(0.95, 0.65, 0.40) * wisp * 0.9;
-  color += vec3(starfield(uv * vec2(1.0, 1.5))) * (1.0 - cloud) * 0.8;
+  vec3 emission = mix(amber, teal, smoothstep(0.2, 1.6, p.y + 0.4 * (gas - 0.5)));
+  emission = mix(emission, crimson, smoothstep(0.55, 0.8, gas) * 0.4);
+  vec3 color = emission * smoothstep(0.15, 0.85, ionised) * 0.9;
+  
 
+  // Dust absorbs what is behind it and shows only a faint reddish body
+  float absorb = exp(-dust * 2.6);
+  color *= absorb;
+  // inside the dust: its own warped texture, lit more on the side facing the stars
+  color += dustCol * body * (0.12 + 1.5 * gas * gas) * (0.35 + 0.9 * exp(-tau * 0.35));
+  color += vec3(1.0, 0.68, 0.38) * front * 0.45;
+
+  float stars = starfield(uv * vec2(1.0, 1.5));
+  color += vec3(stars * 0.85, stars * 0.88, stars) * absorb * (1.0 - smoothstep(0.3, 0.9, ionised) * 0.7);
+
+  float vignette = clamp(1.0 - length(uv - 0.5) * 0.4, 0.0, 1.0);
+  color *= vignette;
   gl_FragColor = vec4(tone(color), 1.0);
 }
 `;
 
+// ?seed=N pins a seed; anything missing or non-numeric draws a random one
 function pickSeed() {
-  const p = new URLSearchParams(location.search);
-  return p.has('seed') ? parseInt(p.get('seed'), 10) : Math.floor(Math.random() * 1e6);
+  const n = parseInt(new URLSearchParams(location.search).get('seed'), 10);
+  return Number.isFinite(n) ? n : Math.floor(Math.random() * 1e6);
 }
 
 function setup() {
