@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +14,7 @@
       min-height: 100vh; background-color: #efe7da;
     }
     main { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
     #canvas-container { box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
     @media (max-width: 800px) {
       main, #canvas-container { width: 100%; }
@@ -23,7 +24,18 @@
 </head>
 <body>
   <main>
-    <div id="canvas-container"></div>
+    <div id="canvas-container" aria-hidden="true"></div>
+    <section class="sr-only">
+      <h1>Entropia</h1>
+      <p>Seis frases, uma por linha. Cada letra caminha ao acaso, e cada linha anda mais que a de cima: a primeira quase não se move, as últimas se soltam, giram, desbotam e caem no pé da página. A última frase fica parada.</p>
+      <p>havia escuta, reverência, delicadeza</p>
+      <p>a vulnerabilidade entregue como um voto de fé</p>
+      <p>o carinho que vira implicância</p>
+      <p>o afeto vira trocadilho</p>
+      <p>o diálogo vira interrogatório</p>
+      <p>dar profundidade; receber futilidade</p>
+      <p>a luz pertencia a quem a emitia</p>
+    </section>
   </main>
   <script src="sketch.js"></script>
 </body>

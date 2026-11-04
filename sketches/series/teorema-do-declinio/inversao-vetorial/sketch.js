@@ -106,7 +106,7 @@ function render(f) {
 function makeGround() {
   ground = createGraphics(W, H); ground.pixelDensity(1); ground.loadPixels();
   for (let i = 0; i < ground.pixels.length; i += 4) {
-    const n = (Math.random() - 0.5) * 7;
+    const n = (random() - 0.5) * 7;
     ground.pixels[i] = BG[0] + n; ground.pixels[i + 1] = BG[1] + n; ground.pixels[i + 2] = BG[2] + n; ground.pixels[i + 3] = 255;
   }
   ground.updatePixels();
@@ -130,6 +130,7 @@ function setup() {
   frameRate(FPS);
   const p = new URLSearchParams(window.location.search);
   baseSeed = p.has('seed') ? parseInt(p.get('seed'), 10) : Math.floor(Math.random() * 1e6);
+  randomSeed(baseSeed); noiseSeed(baseSeed);
   makeGround();
   start();
 

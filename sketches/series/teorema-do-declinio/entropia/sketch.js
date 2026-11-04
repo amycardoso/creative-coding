@@ -90,7 +90,7 @@ function render(f) {
 function makeGround() {
   ground = createGraphics(W, H); ground.pixelDensity(1); ground.loadPixels();
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-    const i = 4 * (y * W + x), n = (Math.random() - 0.5) * 9 + (noise(x * 0.004, y * 0.004) - 0.5) * 16;
+    const i = 4 * (y * W + x), n = (random() - 0.5) * 9 + (noise(x * 0.004, y * 0.004) - 0.5) * 16;
     ground.pixels[i] = BG[0] + n; ground.pixels[i + 1] = BG[1] + n; ground.pixels[i + 2] = BG[2] + n * 0.9; ground.pixels[i + 3] = 255;
   }
   ground.updatePixels();
@@ -114,6 +114,7 @@ function setup() {
   frameRate(FPS);
   const p = new URLSearchParams(window.location.search);
   baseSeed = p.has('seed') ? parseInt(p.get('seed'), 10) : Math.floor(Math.random() * 1e6);
+  randomSeed(baseSeed); noiseSeed(baseSeed);
   makeGround();
   noLoop();
   // the type needs the web font before letters can be measured
