@@ -26,7 +26,15 @@ sketches/
     └── reflexoes/        # Pilha de Areia, Mitose, Cópia da Cópia, Queimada, Bolhas, Feira
 ```
 
-Each sketch folder is `sketches/<category>/<slug>/` (or `sketches/series/<series>/<slug>/`) and holds `index.html`, `sketch.js` and its preview media named `<slug>.gif` or `<slug>.png`. Commit the GIF at full quality: the gallery converts it to MP4 and thumbnails on deploy. `manifest.json` lists every sketch with its `media` path; sketches in a series also carry a `series` field.
+Each sketch folder is `sketches/<category>/<slug>/` (or `sketches/series/<series>/<slug>/`) and holds `index.html`, `sketch.js` and its recording named `<slug>.mp4` (or `<slug>.png` for a still). A few older pieces keep a `<slug>.gif` because their noise does not compress as video. The gallery makes thumbnails from the recording on deploy and runs the sketch itself on its page. `manifest.json` lists every sketch with its `media` path and its default `seed`; sketches in a series also carry a `series` field.
+
+### Seeds
+
+Every sketch opens on its default `seed` from `manifest.json`, and `?seed=N` gives another variation. [`scripts/seed.js`](scripts/seed.js) makes that work for any sketch without touching its code: it turns `Math.random` (and with it p5's unseeded `random()` and `noise()`) into a seeded generator, and for sketches that hard-code their seeds it mixes the new seed into `randomSeed()`/`noiseSeed()`. With the default seed a sketch behaves exactly as it does on its own. The gallery injects it into each live sketch; the recording script injects it too, so a recording shows exactly what the gallery opens on.
+
+### Recording
+
+`scripts/make-media.sh <slug> [frames] [fps] [size]` records a seamless loop as `<slug>.mp4` with the sketch's default seed. The sketch has to expose `window.__captureFrame(i, N)` (render loop phase `i` of `N`, see `sketches/brasilidade/calcadao/sketch.js`).
 
 ## Running Locally
 

@@ -5,9 +5,9 @@ on:
     branches: [main]
     paths:
       - "manifest.json"
-      - "**/**.gif"
-      - "**/**.png"
-      - "**/**.jpg"
+      - "scripts/seed.js"
+      # The gallery runs the sketches live, so code changes count too.
+      - "sketches/**"
 
 jobs:
   notify:

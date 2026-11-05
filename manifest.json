@@ -48,7 +48,8 @@
       "description": "Autonomous agents erode a rigid black-and-white grid into shades of gray — the world is not black and white. Attitudes are gray.",
       "date": "2026-01-28",
       "category": "abstract",
-      "media": "sketches/abstract/erosion-of-discourse/erosion-of-discourse.gif",
+      "media": "sketches/abstract/erosion-of-discourse/erosion-of-discourse.mp4",
+      "seed": 1,
       "tags": ["generative", "agents", "abstract"],
       "tech": ["p5.js", "p5.capture"]
     },
@@ -58,7 +59,8 @@
       "description": "38 years of Amazon deforestation visualized with real satellite data from INPE and NASA FIRMS.",
       "date": "2026-01-28",
       "category": "data-viz",
-      "media": "sketches/data-viz/vanishing-green/vanishing-green.gif",
+      "media": "sketches/data-viz/vanishing-green/vanishing-green.mp4",
+      "live": false,
       "tags": ["data-visualization"],
       "tech": ["p5.js", "gif.js", "INPE API", "NASA FIRMS"]
     },
@@ -69,6 +71,7 @@
       "date": "2026-01-29",
       "category": "landscape",
       "media": "sketches/landscape/urban-sunset/urban-sunset.png",
+      "seed": 1,
       "tags": ["generative", "shader", "landscape"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -78,7 +81,8 @@
       "description": "Generative northern lights: curtains of light ripple across a starlit sky above a silhouetted mountain ridge.",
       "date": "2026-02-08",
       "category": "landscape",
-      "media": "sketches/landscape/aurora-boreal/aurora-boreal.gif",
+      "media": "sketches/landscape/aurora-boreal/aurora-boreal.mp4",
+      "seed": 1,
       "tags": ["generative", "landscape"],
       "tech": ["p5.js"]
     },
@@ -88,7 +92,8 @@
       "description": "A geometric mandala that breathes with Eric Prydz's Opus. One unified visualization continuously scales from silence to full psychedelic intensity, driven by a smooth energy curve matched to the song and real-time FFT analysis.",
       "date": "2026-02-08",
       "category": "abstract",
-      "media": "sketches/abstract/opus/opus.gif",
+      "media": "sketches/abstract/opus/opus.mp4",
+      "live": false,
       "tags": ["generative", "audio-reactive", "abstract"],
       "tech": ["p5.js", "p5.sound", "Web Audio API"]
     },
@@ -99,7 +104,8 @@
       "date": "2026-02-09",
       "category": "space",
       "series": "interstellar",
-      "media": "sketches/series/interstellar/time-dilation/time-dilation.gif",
+      "media": "sketches/series/interstellar/time-dilation/time-dilation.mp4",
+      "seed": 1,
       "tags": ["generative", "simulation", "space", "interstellar"],
       "tech": ["p5.js"]
     },
@@ -110,7 +116,7 @@
       "date": "2026-02-09",
       "category": "space",
       "series": "interstellar",
-      "media": "sketches/series/interstellar/endurance/endurance.gif",
+      "media": "sketches/series/interstellar/endurance/endurance.mp4",
       "tags": ["generative", "simulation", "space", "interstellar"],
       "tech": ["p5.js"]
     },
@@ -121,7 +127,7 @@
       "date": "2026-02-10",
       "category": "space",
       "series": "nebulae",
-      "media": "sketches/series/nebulae/eye-of-god/eye-of-god.gif",
+      "media": "sketches/series/nebulae/eye-of-god/eye-of-god.mp4",
       "tags": ["generative", "shader", "space"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -131,7 +137,7 @@
       "description": "A calm, vast seascape rendered in GLSL — layered FBM noise creates rolling ocean swells with perspective foreshortening beneath an overcast sky with soft cumulus clouds, blended at a hazy horizon.",
       "date": "2026-02-10",
       "category": "landscape",
-      "media": "sketches/landscape/open-ocean/open-ocean.gif",
+      "media": "sketches/landscape/open-ocean/open-ocean.mp4",
       "tags": ["generative", "shader", "landscape"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -141,7 +147,7 @@
       "description": "Swirling oil pour painting rendered in GLSL — double domain-warped FBM noise creates dense, organic marble swirls with a glossy wet-paint appearance in deep blues, salmon pinks, whites, and teal.",
       "date": "2026-02-12",
       "category": "abstract",
-      "media": "sketches/abstract/oil-marble/oil-marble.gif",
+      "media": "sketches/abstract/oil-marble/oil-marble.mp4",
       "tags": ["generative", "shader", "abstract"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -151,7 +157,7 @@
       "description": "Fluffy cumulus clouds drift across a deep blue sky — four parallax-layered cloud passes with volumetric lighting, rendered in GLSL.",
       "date": "2026-02-13",
       "category": "landscape",
-      "media": "sketches/landscape/drifting-clouds/drifting-clouds.gif",
+      "media": "sketches/landscape/drifting-clouds/drifting-clouds.mp4",
       "tags": ["generative", "shader", "landscape"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -161,7 +167,8 @@
       "description": "Animated orrery with log-scaled AU distances and Kepler-accurate orbital speeds — eight planets orbit a glowing sun over a twinkling starfield.",
       "date": "2026-02-13",
       "category": "space",
-      "media": "sketches/space/solar-system/solar-system.gif",
+      "media": "sketches/space/solar-system/solar-system.mp4",
+      "seed": 1,
       "tags": ["generative", "simulation", "space"],
       "tech": ["p5.js"]
     },
@@ -171,7 +178,8 @@
       "description": "Autonomous thought-lines wander and tangle inside a brain silhouette — the inescapable loop of a racing mind at 3 a.m.",
       "date": "2026-02-13",
       "category": "abstract",
-      "media": "sketches/abstract/overthinking/overthinking.gif",
+      "media": "sketches/abstract/overthinking/overthinking.mp4",
+      "seed": 1,
       "tags": ["generative", "agents", "abstract"],
       "tech": ["p5.js"]
     },
@@ -181,7 +189,7 @@
       "description": "Inspired by The xx's iconic album art — a bold white X over an animated fluid background rendered in GLSL. Triple domain-warped FBM creates organic swirls in a Purple Sunset palette of indigo, crimson, orange, and gold.",
       "date": "2026-02-14",
       "category": "abstract",
-      "media": "sketches/abstract/the-xx/the-xx.gif",
+      "media": "sketches/abstract/the-xx/the-xx.mp4",
       "tags": ["generative", "shader", "abstract"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -191,7 +199,8 @@
       "description": "Michelangelo's David emerges from cascading Matrix code — a rotating 3D bust sculpted through character-density ASCII art, where heavy symbols carve highlights and faint dots trace shadows under dramatic Rembrandt lighting.",
       "date": "2026-02-14",
       "category": "abstract",
-      "media": "sketches/abstract/digital-david/digital-david.gif",
+      "media": "sketches/abstract/digital-david/digital-david.mp4",
+      "seed": 1,
       "tags": ["generative", "typography", "3d"],
       "tech": ["p5.js", "WEBGL"]
     },
@@ -201,7 +210,8 @@
       "description": "Thousands of stars twinkle against a dark navy void — dense clusters and faint nebula glow evoke the feeling of drifting through deep space.",
       "date": "2026-02-16",
       "category": "space",
-      "media": "sketches/space/deep-starfield/deep-starfield.gif",
+      "media": "sketches/space/deep-starfield/deep-starfield.mp4",
+      "seed": 1,
       "tags": ["generative", "space"],
       "tech": ["p5.js"]
     },
@@ -211,7 +221,8 @@
       "description": "Michelangelo's Creation of Adam reimagined in deep space — hands dissolve into an animated nebula with twinkling stars, edge-dissolution particles, and divine energy sparking between the fingertips.",
       "date": "2026-02-17",
       "category": "space",
-      "media": "sketches/space/cosmic-touch/cosmic-touch.gif",
+      "media": "sketches/space/cosmic-touch/cosmic-touch.mp4",
+      "seed": 1,
       "tags": ["generative", "space", "abstract"],
       "tech": ["p5.js"]
     },
@@ -222,6 +233,7 @@
       "date": "2026-02-21",
       "category": "abstract",
       "media": "sketches/abstract/komposition/komposition.png",
+      "seed": 1,
       "tags": ["generative", "abstract"],
       "tech": ["p5.js"]
     },
@@ -232,6 +244,7 @@
       "date": "2026-02-28",
       "category": "brasilidade",
       "media": "sketches/brasilidade/terra-brasileira/terra-brasileira.png",
+      "seed": 1,
       "tags": ["generative", "abstract", "landscape"],
       "tech": ["p5.js"]
     },
@@ -242,6 +255,7 @@
       "date": "2026-03-01",
       "category": "brasilidade",
       "media": "sketches/brasilidade/kene/kene.png",
+      "seed": 1,
       "tags": ["generative", "abstract", "narrative"],
       "tech": ["p5.js"]
     },
@@ -251,7 +265,8 @@
       "description": "A lone figure atop Bus 142 in a frozen wilderness. The world slowly transforms from cold isolation to warmth — happiness is only real when shared.",
       "date": "2026-03-05",
       "category": "landscape",
-      "media": "sketches/landscape/bus-142/bus-142.gif",
+      "media": "sketches/landscape/bus-142/bus-142.mp4",
+      "seed": 1,
       "tags": ["generative", "narrative", "landscape"],
       "tech": ["p5.js"]
     },
@@ -262,6 +277,7 @@
       "date": "2026-03-25",
       "category": "brasilidade",
       "media": "sketches/brasilidade/kobra/kobra.png",
+      "seed": 1,
       "tags": ["generative", "abstract", "narrative"],
       "tech": ["p5.js", "d3-delaunay"]
     },
@@ -271,7 +287,8 @@
       "description": "A hand-painted cosmic scene — spiral galaxies, colorful planets, twinkling stars, and a drifting comet rendered with thick gouache brush strokes on deep navy.",
       "date": "2026-04-03",
       "category": "space",
-      "media": "sketches/space/painted-cosmos/painted-cosmos.gif",
+      "media": "sketches/space/painted-cosmos/painted-cosmos.mp4",
+      "seed": 1,
       "tags": ["generative", "space", "abstract"],
       "tech": ["p5.js"]
     },
@@ -281,7 +298,7 @@
       "description": "A Van Gogh / James R. Eads–inspired night sky — luminous gold-edged swirls flow across a deep navy void, with twinkling stars and a glowing moon.",
       "date": "2026-04-04",
       "category": "landscape",
-      "media": "sketches/landscape/starry-swirl/starry-swirl.gif",
+      "media": "sketches/landscape/starry-swirl/starry-swirl.mp4",
       "tags": ["generative", "shader", "landscape"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -292,6 +309,7 @@
       "date": "2026-04-05",
       "category": "abstract",
       "media": "sketches/abstract/abstract-chaos/abstract-chaos.png",
+      "seed": 1,
       "tags": ["generative", "abstract"],
       "tech": ["p5.js"]
     },
@@ -301,7 +319,7 @@
       "description": "A raymarched lunar sphere reveals hidden mineral colors — titanium blues, iron oxide ambers, and olivine greens glow beneath crater-pocked terrain, inspired by Artemis II's mineral color observations.",
       "date": "2026-04-12",
       "category": "space",
-      "media": "sketches/space/mineral-moon/mineral-moon.gif",
+      "media": "sketches/space/mineral-moon/mineral-moon.mp4",
       "tags": ["generative", "shader", "space"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -311,7 +329,7 @@
       "description": "Rose curves accumulate one by one on a black canvas — love as geology, each line a stratum of time.",
       "date": "2026-05-23",
       "category": "abstract",
-      "media": "sketches/abstract/sediment/sediment.gif",
+      "media": "sketches/abstract/sediment/sediment.mp4",
       "tags": ["generative", "geometric", "accumulation"],
       "tech": ["p5.js"]
     },
@@ -322,6 +340,7 @@
       "date": "2026-05-23",
       "category": "landscape",
       "media": "sketches/landscape/crimson-dusk/crimson-dusk.png",
+      "seed": 1,
       "tags": ["generative", "landscape"],
       "tech": ["p5.js"]
     },
@@ -332,6 +351,7 @@
       "date": "2026-05-24",
       "category": "landscape",
       "media": "sketches/landscape/golden-dawn/golden-dawn.png",
+      "seed": 1,
       "tags": ["generative", "landscape"],
       "tech": ["p5.js"]
     },
@@ -341,7 +361,7 @@
       "description": "Starlight Doppler-shifted into a prismatic rain of streaks as the Hail Mary races toward light-speed — redshift to blueshift, scattered with glittering sparks.",
       "date": "2026-05-30",
       "category": "space",
-      "media": "sketches/space/redshift/redshift.gif",
+      "media": "sketches/space/redshift/redshift.mp4",
       "tags": ["generative", "shader", "abstract"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -351,7 +371,7 @@
       "description": "Roberto Burle Marx's Copacabana promenade rebuilt stone by stone — sinuous black-and-white waves of Portuguese mosaic slowly drifting like the sea they imitate. A study in brasilidade: foreign technique digested into something unmistakably Brazilian.",
       "date": "2026-06-13",
       "category": "brasilidade",
-      "media": "sketches/brasilidade/calcadao/calcadao.gif",
+      "media": "sketches/brasilidade/calcadao/calcadao.mp4",
       "tags": ["generative", "geometric", "abstract"],
       "tech": ["p5.js"]
     },
@@ -361,7 +381,8 @@
       "description": "An homage to Oscar Niemeyer's free-flowing curve — sail columns, a dome and a leaning blade in white concrete, standing at the edge of a still reflecting pool while the sun arcs through golden hour. A study in brasilidade: the sensual curve of Brasília modernism.",
       "date": "2026-06-13",
       "category": "brasilidade",
-      "media": "sketches/brasilidade/a-curva/a-curva.gif",
+      "media": "sketches/brasilidade/a-curva/a-curva.mp4",
+      "seed": 7,
       "tags": ["generative", "landscape", "abstract"],
       "tech": ["p5.js"]
     },
@@ -371,7 +392,8 @@
       "description": "\"Tupi or not Tupi.\" A cold imported Concrete-art grid is devoured by swelling organic forms in Tarsila do Amaral's caipira palette, digested into sensual tropical colour and then revealed again — an endless breathing enactment of Oswald de Andrade's 1928 cannibalist manifesto, the founding idea of brasilidade.",
       "date": "2026-06-13",
       "category": "brasilidade",
-      "media": "sketches/brasilidade/antropofagia/antropofagia.gif",
+      "media": "sketches/brasilidade/antropofagia/antropofagia.mp4",
+      "seed": 0,
       "tags": ["generative", "shader", "abstract"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -382,6 +404,7 @@
       "date": "2026-06-13",
       "category": "brasilidade",
       "media": "sketches/brasilidade/alegria/alegria.png",
+      "seed": 3,
       "tags": ["generative", "abstract"],
       "tech": ["p5.js"]
     },
@@ -392,6 +415,7 @@
       "date": "2026-06-14",
       "category": "brasilidade",
       "media": "sketches/brasilidade/marajoara/marajoara.png",
+      "seed": 7,
       "tags": ["generative", "geometric", "abstract"],
       "tech": ["p5.js"]
     },
@@ -401,7 +425,8 @@
       "description": "A Copa do Mundo crowd mosaic: a whole stand of supporters holds up coloured cards that together form the bandeira do Brasil, while an ola (Mexican wave) sweeps across the terraces — fans rising, cards lifting and catching the light, camera flashes sparking through the crowd. Brasilidade as collective joy.",
       "date": "2026-06-14",
       "category": "brasilidade",
-      "media": "sketches/brasilidade/torcida/torcida.gif",
+      "media": "sketches/brasilidade/torcida/torcida.mp4",
+      "seed": 7,
       "tags": ["generative", "abstract"],
       "tech": ["p5.js"]
     },
@@ -412,6 +437,7 @@
       "date": "2026-06-14",
       "category": "brasilidade",
       "media": "sketches/brasilidade/sob-a-lua/sob-a-lua.png",
+      "seed": 8,
       "tags": ["generative", "landscape", "abstract"],
       "tech": ["p5.js"]
     },
@@ -422,7 +448,8 @@
       "date": "2026-06-14",
       "category": "space",
       "series": "interstellar",
-      "media": "sketches/series/interstellar/gargantua/gargantua.gif",
+      "media": "sketches/series/interstellar/gargantua/gargantua.mp4",
+      "seed": 7,
       "tags": ["generative", "shader", "abstract", "interstellar"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -432,7 +459,7 @@
       "description": "One lunar month of real tide at Porto de Itaqui, São Luís — Brazil's most dramatic tides — computed from published harmonic constituents (M2, S2, N2, K1, O1, M4) and drawn as a spiral: one turn per lunar day, ~29.5 turns, with spring and neap cycles emerging as waves of wild and calm rings.",
       "date": "2026-08-30",
       "category": "data-viz",
-      "media": "sketches/data-viz/mare/mare.gif",
+      "media": "sketches/data-viz/mare/mare.mp4",
       "tags": ["data-visualization", "generative"],
       "tech": ["p5.js"]
     },
@@ -442,7 +469,7 @@
       "description": "PSR B1919+21 — the first pulsar ever detected (Jocelyn Bell Burnell, 1967) — beating at its real 1.3373-second rotation period. Each line is one turn of the neutron star, written as the radio beam sweeps past and stacked into the waterfall made famous by Unknown Pleasures; sub-pulses drift steadily across the window pulse after pulse, the drifting-subpulse phenomenon this pulsar actually exhibits.",
       "date": "2026-08-30",
       "category": "space",
-      "media": "sketches/space/pulsar/pulsar.gif",
+      "media": "sketches/space/pulsar/pulsar.mp4",
       "tags": ["generative", "simulation", "space"],
       "tech": ["p5.js"]
     },
@@ -452,7 +479,7 @@
       "description": "Recife carnival as pure geometry — the frevo umbrella exploded into four concentric rings of colored arc segments that never rotate smoothly: each ring snaps forward on its own syncopated 16th-note pattern at 180 BPM, the staccato of the passo, while radial line bursts crack around the mandala on the offbeats like passistas leaping. No figures, no umbrella — just the colors and the syncopation.",
       "date": "2026-08-30",
       "category": "brasilidade",
-      "media": "sketches/brasilidade/frevo/frevo.gif",
+      "media": "sketches/brasilidade/frevo/frevo.mp4",
       "tags": ["generative", "geometric", "abstract"],
       "tech": ["p5.js"]
     },
@@ -462,7 +489,7 @@
       "description": "Moiré wave interference from nothing but straight lines — a field of hue-cycling rainbow stripes shines through two black picket-fence gratings that tilt and drift against each other. Every mark is a straight line; the waves, ripples and rolling bands are pure interference, a pattern that lives only in the space between the gratings, morphing from broad rolling bands to tight woven mesh as the fences swing through alignment.",
       "date": "2026-08-30",
       "category": "abstract",
-      "media": "sketches/abstract/interferencia/interferencia.gif",
+      "media": "sketches/abstract/interferencia/interferencia.mp4",
       "tags": ["generative", "geometric", "abstract"],
       "tech": ["p5.js"]
     },
@@ -472,7 +499,7 @@
       "description": "Chladni figures — geometry born from vibration. Fourteen thousand sand grains ride a vibrating square plate, drifting toward the nodal lines where the plate stands still and getting shaken hardest where it moves most; grain-grain exclusion spreads the piles into the continuous sand ridges real plates show. The loop sweeps six standing-wave modes of increasing intricacy: at each transition the settled figure bursts apart and recrystallizes into the next, pure standing-wave physics with nothing drawn but the grains.",
       "date": "2026-08-30",
       "category": "abstract",
-      "media": "sketches/abstract/cimatica/cimatica.gif",
+      "media": "sketches/abstract/cimatica/cimatica.mp4",
       "tags": ["generative", "simulation", "geometric"],
       "tech": ["p5.js"]
     },
@@ -483,7 +510,8 @@
       "date": "2026-08-30",
       "category": "abstract",
       "series": "arrival",
-      "media": "sketches/series/arrival/logograma/logograma.gif",
+      "media": "sketches/series/arrival/logograma/logograma.mp4",
+      "seed": 7,
       "tags": ["generative", "narrative", "abstract", "arrival"],
       "tech": ["p5.js"]
     },
@@ -494,7 +522,7 @@
       "date": "2026-08-30",
       "category": "abstract",
       "series": "arrival",
-      "media": "sketches/series/arrival/paralaxe/paralaxe.gif",
+      "media": "sketches/series/arrival/paralaxe/paralaxe.mp4",
       "tags": ["generative", "geometric", "abstract", "arrival"],
       "tech": ["p5.js"]
     },
@@ -505,6 +533,7 @@
       "date": "2026-08-30",
       "category": "landscape",
       "media": "sketches/landscape/luar-do-sertao/luar-do-sertao.png",
+      "seed": 1,
       "tags": ["generative", "landscape", "brasilidade"],
       "tech": ["p5.js"]
     },
@@ -515,6 +544,7 @@
       "date": "2026-08-30",
       "category": "landscape",
       "media": "sketches/landscape/ipe-no-cerrado/ipe-no-cerrado.png",
+      "seed": 1,
       "tags": ["generative", "landscape", "brasilidade"],
       "tech": ["p5.js"]
     },
@@ -524,7 +554,8 @@
       "description": "Resistance, Brazil, October 2026. A cordel woodcut that carves itself: a red sun is printed, the black block lands, and an invisible gouge cuts the rays, the sky line by line, and a crowd out of the solid black, one figure at a time. Then the fists go up in a wave under AINDA ESTAMOS AQUI, and the sheet is lifted for a new print. After J. Borges, Käthe Kollwitz and the Atelier Populaire.",
       "date": "2026-10-11",
       "category": "abstract",
-      "media": "sketches/abstract/xilogravura/xilogravura.gif",
+      "media": "sketches/abstract/xilogravura/xilogravura.mp4",
+      "seed": 1964,
       "tags": ["generative", "woodcut", "typography", "brasilidade"],
       "tech": ["p5.js"]
     },
@@ -534,7 +565,8 @@
       "description": "After Athos Bulcão, who let the workers laying his tiles in Brasília choose each one's turn on the wall. Here the wall keeps being re-laid: four waves cross a glazed blue-and-white panel (a diagonal sweep, a scatter, a ripple, a snake) and every tile they touch lifts and turns a quarter, until each has made a full turn and the first panel returns. Crackle, pooled glaze and chipped edges; the light stays put while the tiles turn under it.",
       "date": "2026-10-11",
       "category": "brasilidade",
-      "media": "sketches/brasilidade/azulejaria/azulejaria.gif",
+      "media": "sketches/brasilidade/azulejaria/azulejaria.mp4",
+      "seed": 7,
       "tags": ["generative", "tiles", "pattern", "brasilidade"],
       "tech": ["p5.js"]
     },
@@ -545,7 +577,8 @@
       "date": "2026-10-11",
       "category": "abstract",
       "series": "handmaids-tale",
-      "media": "sketches/series/handmaids-tale/fluxo/fluxo.gif",
+      "media": "sketches/series/handmaids-tale/fluxo/fluxo.mp4",
+      "seed": 5,
       "tags": ["generative", "flow-field", "plotter", "handmaids-tale"],
       "tech": ["p5.js"]
     },
@@ -557,6 +590,7 @@
       "category": "abstract",
       "series": "handmaids-tale",
       "media": "sketches/series/handmaids-tale/contida/contida.gif",
+      "seed": 3,
       "tags": ["generative", "reaction-diffusion", "simulation", "handmaids-tale"],
       "tech": ["p5.js"]
     },
@@ -567,7 +601,8 @@
       "date": "2026-10-11",
       "category": "abstract",
       "series": "handmaids-tale",
-      "media": "sketches/series/handmaids-tale/nomes/nomes.gif",
+      "media": "sketches/series/handmaids-tale/nomes/nomes.mp4",
+      "seed": 8,
       "tags": ["generative", "typography", "noise", "handmaids-tale"],
       "tech": ["p5.js"]
     },
@@ -578,7 +613,8 @@
       "date": "2026-10-11",
       "category": "abstract",
       "series": "handmaids-tale",
-      "media": "sketches/series/handmaids-tale/maioria/maioria.gif",
+      "media": "sketches/series/handmaids-tale/maioria/maioria.mp4",
+      "seed": 29,
       "tags": ["generative", "cellular-automaton", "emergence", "handmaids-tale"],
       "tech": ["p5.js"]
     },
@@ -589,7 +625,8 @@
       "date": "2026-10-11",
       "category": "abstract",
       "series": "reflexoes",
-      "media": "sketches/series/reflexoes/pilha-de-areia/pilha-de-areia.gif",
+      "media": "sketches/series/reflexoes/pilha-de-areia/pilha-de-areia.mp4",
+      "seed": 1,
       "tags": ["generative", "simulation", "cellular-automaton", "reflexoes"],
       "tech": ["p5.js"]
     },
@@ -600,7 +637,8 @@
       "date": "2026-10-11",
       "category": "abstract",
       "series": "reflexoes",
-      "media": "sketches/series/reflexoes/mitose/mitose.gif",
+      "media": "sketches/series/reflexoes/mitose/mitose.mp4",
+      "seed": 1,
       "tags": ["generative", "simulation", "reaction-diffusion", "reflexoes"],
       "tech": ["p5.js"]
     },
@@ -611,7 +649,8 @@
       "date": "2026-10-11",
       "category": "abstract",
       "series": "reflexoes",
-      "media": "sketches/series/reflexoes/copia-da-copia/copia-da-copia.gif",
+      "media": "sketches/series/reflexoes/copia-da-copia/copia-da-copia.mp4",
+      "seed": 3,
       "tags": ["generative", "simulation", "iteration", "reflexoes"],
       "tech": ["p5.js"]
     },
@@ -622,7 +661,8 @@
       "date": "2026-10-11",
       "category": "abstract",
       "series": "reflexoes",
-      "media": "sketches/series/reflexoes/queimada/queimada.gif",
+      "media": "sketches/series/reflexoes/queimada/queimada.mp4",
+      "seed": 4,
       "tags": ["generative", "simulation", "cellular-automaton", "climate", "reflexoes"],
       "tech": ["p5.js"]
     },
@@ -633,7 +673,8 @@
       "date": "2026-10-11",
       "category": "abstract",
       "series": "reflexoes",
-      "media": "sketches/series/reflexoes/bolhas/bolhas.gif",
+      "media": "sketches/series/reflexoes/bolhas/bolhas.mp4",
+      "seed": 5,
       "tags": ["generative", "simulation", "agents", "risograph", "reflexoes"],
       "tech": ["p5.js"]
     },
@@ -644,7 +685,8 @@
       "date": "2026-10-11",
       "category": "abstract",
       "series": "reflexoes",
-      "media": "sketches/series/reflexoes/feira/feira.gif",
+      "media": "sketches/series/reflexoes/feira/feira.mp4",
+      "seed": 6,
       "tags": ["generative", "simulation", "agents", "inequality", "reflexoes"],
       "tech": ["p5.js"]
     },
@@ -655,7 +697,8 @@
       "date": "2026-10-11",
       "category": "abstract",
       "series": "grande-sertao",
-      "media": "sketches/series/grande-sertao/veredas/veredas.gif",
+      "media": "sketches/series/grande-sertao/veredas/veredas.mp4",
+      "seed": 7,
       "tags": ["generative", "simulation", "terrain", "grande-sertao"],
       "tech": ["p5.js"]
     },
@@ -666,7 +709,8 @@
       "date": "2026-10-11",
       "category": "abstract",
       "series": "grande-sertao",
-      "media": "sketches/series/grande-sertao/travessia/travessia.gif",
+      "media": "sketches/series/grande-sertao/travessia/travessia.mp4",
+      "seed": 12,
       "tags": ["generative", "maze", "labyrinth", "grande-sertao"],
       "tech": ["p5.js"]
     },
@@ -677,7 +721,8 @@
       "date": "2026-10-11",
       "category": "abstract",
       "series": "grande-sertao",
-      "media": "sketches/series/grande-sertao/redemoinho/redemoinho.gif",
+      "media": "sketches/series/grande-sertao/redemoinho/redemoinho.mp4",
+      "seed": 21,
       "tags": ["generative", "flow-field", "vector-field", "grande-sertao"],
       "tech": ["p5.js"]
     },
@@ -688,7 +733,8 @@
       "date": "2026-10-11",
       "category": "abstract",
       "series": "dead-channel",
-      "media": "sketches/series/dead-channel/routing/routing.gif",
+      "media": "sketches/series/dead-channel/routing/routing.mp4",
+      "seed": 1,
       "tags": ["generative", "algorithm", "pathfinding", "circuit", "dead-channel"],
       "tech": ["p5.js"]
     },
@@ -700,6 +746,7 @@
       "category": "abstract",
       "series": "dead-channel",
       "media": "sketches/series/dead-channel/pixel-sort/pixel-sort.gif",
+      "seed": 1,
       "tags": ["generative", "glitch", "sorting", "noise", "dead-channel"],
       "tech": ["p5.js"]
     },
@@ -710,7 +757,8 @@
       "date": "2026-10-11",
       "category": "abstract",
       "series": "dead-channel",
-      "media": "sketches/series/dead-channel/neon-signs/neon-signs.gif",
+      "media": "sketches/series/dead-channel/neon-signs/neon-signs.mp4",
+      "seed": 1,
       "tags": ["generative", "typography", "procedural", "markov", "dead-channel"],
       "tech": ["p5.js"]
     },
@@ -721,7 +769,8 @@
       "date": "2026-10-11",
       "category": "abstract",
       "series": "dead-channel",
-      "media": "sketches/series/dead-channel/ice/ice.gif",
+      "media": "sketches/series/dead-channel/ice/ice.mp4",
+      "seed": 1,
       "tags": ["generative", "maze", "algorithm", "pathfinding", "dead-channel"],
       "tech": ["p5.js"]
     },
@@ -733,6 +782,7 @@
       "category": "abstract",
       "series": "dead-channel",
       "media": "sketches/series/dead-channel/chiba-sky/chiba-sky.gif",
+      "seed": 1,
       "tags": ["generative", "simulation", "ising", "noise", "dead-channel"],
       "tech": ["p5.js"]
     },
@@ -742,7 +792,8 @@
       "description": "Seventy metronomes on one loose board, each at its own tempo, nudging each other through the wood (the Kuramoto model). Each is a thread of ink written by a pen sweeping down the page; every visit sets up a new board. As the coupling tightens the tangle combs itself into one shared pulse, then loosens and drifts apart again.",
       "date": "2026-10-17",
       "category": "abstract",
-      "media": "sketches/abstract/metronomes/metronomes.gif",
+      "media": "sketches/abstract/metronomes/metronomes.mp4",
+      "seed": 5,
       "tags": ["generative", "simulation", "synchronization", "music", "kuramoto"],
       "tech": ["p5.js"]
     },
@@ -752,7 +803,8 @@
       "description": "A record cut by a composer that never repeats. Each cycle a generative composer writes a new album side (a random walk over a minor scale, FM voices, five tracks with silent gaps) and a stylus cuts it into one spiral, outside in. The only mark is the stylus path: loud passages swell into wide bands, quiet ones thin to a hairline, the gaps between tracks are clean rings. Then the side is wiped and the next album begins.",
       "date": "2026-10-17",
       "category": "abstract",
-      "media": "sketches/abstract/groove/groove.gif",
+      "media": "sketches/abstract/groove/groove.mp4",
+      "seed": 11,
       "tags": ["generative", "music", "vinyl", "fm-synthesis", "line"],
       "tech": ["p5.js"]
     },
@@ -762,7 +814,8 @@
       "description": "After Mira Schendel's monotypes: a page written in a language that does not exist. Each page invents its own alphabet and vocabulary (letters and words follow Zipf's law), and a pen with mass and spring writes it in a cursive hand, paling as the nib runs dry. The page rests, fades, and the next one arrives in a new language.",
       "date": "2026-10-17",
       "category": "abstract",
-      "media": "sketches/abstract/escrita/escrita.gif",
+      "media": "sketches/abstract/escrita/escrita.mp4",
+      "seed": 13,
       "tags": ["generative", "asemic-writing", "language", "zipf", "line"],
       "tech": ["p5.js"]
     },
@@ -773,7 +826,8 @@
       "date": "2026-11-04",
       "category": "abstract",
       "series": "hunger-games",
-      "media": "sketches/series/hunger-games/reaping/reaping.gif",
+      "media": "sketches/series/hunger-games/reaping/reaping.mp4",
+      "seed": 3,
       "tags": ["generative", "probability", "tally", "typography", "hunger-games"],
       "tech": ["p5.js"]
     },
@@ -784,7 +838,8 @@
       "date": "2026-11-04",
       "category": "abstract",
       "series": "hunger-games",
-      "media": "sketches/series/hunger-games/arena/arena.gif",
+      "media": "sketches/series/hunger-games/arena/arena.mp4",
+      "seed": 3,
       "tags": ["generative", "voronoi", "simulation", "hunger-games"],
       "tech": ["p5.js"]
     },
@@ -795,7 +850,8 @@
       "date": "2026-11-04",
       "category": "abstract",
       "series": "hunger-games",
-      "media": "sketches/series/hunger-games/spark/spark.gif",
+      "media": "sketches/series/hunger-games/spark/spark.mp4",
+      "seed": 3,
       "tags": ["generative", "contagion", "cellular-automata", "simulation", "hunger-games"],
       "tech": ["p5.js"]
     },
@@ -806,7 +862,8 @@
       "date": "2026-11-04",
       "category": "abstract",
       "series": "hunger-games",
-      "media": "sketches/series/hunger-games/tribute/tribute.gif",
+      "media": "sketches/series/hunger-games/tribute/tribute.mp4",
+      "seed": 3,
       "tags": ["generative", "network", "flow", "graph", "hunger-games"],
       "tech": ["p5.js"]
     },
@@ -817,7 +874,8 @@
       "date": "2026-11-04",
       "category": "abstract",
       "series": "hunger-games",
-      "media": "sketches/series/hunger-games/four-notes/four-notes.gif",
+      "media": "sketches/series/hunger-games/four-notes/four-notes.mp4",
+      "seed": 2,
       "tags": ["generative", "cultural-evolution", "agents", "notation", "hunger-games"],
       "tech": ["p5.js"]
     },
@@ -828,7 +886,8 @@
       "date": "2026-11-04",
       "category": "space",
       "series": "nebulae",
-      "media": "sketches/series/nebulae/pillars/pillars.gif",
+      "media": "sketches/series/nebulae/pillars/pillars.mp4",
+      "seed": 3,
       "tags": ["generative", "shader", "space", "photoevaporation", "raymarching", "nebulae"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -839,7 +898,8 @@
       "date": "2026-11-04",
       "category": "space",
       "series": "nebulae",
-      "media": "sketches/series/nebulae/filaments/filaments.gif",
+      "media": "sketches/series/nebulae/filaments/filaments.mp4",
+      "seed": 3,
       "tags": ["generative", "shader", "space", "instability", "noise", "nebulae"],
       "tech": ["p5.js", "GLSL"]
     },
@@ -850,7 +910,8 @@
       "date": "2026-11-04",
       "category": "space",
       "series": "nebulae",
-      "media": "sketches/series/nebulae/shells/shells.gif",
+      "media": "sketches/series/nebulae/shells/shells.mp4",
+      "seed": 3,
       "tags": ["generative", "shader", "space", "rhythm", "noise", "nebulae"],
       "tech": ["p5.js", "GLSL"]
     }
