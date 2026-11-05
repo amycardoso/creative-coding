@@ -4,14 +4,17 @@
 //
 // The sketch must expose a capture hook (see sketches/brasilidade/calcadao/sketch.js):
 //   window.__captureFrame(i, N)  -> render loop phase i of N, then redraw()
-// Frames evenly tile [0,1) so the resulting GIF loops without a seam.
+// Frames evenly tile [0,1) so the resulting video loops without a seam.
+//
+// With a seed, scripts/seed.js is injected before the page loads, so the
+// recording shows exactly what the gallery shows for that seed.
 //
 // Usage:
-//   node scripts/capture-frames.mjs <url> <outDir> <frames> <width> <height>
+//   node scripts/capture-frames.mjs <url> <outDir> <frames> <width> <height> [seed]
 
-const [, , url, outDir, framesArg, wArg, hArg] = process.argv;
+const [, , url, outDir, framesArg, wArg, hArg, seedArg] = process.argv;
 if (!url || !outDir) {
-  console.error('usage: node capture-frames.mjs <url> <outDir> <frames> <width> <height>');
+  console.error('usage: node capture-frames.mjs <url> <outDir> <frames> <width> <height> [seed]');
   process.exit(1);
 }
 const FRAMES = parseInt(framesArg ?? '180', 10);
@@ -79,7 +82,14 @@ await send('Runtime.enable', {}, sid);
 // frame (the default CDP viewport is 800×600 and would letterbox the capture).
 await send('Emulation.setDeviceMetricsOverride',
   { width: WIDTH, height: HEIGHT, deviceScaleFactor: 1, mobile: false }, sid);
-await send('Page.navigate', { url }, sid);
+let pageUrl = url;
+if (seedArg) {
+  const shim = fs.readFileSync(new URL('./seed.js', import.meta.url), 'utf8');
+  await send('Page.addScriptToEvaluateOnNewDocument',
+    { source: `window.__seedBase = ${Number(seedArg)};\n${shim}` }, sid);
+  pageUrl += `${url.includes('?') ? '&' : '?'}seed=${seedArg}`;
+}
+await send('Page.navigate', { url: pageUrl }, sid);
 
 // Wait until the sketch is ready (capture hook installed).
 let ready = false;
