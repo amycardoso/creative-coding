@@ -39,6 +39,11 @@
       "slug": "nebulae",
       "title": "Nebulae",
       "description": "Four nebulae in GLSL, each drawn by the process that shaped it: the ring a dying star leaves behind, light that carves pillars out of shadow, a supernova shell that tears into filaments, and shells thrown off in rhythm. Gas made of domain-warped noise throughout; Pillars, Filaments and Shells draw a new seed every visit."
+    },
+    {
+      "slug": "vice-city",
+      "title": "Vice City",
+      "description": "Miami heat and neon in the colours of Vice City, printed as a fluorescent risograph. Five systems: heat plumes that bend a sunset, neon tubes that grow until they are trapped, wave sources interfering in the bay, a long exposure of traffic stopping at red lights, and palm crowns growing at the golden angle by a pool. A new seed every visit."
     }
   ],
   "sketches": [
@@ -913,6 +918,66 @@
       "media": "sketches/series/nebulae/shells/shells.mp4",
       "seed": 3,
       "tags": ["generative", "shader", "space", "rhythm", "noise", "nebulae"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "mirage",
+      "title": "Mirage",
+      "description": "Vice City #1. A heat simulation runs under a Miami sunset: plumes rise from the hot ground on swaying currents, and the temperature gradient bends every pixel the way hot air bends light. The slatted sun wobbles as it sinks, and below the horizon the ground mirrors the sky like an inferior mirage.",
+      "date": "2026-11-21",
+      "category": "abstract",
+      "series": "vice-city",
+      "media": "sketches/series/vice-city/mirage/mirage.mp4",
+      "seed": 3,
+      "tags": ["generative", "simulation", "heat", "refraction", "risograph", "vice-city"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "neon",
+      "title": "Neon",
+      "description": "Vice City #2. Glass tubes grow together on a grid, each a walk that never crosses itself or another tube. While growing they are cold glass; when one is boxed in it stops, flickers and fills with gas. The sign is done when the last tube is trapped.",
+      "date": "2026-11-21",
+      "category": "abstract",
+      "series": "vice-city",
+      "media": "sketches/series/vice-city/neon/neon.mp4",
+      "seed": 3,
+      "tags": ["generative", "self-avoiding-walk", "grid", "growth", "risograph", "vice-city"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "interference",
+      "title": "Interference",
+      "description": "Vice City #3. Biscayne Bay from above: a few wave sources, some off the page, add up their rings. Contours in aqua, crests in pink where the waves reinforce, and the still nodal lines where they cancel in sunflower yellow. One period loops.",
+      "date": "2026-11-21",
+      "category": "abstract",
+      "series": "vice-city",
+      "media": "sketches/series/vice-city/interference/interference.mp4",
+      "seed": 3,
+      "tags": ["generative", "waves", "interference", "contours", "risograph", "vice-city"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "night-drive",
+      "title": "Night Drive",
+      "description": "Vice City #4. A long exposure of a jittered street grid at night. Traffic lights with their own periods, a few hundred cars that follow the one ahead. Only the light they leave is printed: headlights in aqua, tail lights in pink, and bright knots where queues wait at red.",
+      "date": "2026-11-21",
+      "category": "abstract",
+      "series": "vice-city",
+      "media": "sketches/series/vice-city/night-drive/night-drive.mp4",
+      "seed": 3,
+      "tags": ["generative", "agents", "traffic", "long-exposure", "risograph", "vice-city"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "fronds",
+      "title": "Fronds",
+      "description": "Vice City #5. Palm crowns seen from above grow their fronds at the golden angle, each new frond in the largest gap left by the others, lengthening and curling with age. A low afternoon sun swings their shadows round, and the pool's caustics shimmer.",
+      "date": "2026-11-21",
+      "category": "abstract",
+      "series": "vice-city",
+      "media": "sketches/series/vice-city/fronds/fronds.mp4",
+      "seed": 3,
+      "tags": ["generative", "phyllotaxis", "growth", "golden-angle", "risograph", "vice-city"],
       "tech": ["p5.js", "GLSL"]
     }
   ]
