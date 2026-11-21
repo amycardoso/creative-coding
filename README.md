@@ -24,7 +24,7 @@ sketches/
     ├── interstellar/     # Time Dilation, Endurance, Gargantua
     ├── nebulae/          # Eye of God, Pillars, Filaments, Shells
     ├── reflexoes/        # Pilha de Areia, Mitose, Cópia da Cópia, Queimada, Bolhas, Feira
-    ├── tropics/          # Glitter, Dunes, Swash, Umbrellas, Reef
+    ├── tropics/          # Glitter, Dunes, Umbrellas
     └── vice-city/        # Mirage, Interference, Night Drive, Fronds
 ```
 

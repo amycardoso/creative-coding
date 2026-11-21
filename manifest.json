@@ -48,7 +48,7 @@
     {
       "slug": "tropics",
       "title": "Tropics",
-      "description": "Sun, sea and sand, each drawn by the process behind it and printed as a fluorescent risograph, in the style of Mirage and Fronds. The sun's glitter on moving waves, dunes built by wind, swash lines that the next wave erases, a beach crowd spacing itself out, and a reef growing against the current. Each run is different; the gallery opens on the default seed and Regenerate draws a new one."
+      "description": "Sun, sea and sand, each drawn by the process behind it and printed as a fluorescent risograph, in the style of Mirage and Fronds. The sun's glitter on moving waves, dunes built by wind, and a beach crowd spacing itself out over one day. Each run is different; the gallery opens on the default seed and Regenerate draws a new one."
     }
   ],
   "sketches": [
@@ -998,39 +998,15 @@
       "tech": ["p5.js", "GLSL"]
     },
     {
-      "slug": "swash",
-      "title": "Swash",
-      "description": "Tropics #3. A beach from above. Each wave rushes up to a reach that varies along the shore, leaves a line of foam where it stops, and erases every older line it covers. Only the marks no later wave has reached stay on the sand, while the tide rises and falls.",
-      "date": "2026-11-21",
-      "category": "abstract",
-      "series": "tropics",
-      "media": "sketches/series/tropics/swash/swash.mp4",
-      "seed": 3,
-      "tags": ["generative", "simulation", "waves", "erasure", "risograph", "tropics"],
-      "tech": ["p5.js", "GLSL"]
-    },
-    {
       "slug": "umbrellas",
       "title": "Umbrellas",
-      "description": "Tropics #4. A beach from above over one day. Each newcomer tries a few dozen spots and takes the best: near the water, far from strangers, near whoever they came with. The tight front row, looser back and small clusters come from those three wishes; shadows swing with the sun and people leave in the order they came.",
+      "description": "Tropics #3. A beach from above over one day. Each newcomer tries a few dozen spots and takes the best: near the water, far from strangers, near whoever they came with. The tight front row, looser back and small clusters come from those three wishes; shadows swing with the sun and people leave in the order they came.",
       "date": "2026-11-21",
       "category": "abstract",
       "series": "tropics",
       "media": "sketches/series/tropics/umbrellas/umbrellas.mp4",
       "seed": 3,
       "tags": ["generative", "agents", "crowd", "spacing", "risograph", "tropics"],
-      "tech": ["p5.js", "GLSL"]
-    },
-    {
-      "slug": "reef",
-      "title": "Reef",
-      "description": "Tropics #5. A shallow reef growing by diffusion-limited aggregation: particles wander with a slow current and stick when they touch a colony, so the corals branch and lean into the current. New growth in pink, older coral darkening, and caustics shifting on the sand.",
-      "date": "2026-11-21",
-      "category": "abstract",
-      "series": "tropics",
-      "media": "sketches/series/tropics/reef/reef.mp4",
-      "seed": 3,
-      "tags": ["generative", "dla", "growth", "caustics", "risograph", "tropics"],
       "tech": ["p5.js", "GLSL"]
     }
   ]
