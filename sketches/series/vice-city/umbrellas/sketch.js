@@ -1,7 +1,7 @@
 /**
  * Umbrellas
  *
- * Tropics #4.
+ * Vice City #7.
  *
  * A beach from straight above, over one day. People arrive one at a time.
  * Each newcomer looks at a few dozen spots at random and takes the best:

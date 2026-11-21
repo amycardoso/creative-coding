@@ -1,7 +1,7 @@
 /**
  * Glitter
  *
- * Tropics #1.
+ * Vice City #5.
  *
  * The path of light the sun lays on the sea at the end of the afternoon.
  * The sea is a sum of two dozen waves with random directions and lengths,

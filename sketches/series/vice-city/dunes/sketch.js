@@ -1,7 +1,7 @@
 /**
  * Dunes
  *
- * Tropics #2.
+ * Vice City #6.
  *
  * Werner's dune model, running live. The sand is a stack of slabs on a
  * grid that wraps around. The wind picks a slab at random and carries it a
