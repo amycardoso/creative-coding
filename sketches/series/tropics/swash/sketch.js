@@ -144,6 +144,7 @@ function newWave() {
   for (let j = 0; j < ROWS; j++) {
     const y = j * RY;
     r[j] = base(y) + 60 + big * 230 + (noise(y * 0.006, k * 0.7) - 0.5) * 220 + (noise(y * 0.03, k * 3.1) - 0.5) * 40;
+    r[j] = Math.max(r[j], base(y) + 25);   // every wave reaches past the shoreline
   }
   return { r, born: t, ink: k % 3 === 0 ? 0 : 1, front: new Float32Array(ROWS) };
 }
