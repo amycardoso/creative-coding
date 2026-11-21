@@ -1,7 +1,7 @@
 /**
  * Fronds
  *
- * Vice City #5.
+ * Vice City #4.
  *
  * Palm trees by a pool, seen from straight above. Crowns are scattered by
  * rejection (they may overlap a little) and appear one after another. Each

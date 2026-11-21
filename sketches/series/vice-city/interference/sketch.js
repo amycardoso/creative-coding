@@ -1,7 +1,7 @@
 /**
  * Interference
  *
- * Vice City #3.
+ * Vice City #2.
  *
  * Biscayne Bay seen from above. A few wave sources (boats, jet skis) sit at
  * random points, some of them off the page, and send out rings of
