@@ -23,7 +23,8 @@ sketches/
     ├── hunger-games/     # Reaping, Arena, Spark, Tribute, Four Notes
     ├── interstellar/     # Time Dilation, Endurance, Gargantua
     ├── nebulae/          # Eye of God, Pillars, Filaments, Shells
-    └── reflexoes/        # Pilha de Areia, Mitose, Cópia da Cópia, Queimada, Bolhas, Feira
+    ├── reflexoes/        # Pilha de Areia, Mitose, Cópia da Cópia, Queimada, Bolhas, Feira
+    └── vice-city/        # Mirage, Interference, Night Drive, Fronds
 ```
 
 Each sketch folder is `sketches/<category>/<slug>/` (or `sketches/series/<series>/<slug>/`) and holds `index.html`, `sketch.js` and its recording named `<slug>.mp4` (or `<slug>.png` for a still). A few older pieces keep a `<slug>.gif` because their noise does not compress as video. The gallery makes thumbnails from the recording on deploy and runs the sketch itself on its page. `manifest.json` lists every sketch with its `media` path and its default `seed`; sketches in a series also carry a `series` field.
