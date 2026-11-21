@@ -143,7 +143,7 @@ function restart(s) {
   inks = random([[INK.pink, INK.aqua, INK.yellow], [INK.red, INK.blue, INK.yellow], [INK.pink, INK.teal, INK.orange], [INK.violet, INK.orange, INK.aqua]]);
   let g = new Uint8Array(N * N);
   for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) g[y * N + x] = random() < 0.38 * (0.6 + 0.8 * noise(x * 0.15, y * 0.15)) ? 1 : 0;
-  gens = [g, g, g]; gen = 0; seen = new Map(); t = 0;
+  gens = [g, g, g]; gen = 0; seen = new Map(); t = 0; hold = 0;
   // displayed size of every cell in every pass, easing towards alive (1) or dead (0)
   size = [0, 1, 2].map(() => new Float32Array(N * N));
   // every cell's three shapes, drawn once with their own wobble so no two prints match

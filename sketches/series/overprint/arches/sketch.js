@@ -205,6 +205,7 @@ function draw() {
   risoPrint(img, img2, inks.map((ink, k) => ({ ch: k, ink, solid: true })));
   t++;
   const settled = !queue.length && arches.every(a => a.g >= 1 && Math.abs(a.vx) < 0.02);
+  if (!settled) ended = -1;
   if (settled && ended < 0) ended = t;
   if (ended > 0 && t - ended > HOLD) restart(floor(random(1e6)));
 }
