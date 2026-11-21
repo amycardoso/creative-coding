@@ -62,7 +62,7 @@ void main() {
       vec2 cp = vec2(k.x * ca - k.y * sa, k.x * sa + k.y * ca) * c;
       vec2 uv = clamp(cp / res, 0.0, 1.0);
       float d = clamp(chan(chA[i], uv) + chan(chB[i], uv), 0.0, 1.0);
-      cov = clamp(0.78 * c * sqrt(d) - length(g - k) * c + 0.5, 0.0, 1.0);
+      cov = d > 0.0 ? clamp(0.78 * c * sqrt(d) - length(g - k) * c + 0.5, 0.0, 1.0) : 0.0;
     }
     cov *= 0.86 + 0.14 * hash(px + float(i) * 17.0);
     col *= 1.0 - cov * (1.0 - inks[i]);
@@ -104,10 +104,11 @@ function risoPrint(t0, t1, passes) {
 }
 
 function pickSeed() {
+  // read ?seed first: seed.js only leaves randomSeed() unmixed for sketches that read it
+  const p = new URLSearchParams(location.search), q = parseInt(p.get('seed'), 10);
   // the gallery's seed.js provides the default seed (or ?seed) as window.__seed
   if (Number.isFinite(window.__seed)) return window.__seed;
-  const p = new URLSearchParams(location.search);
-  return p.has('seed') ? parseInt(p.get('seed'), 10) : Math.floor(Math.random() * 1e6);
+  return Number.isFinite(q) ? q : Math.floor(Math.random() * 1e6);
 }
 
 function keyPressed() {

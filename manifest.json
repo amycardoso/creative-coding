@@ -43,12 +43,12 @@
     {
       "slug": "vice-city",
       "title": "Vice City",
-      "description": "Miami heat and neon in the colours of Vice City, printed as a fluorescent risograph. Four systems: heat plumes that bend a sunset, wave sources interfering in the bay, a long exposure of traffic stopping at red lights, and palm crowns growing at the golden angle by a pool. A new seed every visit."
+      "description": "Miami heat and neon in the colours of Vice City, printed as a fluorescent risograph. Four systems: heat plumes that bend a sunset, wave sources interfering in the bay, a long exposure of traffic stopping at red lights, and palm crowns growing at the golden angle by a pool. Each run is different; the gallery opens on the default seed and Regenerate draws a new one."
     },
     {
       "slug": "tropics",
       "title": "Tropics",
-      "description": "Sun, sea and sand, each drawn by the process behind it and printed as a fluorescent risograph, in the style of Mirage and Fronds. The sun's glitter on moving waves, dunes built by wind, swash lines that the next wave erases, a beach crowd spacing itself out, and a reef growing against the current. A new seed every visit."
+      "description": "Sun, sea and sand, each drawn by the process behind it and printed as a fluorescent risograph, in the style of Mirage and Fronds. The sun's glitter on moving waves, dunes built by wind, swash lines that the next wave erases, a beach crowd spacing itself out, and a reef growing against the current. Each run is different; the gallery opens on the default seed and Regenerate draws a new one."
     }
   ],
   "sketches": [

@@ -61,7 +61,7 @@ void main() {
       vec2 cp = vec2(k.x * ca - k.y * sa, k.x * sa + k.y * ca) * c;
       vec2 uv = clamp(cp / res, 0.0, 1.0);
       float d = clamp(chan(chA[i], uv) + chan(chB[i], uv), 0.0, 1.0);
-      cov = clamp(0.78 * c * sqrt(d) - length(g - k) * c + 0.5, 0.0, 1.0);
+      cov = d > 0.0 ? clamp(0.78 * c * sqrt(d) - length(g - k) * c + 0.5, 0.0, 1.0) : 0.0;
     }
     cov *= 0.86 + 0.14 * hash(px + float(i) * 17.0);
     col *= 1.0 - cov * (1.0 - inks[i]);
@@ -103,10 +103,11 @@ function risoPrint(t0, t1, passes) {
 }
 
 function pickSeed() {
+  // read ?seed first: seed.js only leaves randomSeed() unmixed for sketches that read it
+  const p = new URLSearchParams(location.search), q = parseInt(p.get('seed'), 10);
   // the gallery's seed.js provides the default seed (or ?seed) as window.__seed
   if (Number.isFinite(window.__seed)) return window.__seed;
-  const p = new URLSearchParams(location.search);
-  return p.has('seed') ? parseInt(p.get('seed'), 10) : Math.floor(Math.random() * 1e6);
+  return Number.isFinite(q) ? q : Math.floor(Math.random() * 1e6);
 }
 
 function keyPressed() {
@@ -117,7 +118,7 @@ function keyPressed() {
 // ---------------------------------------------------------------------------
 
 const W = 800, H = 800, G = 400, PER_FRAME = 70, TARGET = 20000, HOLD = 150;
-let seed, grid, born, colonies, cur, count, waves, img, img2, t, doneAt;
+let seed, sand, grid, born, colonies, cur, count, waves, img, img2, t, doneAt;
 
 function setup() {
   pixelDensity(1);
@@ -134,6 +135,8 @@ function restart(s) {
   const n = floor(random(5, 10));
   for (let k = 0; k < n; k++) { const x = floor(random(50, 350)), y = floor(random(50, 350)); grid[y * G + x] = 1; colonies.push({ x, y, r: 2 }); }
   cur = p5.Vector.fromAngle(random(TWO_PI)).mult(0.12);
+  sand = new Float32Array(G * G);
+  for (let y = 0; y < G; y++) for (let x = 0; x < G; x++) sand[y * G + x] = noise(x * 2 * 0.004, y * 2 * 0.004);
   waves = [];
   for (let k = 0; k < 6; k++) { const a = random(TWO_PI), l = random(40, 120); waves.push([Math.cos(a) * TWO_PI / l, Math.sin(a) * TWO_PI / l, random(TWO_PI), random(0.02, 0.05)]); }
 }
@@ -170,7 +173,7 @@ function draw() {
       D[k] = 0; D[k + 1] = 0; D[k + 2] = (1 - 0.25 * age) * 255; E[k] = age * 0.35 * 255;
     } else {
       D[k] = (0.08 + ca * 0.6) * 255;
-      D[k + 1] = (0.5 - ca * 0.45 + 0.15 * noise(x * 0.004, y * 0.004)) * 255;
+      D[k + 1] = (0.5 - ca * 0.45 + 0.15 * sand[i]) * 255;
       D[k + 2] = 0; E[k] = 0.05 * 255;
     }
     D[k + 3] = 255; E[k + 3] = 255;
