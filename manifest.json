@@ -43,7 +43,7 @@
     {
       "slug": "vice-city",
       "title": "Vice City",
-      "description": "Miami heat and neon in the colours of Vice City, printed as a fluorescent risograph. Four systems: heat plumes that bend a sunset, wave sources interfering in the bay, a long exposure of traffic stopping at red lights, and palm crowns growing at the golden angle by a pool. A new seed every visit."
+      "description": "Miami heat and neon in the colours of Vice City, printed as a fluorescent risograph. Seven systems: heat plumes that bend a sunset, wave sources interfering in the bay, a long exposure of traffic stopping at red lights, palm crowns growing at the golden angle by a pool, the sun's glitter on moving waves, dunes built by wind, and a beach crowd spacing itself out over one day. Each run is different; the gallery opens on the default seed and Regenerate draws a new one."
     }
   ],
   "sketches": [
@@ -966,6 +966,42 @@
       "media": "sketches/series/vice-city/fronds/fronds.mp4",
       "seed": 3,
       "tags": ["generative", "phyllotaxis", "growth", "golden-angle", "risograph", "vice-city"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "glitter",
+      "title": "Glitter",
+      "description": "Vice City #5. The path of light the sun lays on the sea. The water is a sum of two dozen moving waves; each point is lit only if its surface reflects the line of sight into the sun. Nobody draws the golden path: it is the statistics of facets that catch the sun, sparkling as the waves move while the sun sinks.",
+      "date": "2026-11-21",
+      "category": "abstract",
+      "series": "vice-city",
+      "media": "sketches/series/vice-city/glitter/glitter.mp4",
+      "seed": 3,
+      "tags": ["generative", "optics", "waves", "reflection", "risograph", "vice-city"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "dunes",
+      "title": "Dunes",
+      "description": "Vice City #6. Werner's dune model running live: the wind carries slabs of sand downwind, they land more easily on sand, always in the wind shadow behind a crest, and steep slopes slide. An even sheet of sand turns into ripples, then crests that march downwind, lit by a low sun.",
+      "date": "2026-11-21",
+      "category": "abstract",
+      "series": "vice-city",
+      "media": "sketches/series/vice-city/dunes/dunes.mp4",
+      "seed": 3,
+      "tags": ["generative", "simulation", "sand", "cellular-automata", "risograph", "vice-city"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "umbrellas",
+      "title": "Umbrellas",
+      "description": "Vice City #7. A beach from above over one day. Each newcomer tries a few dozen spots and takes the best: near the water, far from strangers, near whoever they came with. The tight front row, looser back and small clusters come from those three wishes; shadows swing with the sun and people leave in the order they came.",
+      "date": "2026-11-21",
+      "category": "abstract",
+      "series": "vice-city",
+      "media": "sketches/series/vice-city/umbrellas/umbrellas.mp4",
+      "seed": 3,
+      "tags": ["generative", "agents", "crowd", "spacing", "risograph", "vice-city"],
       "tech": ["p5.js", "GLSL"]
     }
   ]
