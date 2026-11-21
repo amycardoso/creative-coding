@@ -44,6 +44,11 @@
       "slug": "vice-city",
       "title": "Vice City",
       "description": "Miami heat and neon in the colours of Vice City, printed as a fluorescent risograph. Seven systems: heat plumes that bend a sunset, wave sources interfering in the bay, a long exposure of traffic stopping at red lights, palm crowns growing at the golden angle by a pool, the sun's glitter on moving waves, dunes built by wind, and a beach crowd spacing itself out over one day. Each run is different; the gallery opens on the default seed and Regenerate draws a new one."
+    },
+    {
+      "slug": "overprint",
+      "title": "Overprint",
+      "description": "Risograph prints where the press itself is the rule. A riso prints every ink from its own drum, so colours never collide, they stack. Five systems built on that: arches that only push away their own ink, pines that bend towards a drifting light, a cellular automaton printed one generation per drum, three starling flocks that only see their own kind, and halftone screens whose interference is the whole picture. Each run is different; the gallery opens on the default seed and Regenerate draws a new one."
     }
   ],
   "sketches": [
@@ -1002,6 +1007,66 @@
       "media": "sketches/series/vice-city/umbrellas/umbrellas.mp4",
       "seed": 3,
       "tags": ["generative", "agents", "crowd", "spacing", "risograph", "vice-city"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "arches",
+      "title": "Arches",
+      "description": "Overprint #1. Arches sprout one by one on a few shelves. Each arch shoves aside every arch of its own ink but passes straight through the other inks, the way separate riso drums never touch. The colour mixes are whatever overlaps survive the pushing.",
+      "date": "2026-11-21",
+      "category": "abstract",
+      "series": "overprint",
+      "media": "sketches/series/overprint/arches/arches.mp4",
+      "seed": 3,
+      "tags": ["generative", "physics", "overprint", "colour-mixing", "risograph"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "beam",
+      "title": "Beam",
+      "description": "Overprint #2. Phototropism: a light drifts across the night sky and every pine grows one step at a time, turning its tip towards it, faster inside the beam. The curve of each trunk is a record of where the light has been.",
+      "date": "2026-11-21",
+      "category": "abstract",
+      "series": "overprint",
+      "media": "sketches/series/overprint/beam/beam.mp4",
+      "seed": 3,
+      "tags": ["generative", "growth", "phototropism", "forest", "risograph"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "generations",
+      "title": "Generations",
+      "description": "Overprint #3. A HighLife cellular automaton printed in three passes: this generation as circles, the last as squares, the one before as arches, each in its own ink. Dark overprints mark life that stays put; a single clean colour is a birth or a death.",
+      "date": "2026-11-21",
+      "category": "abstract",
+      "series": "overprint",
+      "media": "sketches/series/overprint/generations/generations.mp4",
+      "seed": 3,
+      "tags": ["generative", "cellular-automata", "highlife", "overprint", "risograph"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "murmuration",
+      "title": "Murmuration",
+      "description": "Overprint #4. Three starling flocks, one per ink. Each bird follows the flocking rules but only sees its own flock, so the clouds fold and pour through each other and colours mix only where they cross.",
+      "date": "2026-11-21",
+      "category": "abstract",
+      "series": "overprint",
+      "media": "sketches/series/overprint/murmuration/murmuration.mp4",
+      "seed": 3,
+      "tags": ["generative", "boids", "flocking", "emergence", "risograph"],
+      "tech": ["p5.js", "GLSL"]
+    },
+    {
+      "slug": "rosette",
+      "title": "Rosette",
+      "description": "Overprint #5. Three discs of smooth gradient and no drawn pattern at all. The halftone screens sit at almost the same angle and size, so where discs overlap they beat into moiré; as the discs drift and the screens turn, the interference keeps rearranging.",
+      "date": "2026-11-21",
+      "category": "abstract",
+      "series": "overprint",
+      "media": "sketches/series/overprint/rosette/rosette.mp4",
+      "seed": 3,
+      "tags": ["generative", "halftone", "moire", "interference", "risograph"],
       "tech": ["p5.js", "GLSL"]
     }
   ]

@@ -24,6 +24,7 @@ sketches/
     ├── interstellar/     # Time Dilation, Endurance, Gargantua
     ├── nebulae/          # Eye of God, Pillars, Filaments, Shells
     ├── reflexoes/        # Pilha de Areia, Mitose, Cópia da Cópia, Queimada, Bolhas, Feira
+    ├── overprint/        # Arches, Beam, Generations, Murmuration, Rosette
     └── vice-city/        # Mirage, Interference, Night Drive, Fronds, Glitter, Dunes, Umbrellas
 ```
 
